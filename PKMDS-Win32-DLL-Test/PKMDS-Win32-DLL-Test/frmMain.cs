@@ -24,7 +24,7 @@ namespace PKMDS_Win32_DLL_Test
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-            lblTest.Text = GetPKMName(1, 9, dbfile);
+            lblTest.Text = GetPKMName((int)(numSpecies.Value), 9, dbfile);
         }
     }
 }

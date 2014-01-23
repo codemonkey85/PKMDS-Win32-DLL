@@ -30,6 +30,8 @@
         {
             this.btnTest = new System.Windows.Forms.Button();
             this.lblTest = new System.Windows.Forms.Label();
+            this.numSpecies = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numSpecies)).BeginInit();
             this.SuspendLayout();
             // 
             // btnTest
@@ -51,15 +53,39 @@
             this.lblTest.TabIndex = 1;
             this.lblTest.Text = "lblTest";
             // 
+            // numSpecies
+            // 
+            this.numSpecies.Location = new System.Drawing.Point(93, 15);
+            this.numSpecies.Maximum = new decimal(new int[] {
+            649,
+            0,
+            0,
+            0});
+            this.numSpecies.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numSpecies.Name = "numSpecies";
+            this.numSpecies.Size = new System.Drawing.Size(66, 20);
+            this.numSpecies.TabIndex = 2;
+            this.numSpecies.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.numSpecies);
             this.Controls.Add(this.lblTest);
             this.Controls.Add(this.btnTest);
             this.Name = "frmMain";
             this.Text = "Main Form";
+            ((System.ComponentModel.ISupportInitialize)(this.numSpecies)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -69,6 +95,7 @@
 
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.Label lblTest;
+        private System.Windows.Forms.NumericUpDown numSpecies;
     }
 }
 
