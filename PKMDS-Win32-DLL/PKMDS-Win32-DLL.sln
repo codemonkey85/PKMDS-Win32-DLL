@@ -3,16 +3,41 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PKMDS-Win32-DLL", "PKMDS-Win32-DLL\PKMDS-Win32-DLL.vcxproj", "{E0D24125-BB5B-4E72-B13E-637EC39ADD37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PKMDS-Win32-DLL-Test", "PKMDS-Win32-DLL-Test\PKMDS-Win32-DLL-Test.csproj", "{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37} = {E0D24125-BB5B-4E72-B13E-637EC39ADD37}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|Win32 = Debug|Win32
+		Debug|x86 = Debug|x86
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|Win32 = Release|Win32
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Debug|Win32.ActiveCfg = Debug|Win32
 		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Debug|Win32.Build.0 = Debug|Win32
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Debug|x86.ActiveCfg = Debug|Win32
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Release|Win32.ActiveCfg = Release|Win32
 		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Release|Win32.Build.0 = Release|Win32
+		{E0D24125-BB5B-4E72-B13E-637EC39ADD37}.Release|x86.ActiveCfg = Release|Win32
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Debug|Win32.ActiveCfg = Debug|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Debug|x86.ActiveCfg = Debug|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Debug|x86.Build.0 = Debug|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Release|Win32.ActiveCfg = Release|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Release|x86.ActiveCfg = Release|x86
+		{560E7D8D-AE88-4C73-B0B6-4835C50EA35C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

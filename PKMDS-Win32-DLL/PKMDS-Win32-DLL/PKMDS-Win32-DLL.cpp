@@ -37,6 +37,18 @@ EXPORT BSTR GetBoxName(const char * savefile, int box)
 	return ANSItoBSTR(boxstr.c_str());
 }
 
+EXPORT int GetPKMStat(const char * savefile, int box, int slot, int stat, const char * dbfilename)
+{
+	bw2sav_obj * sav = new bw2sav_obj();
+	read(savefile,sav);
+	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
+	decryptpkm(pkm);
+	opendb(dbfilename);
+	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
+	closedb();
+	return ret;
+}
+
 BSTR ANSItoBSTR(const char* input)
 {
     BSTR result = NULL;
