@@ -34,8 +34,10 @@
             this.numSpecies = new System.Windows.Forms.NumericUpDown();
             this.lblTest = new System.Windows.Forms.Label();
             this.btnTest = new System.Windows.Forms.Button();
+            this.pbTest = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numSlot)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpecies)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbTest)).BeginInit();
             this.SuspendLayout();
             // 
             // btnTest2
@@ -119,11 +121,21 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // pbTest
+            // 
+            this.pbTest.Location = new System.Drawing.Point(12, 123);
+            this.pbTest.Name = "pbTest";
+            this.pbTest.Size = new System.Drawing.Size(121, 127);
+            this.pbTest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbTest.TabIndex = 12;
+            this.pbTest.TabStop = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.pbTest);
             this.Controls.Add(this.btnTest2);
             this.Controls.Add(this.numSlot);
             this.Controls.Add(this.cbBox);
@@ -134,6 +146,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numSlot)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSpecies)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbTest)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,6 +160,7 @@
         private System.Windows.Forms.NumericUpDown numSpecies;
         private System.Windows.Forms.Label lblTest;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.PictureBox pbTest;
     }
 }
 

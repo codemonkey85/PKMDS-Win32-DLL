@@ -16,6 +16,14 @@ EXPORT BSTR GetPKMName(int speciesid, int langid, const char * dbfilename)
 	return ANSItoBSTR(ret.c_str());
 }
 
+EXPORT BSTR GetItemName(int itemid, int generation, int langid, const char * dbfilename)
+{
+	opendb(dbfilename);
+	std::string ret = lookupitemname(itemid,generation,langid).c_str();
+	closedb();
+	return ANSItoBSTR(ret.c_str());
+}
+
 EXPORT BSTR GetPKMName_FromSav(const char * savefile, int box, int slot, const char * dbfilename)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
@@ -28,11 +36,21 @@ EXPORT BSTR GetPKMName_FromSav(const char * savefile, int box, int slot, const c
 	return ANSItoBSTR(ret.c_str());
 }
 
+EXPORT BSTR GetTrainerName_FromSav(const char * savefile)
+{
+	bw2sav_obj * sav = new bw2sav_obj();
+	read(savefile,sav);
+	decryptpkm(sav->cur.party.pokemon[0]);
+	std::wstring trainername = sav->cur.party.pokemon[0].otname;
+	std::string trainernamestr = std::string(trainername.begin(),trainername.end());
+	return ANSItoBSTR(trainernamestr.c_str());
+}
+
 EXPORT BSTR GetBoxName(const char * savefile, int box)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
 	read(savefile,sav);
-	std::wstring boxname = (sav->cur.boxnames[box]);
+	std::wstring boxname = sav->cur.boxnames[box];
 	std::string boxstr = std::string(boxname.begin(),boxname.end());
 	return ANSItoBSTR(boxstr.c_str());
 }
