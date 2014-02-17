@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
+using PKMDS_CS;
 
 namespace PKMDS_Win32_DLL_Test
 {
@@ -23,30 +23,7 @@ namespace PKMDS_Win32_DLL_Test
         };
 
         public string dbfile = "C:\\Users\\michaelbond\\Dropbox\\PKMDS Databases\\veekun-pokedex.sqlite";
-        public string savefile = "C:\\Users\\michaelbond\\Dropbox\\Saves\\Mike B2 Sav.sav";
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetPKMName(int speciesid, int langid, string dbfilename);
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetPKMName_FromSav(string savefile, int box, int slot, string dbfilename);
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetTrainerName_FromSav(string savefile);
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetBoxName(string savefile, int box);
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMStat(string savefile, int box, int slot, int stat, string dbfilename);
-
-        [DllImport("..\\..\\..\\Debug\\PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetItemName(int itemid, int generation, int langid, string dbfilename);
+        public string savefile = "C:\\Users\\michaelbond\\Dropbox\\Saves\\Mike B Sav.sav";
 
         public frmMain()
         {
@@ -58,7 +35,7 @@ namespace PKMDS_Win32_DLL_Test
             cbBox.Items.Clear();
             for (int box = 0; box < 24; box++)
             {
-                cbBox.Items.Add(GetBoxName(savefile, box));
+                cbBox.Items.Add(PKMDS.GetBoxName(savefile, box));
             }
         }
 
@@ -66,8 +43,8 @@ namespace PKMDS_Win32_DLL_Test
         {
             if (cbBox.Items.Count > 0)
             {
-                //lblTest.Text = GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), dbfile);
-                lblTest.Text = GetTrainerName_FromSav(savefile);
+                lblTest.Text = PKMDS.GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), dbfile);
+                //lblTest.Text = GetTrainerName_FromSav(savefile);
                 //GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.HP), dbfile).ToString()
                 //+ '\n' + GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.Attack), dbfile).ToString()
                 //+ '\n' + GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.Defense), dbfile).ToString()

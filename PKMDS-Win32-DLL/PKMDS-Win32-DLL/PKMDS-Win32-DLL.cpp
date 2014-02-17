@@ -40,8 +40,7 @@ EXPORT BSTR GetTrainerName_FromSav(const char * savefile)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
 	read(savefile,sav);
-	decryptpkm(sav->cur.party.pokemon[0]);
-	std::wstring trainername = sav->cur.party.pokemon[0].otname;
+	std::wstring trainername = getwstring(sav->cur.trainername); // sav->cur.party.pokemon[0].otname;
 	std::string trainernamestr = std::string(trainername.begin(),trainername.end());
 	return ANSItoBSTR(trainernamestr.c_str());
 }
@@ -50,7 +49,7 @@ EXPORT BSTR GetBoxName(const char * savefile, int box)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
 	read(savefile,sav);
-	std::wstring boxname = sav->cur.boxnames[box];
+	std::wstring boxname = getwstring(sav->cur.boxnames[box]);
 	std::string boxstr = std::string(boxname.begin(),boxname.end());
 	return ANSItoBSTR(boxstr.c_str());
 }
