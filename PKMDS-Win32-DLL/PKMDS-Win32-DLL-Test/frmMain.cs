@@ -12,15 +12,6 @@ namespace PKMDS_Win32_DLL_Test
 {
     public partial class frmMain : Form
     {
-        enum stats
-        {
-            HP = 1,
-            Attack,
-            Defense,
-            SpAtk,
-            SpDef,
-            Speed
-        };
 
         public string dbfile = "C:\\Users\\michaelbond\\Dropbox\\PKMDS Databases\\veekun-pokedex.sqlite";
         public string savefile = "C:\\Users\\michaelbond\\Dropbox\\Saves\\Mike B Sav.sav";
@@ -43,7 +34,8 @@ namespace PKMDS_Win32_DLL_Test
         {
             if (cbBox.Items.Count > 0)
             {
-                lblTest.Text = PKMDS.GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), dbfile);
+                //lblTest.Text = PKMDS.GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), dbfile);
+                lblTest.Text = PKMDS.GetMoveName(1, 9, dbfile);
                 //lblTest.Text = GetTrainerName_FromSav(savefile);
                 //GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.HP), dbfile).ToString()
                 //+ '\n' + GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.Attack), dbfile).ToString()

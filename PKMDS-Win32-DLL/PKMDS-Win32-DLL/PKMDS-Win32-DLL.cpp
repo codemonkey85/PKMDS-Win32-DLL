@@ -24,6 +24,14 @@ EXPORT BSTR GetItemName(int itemid, int generation, int langid, const char * dbf
 	return ANSItoBSTR(ret.c_str());
 }
 
+EXPORT BSTR GetMoveName(int moveid, int langid, const char * dbfilename)
+{
+	opendb(dbfilename);
+	std::string ret = lookupmovename(moveid, langid).c_str();
+	closedb();
+	return ANSItoBSTR(ret.c_str());
+}
+
 EXPORT BSTR GetPKMName_FromSav(const char * savefile, int box, int slot, const char * dbfilename)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
