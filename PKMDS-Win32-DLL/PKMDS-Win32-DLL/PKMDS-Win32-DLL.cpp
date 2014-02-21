@@ -1,7 +1,7 @@
 // PKMDS-Win32-DLL.cpp : Defines the exported functions for the DLL application.
 //
 #include "stdafx.h"
-#include "../../../PKMDS/include/pkmds/pkmds_sql.h"
+#include "../../externals/PKMDS/include/pkmds/pkmds_sql.h"
 #include <comutil.h>
 
 BSTR ANSItoBSTR(const char* input);
