@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+// TODO: add all enums and classes to talk to DLL
 namespace PKMDS_CS
 {
     enum stats
