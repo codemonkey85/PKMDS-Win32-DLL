@@ -8,39 +8,40 @@ BSTR ANSItoBSTR(const char* input);
 
 #define EXPORT extern "C" __declspec(dllexport)
 
-EXPORT BSTR GetPKMName(int speciesid, int langid, const char * dbfilename)
+EXPORT void OpenDB(const char * dbfilename)
 {
 	opendb(dbfilename);
+}
+EXPORT void CloseDB()
+{
+	closedb();
+}
+
+EXPORT BSTR GetPKMName(int speciesid, int langid)
+{
 	std::string ret = lookuppkmname(speciesid,langid).c_str();
-	closedb();
 	return ANSItoBSTR(ret.c_str());
 }
 
-EXPORT BSTR GetItemName(int itemid, int generation, int langid, const char * dbfilename)
+EXPORT BSTR GetItemName(int itemid, int generation, int langid)
 {
-	opendb(dbfilename);
 	std::string ret = lookupitemname(itemid,generation,langid).c_str();
-	closedb();
 	return ANSItoBSTR(ret.c_str());
 }
 
-EXPORT BSTR GetMoveName(int moveid, int langid, const char * dbfilename)
+EXPORT BSTR GetMoveName(int moveid, int langid)
 {
-	opendb(dbfilename);
 	std::string ret = lookupmovename(moveid, langid).c_str();
-	closedb();
 	return ANSItoBSTR(ret.c_str());
 }
 
-EXPORT BSTR GetPKMName_FromSav(const char * savefile, int box, int slot, const char * dbfilename)
+EXPORT BSTR GetPKMName_FromSav(const char * savefile, int box, int slot)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
 	read(savefile,sav);
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
 	decryptpkm(pkm);
-	opendb(dbfilename);
 	std::string ret = lookuppkmname(pkm);
-	closedb();
 	return ANSItoBSTR(ret.c_str());
 }
 
@@ -62,15 +63,13 @@ EXPORT BSTR GetBoxName(const char * savefile, int box)
 	return ANSItoBSTR(boxstr.c_str());
 }
 
-EXPORT int GetPKMStat(const char * savefile, int box, int slot, int stat, const char * dbfilename)
+EXPORT int GetPKMStat(const char * savefile, int box, int slot, int stat)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
 	read(savefile,sav);
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
 	decryptpkm(pkm);
-	opendb(dbfilename);
 	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
-	closedb();
 	return ret;
 }
 
