@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +21,12 @@ namespace PKMDS_CS
 #else
         private const string folder = "";
 #endif
+        [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void OpenDB(string dbfilename);
+        
+        [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CloseDB();
+        
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMName(int speciesid, int langid, string dbfilename);
