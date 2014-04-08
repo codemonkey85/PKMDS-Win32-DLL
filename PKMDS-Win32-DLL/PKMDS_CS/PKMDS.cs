@@ -29,11 +29,11 @@ namespace PKMDS_CS
         
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetPKMName(int speciesid, int langid, string dbfilename);
+        public static extern string GetPKMName(int speciesid, int langid);
 
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetPKMName_FromSav(string savefile, int box, int slot, string dbfilename);
+        public static extern string GetPKMName_FromSav(string savefile, int box, int slot);
 
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
@@ -44,14 +44,14 @@ namespace PKMDS_CS
         public static extern string GetBoxName(string savefile, int box);
 
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetPKMStat(string savefile, int box, int slot, int stat, string dbfilename);
+        public static extern int GetPKMStat(string savefile, int box, int slot, int stat);
 
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetItemName(int itemid, int generation, int langid, string dbfilename);
+        public static extern string GetItemName(int itemid, int generation, int langid);
 
         [DllImport(folder + "PKMDS-Win32-DLL.dll", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetMoveName(int moveid, int langid, string dbfilename);
+        public static extern string GetMoveName(int moveid, int langid);
     }
 }
