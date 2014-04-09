@@ -54,6 +54,20 @@ EXPORT BSTR GetTrainerName_FromSav(const char * savefile)
 	return ANSItoBSTR(trainernamestr.c_str());
 }
 
+EXPORT int GetTrainerTID_FromSav(const char * savefile)
+{
+	bw2sav_obj * sav = new bw2sav_obj();
+	read(savefile,sav);
+	return sav->cur.tid;
+}
+
+EXPORT int GetTrainerSID_FromSav(const char * savefile)
+{
+	bw2sav_obj * sav = new bw2sav_obj();
+	read(savefile,sav);
+	return sav->cur.sid;
+}
+
 EXPORT BSTR GetBoxName(const char * savefile, int box)
 {
 	bw2sav_obj * sav = new bw2sav_obj();
@@ -73,15 +87,24 @@ EXPORT int GetPKMStat(const char * savefile, int box, int slot, int stat)
 	return ret;
 }
 
+EXPORT void GetPKMData_INTERNAL(pokemon_obj * pokemon, const char * savefile, int box, int slot)
+{
+	bw2sav_obj * sav = new bw2sav_obj();
+	read(savefile,sav);
+	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
+	decryptpkm(pkm);
+	*pokemon = *pkm;
+};
+
 BSTR ANSItoBSTR(const char* input)
 {
-    BSTR result = NULL;
-    int lenA = lstrlenA(input);
-    int lenW = ::MultiByteToWideChar(CP_ACP, 0, input, lenA, NULL, 0);
-    if (lenW > 0)
-    {
-        result = ::SysAllocStringLen(0, lenW);
-        ::MultiByteToWideChar(CP_ACP, 0, input, lenA, result, lenW);
-    } 
-    return result;
+	BSTR result = NULL;
+	int lenA = lstrlenA(input);
+	int lenW = ::MultiByteToWideChar(CP_ACP, 0, input, lenA, NULL, 0);
+	if (lenW > 0)
+	{
+		result = ::SysAllocStringLen(0, lenW);
+		::MultiByteToWideChar(CP_ACP, 0, input, lenA, result, lenW);
+	} 
+	return result;
 }
