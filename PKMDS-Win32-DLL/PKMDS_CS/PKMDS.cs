@@ -68,6 +68,10 @@ namespace PKMDS_CS
         public static extern string GetMoveName(int moveid, int langid = LANG_ID);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetMoveTypeName(int moveid, int langid = LANG_ID);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
 
         public static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
@@ -76,6 +80,16 @@ namespace PKMDS_CS
             for (int move = 0; move < 4; move++)
             {
                 moves[move] = GetMoveName(GetPKMMoveID(pkm, move), langid);
+            }
+            return moves;
+        }
+
+        public static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID)
+        {
+            string[] moves = { "", "", "", "" };
+            for (int move = 0; move < 4; move++)
+            {
+                moves[move] = GetMoveTypeName(GetPKMMoveID(pkm, move), langid);
             }
             return moves;
         }

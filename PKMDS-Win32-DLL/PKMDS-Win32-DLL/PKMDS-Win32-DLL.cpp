@@ -50,6 +50,12 @@ EXPORT BSTR GetMoveName(int moveid, int langid)
 	return ANSItoBSTR(ret.c_str());
 }
 
+EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
+{
+	std::string ret = lookupmovetypename(moveid, langid).c_str();
+	return ANSItoBSTR(ret.c_str());
+}
+
 EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
 {
 	std::string ret = lookuppkmname(pkm);
