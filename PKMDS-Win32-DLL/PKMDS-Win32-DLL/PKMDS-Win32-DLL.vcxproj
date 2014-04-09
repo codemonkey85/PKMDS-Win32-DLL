@@ -54,6 +54,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Debug"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -75,7 +78,7 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Q /Y "$(TargetPath)" "C:\PKMDS-DLL-DISTRIBUTE"</Command>
+      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Release"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

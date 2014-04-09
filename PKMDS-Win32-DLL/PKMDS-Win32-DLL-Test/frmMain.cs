@@ -13,8 +13,11 @@ namespace PKMDS_Win32_DLL_Test
     public partial class frmMain : Form
     {
 
-        public string dbfile = "C:\\Users\\Michael Bond\\Dropbox\\PKMDS Databases\\veekun-pokedex.sqlite";
-        public string savefile = "C:\\Users\\Michael Bond\\Dropbox\\Saves\\Mike B2 Sav.sav";
+        //public string dbfile = "C:\\Users\\Michael Bond\\Dropbox\\PKMDS Databases\\veekun-pokedex.sqlite";
+        //public string savefile = "C:\\Users\\Michael Bond\\Dropbox\\Saves\\Mike B2 Sav.sav";
+
+        public string dbfile = "C:\\Users\\michaelbond\\Downloads\\PKMDS Databases\\veekun-pokedex.sqlite";
+        public string savefile = "C:\\Users\\michaelbond\\Downloads\\PKMDS Databases\\Mike B2 Sav.sav";
 
         public frmMain()
         {
@@ -30,7 +33,7 @@ namespace PKMDS_Win32_DLL_Test
                 //MessageBox.Show(PKMDS.GetBoxName(savefile, box));
                 cbBox.Items.Add(PKMDS.GetBoxName(savefile, box));
             }
-            if (cbBox.Items.Count > 0) 
+            if (cbBox.Items.Count > 0)
             {
                 cbBox.SelectedIndex = 0;
             }
@@ -40,7 +43,7 @@ namespace PKMDS_Win32_DLL_Test
         {
             if (cbBox.Items.Count > 0)
             {
-                lblTest.Text = PKMDS.GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), dbfile);
+                lblTest.Text = PKMDS.GetPKMName_FromSav(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1));
                 //lblTest.Text = PKMDS.GetMoveName(1, 9, dbfile);
                 //lblTest.Text = GetTrainerName_FromSav(savefile);
                 //GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.HP), dbfile).ToString()
@@ -50,6 +53,16 @@ namespace PKMDS_Win32_DLL_Test
                 //+ '\n' + GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.SpDef), dbfile).ToString()
                 //+ '\n' + GetPKMStat(savefile, cbBox.SelectedIndex, (int)(numSlot.Value - 1), Convert.ToInt16(stats.Speed), dbfile).ToString();
             }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            PKMDS.OpenDB(dbfile);
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            PKMDS.CloseDB();
         }
     }
 }
