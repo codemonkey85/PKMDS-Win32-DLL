@@ -50,15 +50,15 @@ EXPORT BSTR GetMoveName(int moveid, int langid)
 	return ANSItoBSTR(ret.c_str());
 }
 
-EXPORT BSTR GetPKMName_FromObj/*_FromSav*/(pokemon_obj * pkm/*, int box, int slot*/)
+EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
 {
-	//pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
-	//if(!(pkm->isboxdatadecrypted))
-	//{
-	//	decryptpkm(pkm);
-	//}
 	std::string ret = lookuppkmname(pkm);
 	return ANSItoBSTR(ret.c_str());
+}
+
+EXPORT int GetPKMMoveID(pokemon_obj * pokemon, int moveid)
+{
+	return pokemon->moves[moveid];
 }
 
 EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)

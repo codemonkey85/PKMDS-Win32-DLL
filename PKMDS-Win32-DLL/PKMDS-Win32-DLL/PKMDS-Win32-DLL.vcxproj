@@ -78,7 +78,7 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Q /Y "$(TargetPath)" "..\PKMDS-Save-Editor\bin\Release"</Command>
+      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Release"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
