@@ -32,6 +32,12 @@ namespace PKMDS_CS
         public static extern void CloseDB();
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void OpenImgDB(string dbfilename);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CloseImgDB();
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMName(int speciesid, int langid = LANG_ID);
 
@@ -71,8 +77,144 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveTypeName(int moveid, int langid = LANG_ID);
 
+        private static unsafe System.Drawing.Image GetPic(IntPtr picdata, int size)
+        {
+            byte[] thedata = new byte[size];
+            System.Runtime.InteropServices.Marshal.Copy(picdata, thedata, 0, size);
+            System.IO.Stream picstream = new System.IO.MemoryStream(thedata);
+            System.Drawing.Image pic = System.Drawing.Image.FromStream(picstream);
+            return pic;
+        }
+
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
+        private static unsafe extern void GetPKMSprite_INTERNAL(Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetPKMIcon_INTERNAL(Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetTypePic_INTERNAL(int type, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetShinyStar_INTERNAL([In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetGenderPic_INTERNAL(int gender, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetWallpaperImage_INTERNAL(int wallpaper, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetItemImage_INTERNAL(int item, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetMarkingImage_INTERNAL(int marking, bool marked, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetBallPic_INTERNAL(int ball, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetMoveCategoryImage_INTERNAL(int move, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetPokerusImage_INTERNAL(int strain, int days, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetRibbonImage_INTERNAL(string ribbon, bool hoenn, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        public static unsafe System.Drawing.Image GetPKMSprite(Pokemon pokemon, int Generation = GENERATION)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetPKMSprite_INTERNAL(pokemon, &picdata, &size, Generation);
+            return GetPic(picdata, size);
+        }
+        public static unsafe System.Drawing.Image GetPKMIcon(Pokemon pokemon, int Generation = GENERATION)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetPKMIcon_INTERNAL(pokemon, &picdata, &size, Generation);
+            return GetPic(picdata, size);
+        }
+        public static unsafe System.Drawing.Image GetTypePic(int type)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetTypePic_INTERNAL(type, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+        
+        public static unsafe System.Drawing.Image GetShinyStar()
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetShinyStar_INTERNAL(&picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetGenderPic(int gender)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetGenderPic_INTERNAL(gender, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetWallpaperImage(int wallpaper)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetWallpaperImage_INTERNAL(wallpaper, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetItemImage(int item)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetItemImage_INTERNAL(item, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetMarkingImage(int marking, bool marked)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetMarkingImage_INTERNAL(marking, marked, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetBallPic(int ball)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetBallPic_INTERNAL(ball, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetMoveCategoryImage(int move)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetMoveCategoryImage_INTERNAL(move, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetPokerusImage(int strain, int days)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetPokerusImage_INTERNAL(strain, days, &picdata, &size);
+            return GetPic(picdata, size);
+        }
+
+        public static unsafe System.Drawing.Image GetRibbonImage(string ribbon, bool hoenn)
+        {
+            IntPtr picdata = new IntPtr();
+            int size = new int();
+            GetRibbonImage_INTERNAL(ribbon, hoenn, &picdata, &size);
+            return GetPic(picdata, size);
+        }
 
         public static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
         {
@@ -93,6 +235,9 @@ namespace PKMDS_CS
             }
             return moves;
         }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
 
         public static void GetPKMData([In][Out] ref Pokemon pokemon, Save sav, int box, int slot)
         {
