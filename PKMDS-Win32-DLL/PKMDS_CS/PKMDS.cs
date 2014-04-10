@@ -17,6 +17,7 @@ namespace PKMDS_CS
 
     public class PKMDS
     {
+        #region Constants
         private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
         private const int LANG_ID = 9;
         private const int VERSION_GROUP = 11;
@@ -24,7 +25,9 @@ namespace PKMDS_CS
         private const int BUFF_SIZE = 955;
         private const int NICKLENGTH = 11;
         private const int OTLENGTH = 8;
+        #endregion
 
+        #region DBAccess
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void OpenDB(string dbfilename);
 
@@ -36,6 +39,7 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void CloseImgDB();
+        #endregion
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
@@ -43,7 +47,7 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetPKMName_FromObj(Pokemon pkm/*, int box, int slot*/);
+        public static extern string GetPKMName_FromObj(Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
