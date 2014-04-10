@@ -43,7 +43,7 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetTrainerName_FromSav(Save sav);
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetTrainerName_FromSav_INTERNAL([In][Out] Save sav, string name, int namelength);
 
         private static void SetTrainerName_FromSav([In][Out] Save sav, string name)

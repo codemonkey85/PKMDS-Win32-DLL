@@ -82,52 +82,9 @@ EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
 	return ANSItoBSTR(trainernamestr.c_str());
 }
 
-EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, const wchar_t * name, int namelength)
+EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, int namelength)
 {
-	//std::wstring trainername = getwstring(sav->cur.trainername);
-	//std::string trainernamestr = std::string(trainername.begin(),trainername.end());
-	//return ANSItoBSTR(trainernamestr.c_str());
-
-	for(int i = 0; i < namelength; i++)
-	{
-		sav->cur.trainername[2*i] = name[i];
-	}
-	if(namelength < OTLENGTH)
-	{
-		byte * btpnt = new byte;
-		btpnt = reinterpret_cast<byte*>(&(sav->cur.trainername));
-		memset(btpnt+(namelength*2),0xff,2);
-		btpnt += (OTLENGTH*2)-2;
-		memset(btpnt,0xff,2);
-	}
-
-	/*
-	void OTInfo::on_txtOTName_textChanged(const QString &arg1)
-	{
-	if(otinforedisplayok)
-	{
-	#if ! defined(MARKUP_SIZEOFWCHAR)
-	#if __SIZEOF_WCHAR_T__ == 4 || __WCHAR_MAX__ > 0x10000
-	for(int i = 0; i < arg1.length(); i++)
-	{
-	tempotinfosav->cur.trainername[2*i] = arg1[i].unicode();
-	}
-	#else
-	arg1.toWCharArray(tempotinfosav->cur.trainername);
-	#endif
-	#endif
-	if(ui->txtOTName->text().length() < OTLENGTH)
-	{
-	byte * btpnt = new byte;
-	btpnt = reinterpret_cast<byte*>(&(tempotinfosav->cur.trainername));
-	memset(btpnt+(ui->txtOTName->text().length()*2),0xff,2);
-	btpnt += (OTLENGTH*2)-2;
-	memset(btpnt,0xff,2);
-	}
-	}
-	}
-	*/
-
+	setsavetrainername(sav,name,namelength);
 }
 
 EXPORT int GetTrainerTID_FromSav(bw2sav_obj * sav)
