@@ -82,6 +82,54 @@ EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
 	return ANSItoBSTR(trainernamestr.c_str());
 }
 
+EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, const wchar_t * name, int namelength)
+{
+	//std::wstring trainername = getwstring(sav->cur.trainername);
+	//std::string trainernamestr = std::string(trainername.begin(),trainername.end());
+	//return ANSItoBSTR(trainernamestr.c_str());
+
+	for(int i = 0; i < namelength; i++)
+	{
+		sav->cur.trainername[2*i] = name[i];
+	}
+	if(namelength < OTLENGTH)
+	{
+		byte * btpnt = new byte;
+		btpnt = reinterpret_cast<byte*>(&(sav->cur.trainername));
+		memset(btpnt+(namelength*2),0xff,2);
+		btpnt += (OTLENGTH*2)-2;
+		memset(btpnt,0xff,2);
+	}
+
+	/*
+	void OTInfo::on_txtOTName_textChanged(const QString &arg1)
+	{
+	if(otinforedisplayok)
+	{
+	#if ! defined(MARKUP_SIZEOFWCHAR)
+	#if __SIZEOF_WCHAR_T__ == 4 || __WCHAR_MAX__ > 0x10000
+	for(int i = 0; i < arg1.length(); i++)
+	{
+	tempotinfosav->cur.trainername[2*i] = arg1[i].unicode();
+	}
+	#else
+	arg1.toWCharArray(tempotinfosav->cur.trainername);
+	#endif
+	#endif
+	if(ui->txtOTName->text().length() < OTLENGTH)
+	{
+	byte * btpnt = new byte;
+	btpnt = reinterpret_cast<byte*>(&(tempotinfosav->cur.trainername));
+	memset(btpnt+(ui->txtOTName->text().length()*2),0xff,2);
+	btpnt += (OTLENGTH*2)-2;
+	memset(btpnt,0xff,2);
+	}
+	}
+	}
+	*/
+
+}
+
 EXPORT int GetTrainerTID_FromSav(bw2sav_obj * sav)
 {
 	return sav->cur.tid;
@@ -110,6 +158,16 @@ EXPORT int GetPKMStat(bw2sav_obj * sav, int box, int slot, int stat)
 	return ret;
 }
 
+EXPORT int GetPKMStat_FromObj(pokemon_obj * pkm, int stat)
+{
+	if(!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
+	return ret;
+}
+
 EXPORT void GetPKMSprite_INTERNAL(pokemon_obj * pkm, byte ** picdata, int * size, int generation)
 {
 	std::ostringstream o;
@@ -129,6 +187,43 @@ EXPORT void GetTypePic_INTERNAL(int type, byte ** picdata, int * size)
 	std::ostringstream o;
 	gettypesql(o,type);
 	getapic(o,picdata,size);
+}
+
+EXPORT int GetPKMLevel(pokemon_obj * pkm)
+{
+	if(!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	int ret = getpkmlevel(pkm);
+	return ret;
+}
+
+EXPORT void SetPKMLevel(pokemon_obj * pkm, int level)
+{
+	if(!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	pkm->exp = getpkmexpatlevel(pkm->species,level);
+}
+
+EXPORT int GetPKMSpeciesID(pokemon_obj * pkm)
+{
+	if(!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	return int(pkm->species);
+}
+
+EXPORT void SetPKMSpeciesID(pokemon_obj * pkm, int speciesid)
+{
+	if(!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	pkm->species = Species::species(speciesid);
 }
 
 EXPORT void GetShinyStar_INTERNAL(byte ** picdata, int * size)
