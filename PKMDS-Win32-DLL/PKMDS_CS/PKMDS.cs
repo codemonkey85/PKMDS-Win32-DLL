@@ -43,6 +43,12 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetTrainerName_FromSav(Save sav);
 
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void WritePokemonFile(Pokemon pkm, string filename, bool encrypt = false);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void WriteSaveFile(Save sav, string filename);
+
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetTrainerName_FromSav_INTERNAL([In][Out] Save sav, string name, int namelength);
 
@@ -269,6 +275,21 @@ namespace PKMDS_CS
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void SetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
+
+        public static void SetPKMData([In][Out] Pokemon pokemon, Save sav, int box, int slot)
+        {
+            //Pokemon pkm = new Pokemon();
+            //int size = Marshal.SizeOf(typeof(Pokemon));
+            //IntPtr pkmptr = Marshal.AllocHGlobal(size);
+            //Marshal.StructureToPtr(pkm, pkmptr, false);
+            SetPKMData_INTERNAL(pokemon, sav, box, slot);
+            //pokemon = pkm;
+            //Marshal.FreeHGlobal(pkmptr);
+            //pkmptr = IntPtr.Zero;
+        }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetSAVData_INTERNAL([In][Out] Save save, string savefile);
 
         public static void GetSAVData([In][Out] ref Save save, string savefile)
@@ -336,6 +357,10 @@ namespace PKMDS_CS
                     SetPKMSpeciesID(this, value);
                 }
             }
+            public void WriteToFile(string FileName, bool encrypt = false)
+            {
+                WritePokemonFile(this, FileName, encrypt);
+            }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         public class Save
@@ -378,6 +403,10 @@ namespace PKMDS_CS
             public string GetBoxName(int box)
             {
                 return PKMDS.GetBoxName(this, box);
+            }
+            public void WriteToFile(string FileName)
+            {
+                WriteSaveFile(this, FileName);
             }
         }
     }

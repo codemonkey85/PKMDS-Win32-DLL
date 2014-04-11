@@ -24,12 +24,10 @@ EXPORT void CloseImgDB()
 {
 	openimgdb();
 }
-
 EXPORT void GetSAVData_INTERNAL(bw2sav_obj * save, const char * savefile)
 {
 	read(savefile,save);
 };
-
 EXPORT void GetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box, int slot)
 {
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
@@ -39,71 +37,69 @@ EXPORT void GetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box
 	}
 	*pokemon = *pkm;
 };
-
+EXPORT void SetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box, int slot)
+{
+	if(!(pokemon->isboxdatadecrypted))
+	{
+		decryptpkm(pokemon);
+	}
+	calcchecksum(pokemon);
+	//encryptpkm(pokemon);
+	sav->cur.boxes[box].pokemon[slot] = *pokemon;
+};
 EXPORT BSTR GetPKMName(int speciesid, int langid)
 {
 	std::string ret = lookuppkmname(speciesid,langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
-
 EXPORT BSTR GetItemName(int itemid, int generation, int langid)
 {
 	std::string ret = lookupitemname(itemid,generation,langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
-
 EXPORT BSTR GetMoveName(int moveid, int langid)
 {
 	std::string ret = lookupmovename(moveid, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
-
 EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
 {
 	std::string ret = lookupmovetypename(moveid, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
-
 EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
 {
 	std::string ret = lookuppkmname(pkm);
 	return ANSItoBSTR(ret.c_str());
 }
-
 EXPORT int GetPKMMoveID(pokemon_obj * pokemon, int moveid)
 {
 	return pokemon->moves[moveid];
 }
-
 EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
 {
 	std::wstring trainername = getwstring(sav->cur.trainername);
 	std::string trainernamestr = std::string(trainername.begin(),trainername.end());
 	return ANSItoBSTR(trainernamestr.c_str());
 }
-
 EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, int namelength)
 {
 	setsavetrainername(sav,name,namelength);
 }
-
 EXPORT int GetTrainerTID_FromSav(bw2sav_obj * sav)
 {
 	return sav->cur.tid;
 }
-
 EXPORT int GetTrainerSID_FromSav(bw2sav_obj * sav)
 {
 	return sav->cur.sid;
 }
-
 EXPORT BSTR GetBoxName(bw2sav_obj * sav, int box)
 {
 	std::wstring boxname = getwstring(sav->cur.boxnames[box]);
 	std::string boxstr = std::string(boxname.begin(),boxname.end());
 	return ANSItoBSTR(boxstr.c_str());
 }
-
 EXPORT int GetPKMStat(bw2sav_obj * sav, int box, int slot, int stat)
 {
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
@@ -114,7 +110,6 @@ EXPORT int GetPKMStat(bw2sav_obj * sav, int box, int slot, int stat)
 	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
 	return ret;
 }
-
 EXPORT int GetPKMStat_FromObj(pokemon_obj * pkm, int stat)
 {
 	if(!(pkm->isboxdatadecrypted))
@@ -124,28 +119,24 @@ EXPORT int GetPKMStat_FromObj(pokemon_obj * pkm, int stat)
 	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
 	return ret;
 }
-
 EXPORT void GetPKMSprite_INTERNAL(pokemon_obj * pkm, byte ** picdata, int * size, int generation)
 {
 	std::ostringstream o;
 	getspritesql(o,pkm,generation);
 	getapic(o,picdata,size);
 }
-
 EXPORT void GetPKMIcon_INTERNAL(pokemon_obj * pkm, byte ** picdata, int * size, int generation)
 {
 	std::ostringstream o;
 	geticonsql(o,pkm,generation);
 	getapic(o,picdata,size);
 }
-
 EXPORT void GetTypePic_INTERNAL(int type, byte ** picdata, int * size)
 {
 	std::ostringstream o;
 	gettypesql(o,type);
 	getapic(o,picdata,size);
 }
-
 EXPORT int GetPKMLevel(pokemon_obj * pkm)
 {
 	if(!(pkm->isboxdatadecrypted))
@@ -155,7 +146,6 @@ EXPORT int GetPKMLevel(pokemon_obj * pkm)
 	int ret = getpkmlevel(pkm);
 	return ret;
 }
-
 EXPORT void SetPKMLevel(pokemon_obj * pkm, int level)
 {
 	if(!(pkm->isboxdatadecrypted))
@@ -164,7 +154,6 @@ EXPORT void SetPKMLevel(pokemon_obj * pkm, int level)
 	}
 	pkm->exp = getpkmexpatlevel(pkm->species,level);
 }
-
 EXPORT int GetPKMSpeciesID(pokemon_obj * pkm)
 {
 	if(!(pkm->isboxdatadecrypted))
@@ -173,7 +162,6 @@ EXPORT int GetPKMSpeciesID(pokemon_obj * pkm)
 	}
 	return int(pkm->species);
 }
-
 EXPORT void SetPKMSpeciesID(pokemon_obj * pkm, int speciesid)
 {
 	if(!(pkm->isboxdatadecrypted))
@@ -182,7 +170,6 @@ EXPORT void SetPKMSpeciesID(pokemon_obj * pkm, int speciesid)
 	}
 	pkm->species = Species::species(speciesid);
 }
-
 EXPORT void GetShinyStar_INTERNAL(byte ** picdata, int * size)
 {
 	std::ostringstream o;
@@ -267,7 +254,68 @@ EXPORT void GetRibbonImage_INTERNAL(string ribbon, bool hoenn,byte ** picdata, i
 	o << getribbonsql(ribbon,hoenn);
 	getapic(o,picdata,size);
 }
-
+EXPORT void FixPokemonChecksum(pokemon_obj * pkm)
+{
+	calcchecksum(pkm);
+}
+EXPORT void FixSaveChecksums(bw2sav_obj * sav)
+{
+	bool isbw2 = savisbw2(sav);
+	pokemon_obj * pkm = new pokemon_obj();
+	party_pkm * ppkm = new party_pkm();
+	for(int partyslot = 0; partyslot < sav->cur.party.size; partyslot++)
+	{
+		ppkm = &(sav->cur.party.pokemon[partyslot]);
+		if(ppkm->ispartydatadecrypted)
+		{
+			calcchecksum(ppkm);
+			encryptpkm(ppkm);
+		}
+		else if(ppkm->isboxdatadecrypted)
+		{
+			pkm = ppkm;
+			calcchecksum(pkm);
+			encryptpkm(pkm);
+		}
+	}
+	calcpartychecksum(&(sav->cur),isbw2);
+	for(int box = 0; box < 24; box++)
+	{
+		for(int slot = 0; slot < 30; slot++)
+		{
+			pkm = &(sav->cur.boxes[box].pokemon[slot]);
+			if(pkm->isboxdatadecrypted)
+			{
+				calcchecksum(pkm);
+				encryptpkm(pkm);
+			}
+		}
+		calcboxchecksum(&(sav->cur),box,isbw2);
+	}
+	fixsavchecksum(sav,isbw2);
+}
+EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
+{
+	if(pkm->isboxdatadecrypted)
+	{
+		calcchecksum(pkm);
+	}
+	else
+	{
+		decryptpkm(pkm);
+		calcchecksum(pkm);
+	}
+	if(encrypt)
+	{
+		encryptpkm(pkm);
+	}
+	write(filename,pkm);
+}
+EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
+{
+	FixSaveChecksums(sav);
+	write(filename,sav);
+}
 BSTR ANSItoBSTR(const char* input)
 {
 	BSTR result = NULL;
