@@ -78,7 +78,7 @@ EXPORT int GetPKMMoveID(pokemon_obj * pokemon, int moveid)
 }
 EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
 {
-	std::wstring trainername = getwstring(sav->cur.trainername);
+	std::wstring trainername = getwstring(sav->cur.trainername,OTLENGTH);
 	std::string trainernamestr = std::string(trainername.begin(),trainername.end());
 	return ANSItoBSTR(trainernamestr.c_str());
 }
@@ -304,7 +304,9 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 		}
 		calcboxchecksum(&(sav->cur),box,isbw2);
 	}
-	sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
+	//sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
+	//calcchecksum(&(sav->cur),0x19400,0xB0,0x194B2);
+	fixtrainerdatachecksum(&(sav->cur));
 	fixsavchecksum(sav,isbw2);
 }
 EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
@@ -326,33 +328,8 @@ EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encr
 }
 EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
 {
-	//FixSaveChecksums(sav);
-	//write(filename,sav);
-
-	//bw2sav_obj * savout = new bw2sav_obj;
-	//*savout = *sav;
-	bool isbw2 = savisbw2(sav);
-	//sav->cur.curbox = frmCurBoxNum; // ui->cbBoxes->currentIndex();
-	for(uint32 pslot = 0; pslot < sav->cur.party.size; pslot++)
-	{
-		//encryptpkm(&(sav->cur.party.pokemon[pslot]));
-	}
-	calcpartychecksum(&(sav->cur),isbw2);
-	for(int boxnum = 0; boxnum < 24; boxnum++)
-	{
-		for(int boxslot = 0; boxslot < 30; boxslot++)
-		{
-			//encryptpkm(&(sav->cur.boxes[boxnum].pokemon[boxslot]));
-		}
-		calcboxchecksum(&(sav->cur),boxnum,isbw2);
-	}
-	sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
-	fixsavchecksum(sav, isbw2);
-
-	//uint16 * val = new uint16();
-	//*val = 0xEFBE;
-	//memcpy(sav, val, 2);
-
+	cout << "Eat my heart out!\n";
+	FixSaveChecksums(sav);
 	write(filename,sav);
 }
 BSTR ANSItoBSTR(const char* input)

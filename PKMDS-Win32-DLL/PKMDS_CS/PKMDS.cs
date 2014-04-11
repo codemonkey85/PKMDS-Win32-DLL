@@ -37,56 +37,56 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetPKMName_FromObj(Pokemon pkm);
+        private static extern string GetPKMName_FromObj([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetTrainerName_FromSav(Save sav);
+        private static extern string GetTrainerName_FromSav([In][Out] Save sav);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void WritePokemonFile(Pokemon pkm, string filename, bool encrypt = false);
+        private static extern void WritePokemonFile([In][Out] Pokemon pkm, string filename, bool encrypt = false);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void WriteSaveFile(Save sav, string filename);
+        public static extern void WriteSaveFile([In][Out] Save sav, string filename);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetTrainerName_FromSav_INTERNAL([In][Out] Save sav, string name, int namelength);
 
-        private static void SetTrainerName_FromSav(/*[In][Out]*/ Save sav, string name)
+        private static void SetTrainerName_FromSav([In][Out] Save sav, string name)
         {
             SetTrainerName_FromSav_INTERNAL(sav, name, name.Length);
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetTrainerTID_FromSav(Save sav);
+        private static extern int GetTrainerTID_FromSav([In][Out] Save sav);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetTrainerSID_FromSav(Save sav);
+        private static extern int GetTrainerSID_FromSav([In][Out] Save sav);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetBoxName(Save sav, int box);
+        private static extern string GetBoxName([In][Out] Save sav, int box);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMStat(Save sav, int box, int slot, int stat);
+        private static extern int GetPKMStat([In][Out] Save sav, int box, int slot, int stat);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMStat_FromObj(Pokemon pkm, int stat);
+        private static extern int GetPKMStat_FromObj([In][Out] Pokemon pkm, int stat);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMLevel(Pokemon pkm);
+        private static extern int GetPKMLevel([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMLevel([In][Out] Pokemon pkm, int level);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMSpeciesID(Pokemon pkm);
+        private static extern int GetPKMSpeciesID([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMSpeciesID([In][Out] Pokemon pkm, int speciesid);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMMoveID(Pokemon pokemon, int moveid);
+        private static extern int GetPKMMoveID([In][Out] Pokemon pokemon, int moveid);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
@@ -110,10 +110,10 @@ namespace PKMDS_CS
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetPKMSprite_INTERNAL(Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
+        private static unsafe extern void GetPKMSprite_INTERNAL([In][Out] Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetPKMIcon_INTERNAL(Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
+        private static unsafe extern void GetPKMIcon_INTERNAL([In][Out] Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetTypePic_INTERNAL(int type, [In][Out] IntPtr* picdata, [In][Out] int* size);
@@ -145,14 +145,14 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetRibbonImage_INTERNAL(string ribbon, bool hoenn, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
-        private static unsafe System.Drawing.Image GetPKMSprite(Pokemon pokemon, int Generation = GENERATION)
+        private static unsafe System.Drawing.Image GetPKMSprite([In][Out] Pokemon pokemon, int Generation = GENERATION)
         {
             IntPtr picdata = new IntPtr();
             int size = new int();
             GetPKMSprite_INTERNAL(pokemon, &picdata, &size, Generation);
             return GetPic(picdata, size);
         }
-        private static unsafe System.Drawing.Image GetPKMIcon(Pokemon pokemon, int Generation = GENERATION)
+        private static unsafe System.Drawing.Image GetPKMIcon([In][Out] Pokemon pokemon, int Generation = GENERATION)
         {
             IntPtr picdata = new IntPtr();
             int size = new int();
@@ -239,7 +239,7 @@ namespace PKMDS_CS
             return GetPic(picdata, size);
         }
 
-        private static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
+        private static string[] GetPKMMoveNames([In][Out] Pokemon pkm, int langid = LANG_ID)
         {
             string[] moves = { "", "", "", "" };
             for (int move = 0; move < 4; move++)
@@ -249,7 +249,7 @@ namespace PKMDS_CS
             return moves;
         }
 
-        private static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID)
+        private static string[] GetPKMMoveTypeNames([In][Out] Pokemon pkm, int langid = LANG_ID)
         {
             string[] moves = { "", "", "", "" };
             for (int move = 0; move < 4; move++)
@@ -260,9 +260,9 @@ namespace PKMDS_CS
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
+        private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
 
-        public static void GetPKMData([In][Out] ref Pokemon pokemon, Save sav, int box, int slot)
+        public static void GetPKMData([In][Out] ref Pokemon pokemon, [In][Out] Save sav, int box, int slot)
         {
             Pokemon pkm = new Pokemon();
             int size = Marshal.SizeOf(typeof(Pokemon));
@@ -275,9 +275,9 @@ namespace PKMDS_CS
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetPKMData_INTERNAL([In][Out] Pokemon pokemon, Save sav, int box, int slot);
+        private static extern void SetPKMData_INTERNAL([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
 
-        public static void SetPKMData([In][Out] Pokemon pokemon, Save sav, int box, int slot)
+        public static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot)
         {
             //Pokemon pkm = new Pokemon();
             //int size = Marshal.SizeOf(typeof(Pokemon));
