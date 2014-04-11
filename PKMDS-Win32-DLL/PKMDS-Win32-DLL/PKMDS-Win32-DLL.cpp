@@ -277,6 +277,12 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 			calcchecksum(pkm);
 			encryptpkm(pkm);
 		}
+		else
+		{
+			decryptpkm(pkm);
+			calcchecksum(pkm);
+			encryptpkm(pkm);
+		}
 	}
 	calcpartychecksum(&(sav->cur),isbw2);
 	for(int box = 0; box < 24; box++)
@@ -289,9 +295,16 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 				calcchecksum(pkm);
 				encryptpkm(pkm);
 			}
+			else
+			{
+				decryptpkm(pkm);
+				calcchecksum(pkm);
+				encryptpkm(pkm);
+			}
 		}
 		calcboxchecksum(&(sav->cur),box,isbw2);
 	}
+	sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
 	fixsavchecksum(sav,isbw2);
 }
 EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
@@ -313,7 +326,33 @@ EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encr
 }
 EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
 {
-	FixSaveChecksums(sav);
+	//FixSaveChecksums(sav);
+	//write(filename,sav);
+
+	//bw2sav_obj * savout = new bw2sav_obj;
+	//*savout = *sav;
+	bool isbw2 = savisbw2(sav);
+	//sav->cur.curbox = frmCurBoxNum; // ui->cbBoxes->currentIndex();
+	for(uint32 pslot = 0; pslot < sav->cur.party.size; pslot++)
+	{
+		//encryptpkm(&(sav->cur.party.pokemon[pslot]));
+	}
+	calcpartychecksum(&(sav->cur),isbw2);
+	for(int boxnum = 0; boxnum < 24; boxnum++)
+	{
+		for(int boxslot = 0; boxslot < 30; boxslot++)
+		{
+			//encryptpkm(&(sav->cur.boxes[boxnum].pokemon[boxslot]));
+		}
+		calcboxchecksum(&(sav->cur),boxnum,isbw2);
+	}
+	sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
+	fixsavchecksum(sav, isbw2);
+
+	//uint16 * val = new uint16();
+	//*val = 0xEFBE;
+	//memcpy(sav, val, 2);
+
 	write(filename,sav);
 }
 BSTR ANSItoBSTR(const char* input)
