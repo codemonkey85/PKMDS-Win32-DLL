@@ -794,7 +794,7 @@ EXPORT bool GetPKMIsEgg(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->isegg;
+	return pkm->isegg == true;
 }
 EXPORT void SetPKMIsEgg(pokemon_obj * pkm, bool isegg)
 {
@@ -810,7 +810,7 @@ EXPORT bool GetPKMIsNicknamed(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->isnicknamed;
+	return pkm->isnicknamed == true;
 }
 EXPORT void SetPKMIsNicknamed(pokemon_obj * pkm, bool isnicknamed)
 {
@@ -826,7 +826,7 @@ EXPORT bool GetPKMFateful(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->fencounter;
+	return pkm->fencounter == true;
 }
 EXPORT void SetPKMFateful(pokemon_obj * pkm, bool isfateful)
 {
@@ -890,7 +890,7 @@ EXPORT bool GetPKMDWAbility(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->hasdwability;
+	return pkm->hasdwability == true;
 }
 EXPORT void SetPKMDWAbility(pokemon_obj * pkm, bool hasdwability)
 {
@@ -906,7 +906,7 @@ EXPORT bool GetPKMNsPokemon(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->n_pkm;
+	return pkm->n_pkm == true;
 }
 EXPORT void SetPKMNsPokemon(pokemon_obj * pkm, bool isnspokemon)
 {
@@ -1224,7 +1224,7 @@ EXPORT void FixPokemonChecksum(pokemon_obj * pkm)
 }
 EXPORT bool IsPKMShiny(pokemon_obj * pkm)
 {
-	return getpkmshiny(pkm);
+	return getpkmshiny(pkm) == true;
 }
 BSTR ANSItoBSTR(const char* input)
 {
