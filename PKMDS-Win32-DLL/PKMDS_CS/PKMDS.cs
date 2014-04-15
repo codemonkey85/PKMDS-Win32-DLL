@@ -2444,7 +2444,7 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetPKMNickname([In][Out] Pokemon pkm);
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetPKMNickname([In][Out] Pokemon pkm, string nickname, int nicknamelength);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]

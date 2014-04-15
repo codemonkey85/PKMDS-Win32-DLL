@@ -932,13 +932,7 @@ EXPORT void SetPKMNickname(pokemon_obj * pkm, wchar_t * nickname, int nicknamele
 	{
 		decryptpkm(pkm);
 	}
-	/*
-
-
-	// TODO: SetPKMNickname
-
-
-	*/
+	setpkmnickname(pkm,nickname,nicknamelength);
 }
 EXPORT int GetPKMHometown(pokemon_obj * pkm)
 {
@@ -972,13 +966,7 @@ EXPORT void SetPKMOTName(pokemon_obj * pkm, wchar_t * otname, int otnamelength)
 	{
 		decryptpkm(pkm);
 	}
-	/*
-
-
-	// TODO: SetPKMOTname
-
-
-	*/
+	setpkmotname(pkm,otname,otnamelength);
 }
 EXPORT int GetPKMEggYear(pokemon_obj * pkm)
 {
