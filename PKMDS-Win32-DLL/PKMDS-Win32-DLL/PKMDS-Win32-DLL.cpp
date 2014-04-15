@@ -77,6 +77,18 @@ EXPORT uint16 GetTrainerSID_FromSav(bw2sav_obj * sav)
 {
 	return sav->cur.sid;
 }
+EXPORT uint32 GetPKMTNL(pokemon_obj * pkm)
+{
+	return getpkmexptonext(pkm);
+}
+EXPORT uint32 GetPKMEXPCurLevel(pokemon_obj * pkm)
+{
+	return getpkmexpatcur(pkm);
+}
+EXPORT uint32 GetPKMEXPGivenLevel(pokemon_obj * pkm, int level)
+{
+	return getpkmexpatlevel(pkm->species,level);
+}
 EXPORT BSTR GetBoxName(bw2sav_obj * sav, int box)
 {
 	std::wstring boxname = getwstring(sav->cur.boxnames[box]);
@@ -142,6 +154,10 @@ EXPORT void GetItemImage_INTERNAL(int item,byte ** picdata, int * size)
 		getitemsql(o,item);
 	}
 	getapic(o,picdata,size);
+}
+EXPORT int GetPKMType_INTERNAL(pokemon_obj * pkm, int type, int generation)
+{
+	return lookuppkmtype(pkm,type,generation);
 }
 EXPORT void GetMarkingImage_INTERNAL(int marking, bool marked,byte ** picdata, int * size)
 {

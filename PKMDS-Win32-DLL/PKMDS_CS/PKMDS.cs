@@ -2129,6 +2129,15 @@ namespace PKMDS_CS
         private static extern void FixPokemonChecksum([In][Out] Pokemon pokemon);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern UInt32 GetPKMTNL([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern UInt32 GetPKMEXPGivenLevel([In][Out] Pokemon pkm, int level);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern UInt32 GetPKMEXPCurLevel([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetItemName_INTERNAL(int itemid, int generation, int langid);
 
@@ -2210,6 +2219,10 @@ namespace PKMDS_CS
         }
         private static unsafe System.Drawing.Image GetTypePic(int type)
         {
+            if (type == -1)
+            {
+                return null;
+            }
             IntPtr picdata = new IntPtr();
             int size = new int();
             GetTypePic_INTERNAL(type, &picdata, &size);
@@ -2310,6 +2323,14 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMPID([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetPKMType_INTERNAL([In][Out] Pokemon pkm, int type, int generation);
+
+        private static int GetPKMType(Pokemon pokemon, int slot, int generation = GENERATION)
+        {
+            return GetPKMType_INTERNAL(pokemon, slot, generation);
+        }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMPID([In][Out] Pokemon pkm, UInt32 pid);
@@ -2840,7 +2861,7 @@ namespace PKMDS_CS
             }
             public int GetIV(int ivindex)
             {
-                return GetPKMEV(this, ivindex);
+                return GetPKMIV(this, ivindex);
             }
             public void SetIV(int ivindex, int iv)
             {
@@ -3130,16 +3151,38 @@ namespace PKMDS_CS
                     return PKMDS.IsPKMShiny(this);
                 }
             }
-            public System.Drawing.Image GetTypePic(int type)
+            public int GetType(int Slot)
             {
-                if ((type == 1) | (type == 2))
+                return GetPKMType(this, Slot);
+            }
+            public System.Drawing.Image GetTypePic(int Slot)
+            {
+                if ((Slot == 1) | (Slot == 2))
                 {
-                    return PKMDS.GetTypePic(type);
+                    return PKMDS.GetTypePic(this.GetType(Slot));
                 }
                 else
                 {
-                    return PKMDS.GetTypePic(1);
+                    return null;
                 }
+            }
+            public UInt32 TNL
+            {
+                get
+                {
+                    return PKMDS.GetPKMTNL(this);
+                }
+            }
+            public UInt32 EXPAtCurLevel
+            {
+                get
+                {
+                    return PKMDS.GetPKMEXPCurLevel(this);
+                }
+            }
+            public UInt32 EXPAtGivenLevel(int Level)
+            {
+                return GetPKMEXPGivenLevel(this, Level);
             }
             public System.Drawing.Image ShinyIcon
             {
@@ -3198,7 +3241,7 @@ namespace PKMDS_CS
             //        return PKMDS.GetRibbonImage(this);
             //    }
             //}
-            public Pokemon Clone() 
+            public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
                 Data.CopyTo(ClonedData, 0);
