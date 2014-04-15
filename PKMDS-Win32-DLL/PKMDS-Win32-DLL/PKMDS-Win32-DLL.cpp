@@ -1206,7 +1206,7 @@ EXPORT void SetPKMEncounter(pokemon_obj * pkm, int encounter)
 }
 EXPORT bool IsPKMModified(pokemon_obj * pkm)
 {
-	int chk = pkm->checksum;
+	uint16 chk = pkm->checksum;
 	if(!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
