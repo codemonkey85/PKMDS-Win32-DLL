@@ -2158,6 +2158,15 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.BStr)]
+        private static extern string GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int versiongroup);
+
+        public static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP)
+        {
+            return GetItemFlavor_INTERNAL(itemid, generation, langid, versiongroup);
+        }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveName(int moveid, int langid = LANG_ID);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2689,6 +2698,21 @@ namespace PKMDS_CS
                     else
                     {
                         return name;
+                    }
+                }
+            }
+            public string ItemFlavor
+            {
+                get
+                {
+                    string flavor = PKMDS.GetItemFlavor(this.itemid);
+                    if (flavor == null)
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        return flavor.Replace("\n", " ");
                     }
                 }
             }
@@ -3244,21 +3268,21 @@ namespace PKMDS_CS
                     return PKMDS.GetPokerusImage(this.PokerusStrain, this.PokerusDays);
                 }
             }
-            public string Characteristic 
+            public string Characteristic
             {
-                get 
+                get
                 {
                     return GetCharacteristic(this);
                 }
             }
-            public int NatureIncrease 
+            public int NatureIncrease
             {
-                get 
+                get
                 {
                     return GetNatureIncrease(this);
                 }
             }
-            public int NatureDecrease 
+            public int NatureDecrease
             {
                 get
                 {

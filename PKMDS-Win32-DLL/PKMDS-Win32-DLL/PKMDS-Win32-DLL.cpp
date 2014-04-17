@@ -33,6 +33,11 @@ EXPORT BSTR GetItemName_INTERNAL(int itemid, int generation, int langid)
 	std::string ret = lookupitemname(itemid,generation,langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
+EXPORT BSTR GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int versiongroup)
+{
+	std::string ret = lookupitemflavortext(itemid,generation,langid,versiongroup).c_str();
+	return ANSItoBSTR(ret.c_str());
+}
 EXPORT BSTR GetMoveName(int moveid, int langid)
 {
 	std::string ret = lookupmovename(moveid, langid).c_str();
