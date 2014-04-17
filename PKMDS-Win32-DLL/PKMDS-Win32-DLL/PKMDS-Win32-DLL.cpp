@@ -53,6 +53,19 @@ EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, in
 {
 	setsavetrainername(sav,name,namelength);
 }
+EXPORT BSTR GetCharacteristic(pokemon_obj * pkm)
+{
+	std::string characteristic = lookupcharacteristic(pkm);
+	return ANSItoBSTR(characteristic.c_str());
+}
+EXPORT int GetNatureIncrease(pokemon_obj * pkm)
+{
+	return getnatureincrease(pkm);
+}
+EXPORT int GetNatureDecrease(pokemon_obj * pkm)
+{
+	return getnaturedecrease(pkm);
+}
 EXPORT int GetBoxWallpaper(bw2sav_obj * sav, int box)
 {
 	return int(sav->cur.boxwallpapers[box]);

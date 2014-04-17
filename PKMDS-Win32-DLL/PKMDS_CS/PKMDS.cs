@@ -2048,6 +2048,10 @@ namespace PKMDS_CS
         private static extern string GetTrainerName_FromSav([In][Out] Save sav);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        private static extern string GetCharacteristic([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void WritePokemonFile([In][Out] Pokemon pkm, string filename, bool encrypt = false);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2088,6 +2092,12 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetBoxName([In][Out] Save sav, int box, string name, int namelength);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetNatureIncrease([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetNatureDecrease([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMStat([In][Out] Save sav, int box, int slot, int stat);
@@ -3232,6 +3242,27 @@ namespace PKMDS_CS
                 get
                 {
                     return PKMDS.GetPokerusImage(this.PokerusStrain, this.PokerusDays);
+                }
+            }
+            public string Characteristic 
+            {
+                get 
+                {
+                    return GetCharacteristic(this);
+                }
+            }
+            public int NatureIncrease 
+            {
+                get 
+                {
+                    return GetNatureIncrease(this);
+                }
+            }
+            public int NatureDecrease 
+            {
+                get
+                {
+                    return GetNatureDecrease(this);
                 }
             }
             //public System.Drawing.Image RibbonPic
