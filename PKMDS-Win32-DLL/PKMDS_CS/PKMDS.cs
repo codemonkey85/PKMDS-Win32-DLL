@@ -2391,7 +2391,7 @@ namespace PKMDS_CS
         private static extern void SetPKMAbilityIndex([In][Out] Pokemon pkm, int ability);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern bool GetPKMMarking([In][Out] Pokemon pkm, int marking);
+        /*private*/public static extern bool GetPKMMarking([In][Out] Pokemon pkm, int marking);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMarking([In][Out] Pokemon pkm, int marking, bool marked);

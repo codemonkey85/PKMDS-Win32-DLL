@@ -26,16 +26,16 @@ EXPORT void CloseImgDB()
 }
 EXPORT void GetSAVData_INTERNAL(bw2sav_obj * save, const char * savefile)
 {
-	read(savefile,save);
+	read(savefile, save);
 };
 EXPORT BSTR GetItemName_INTERNAL(int itemid, int generation, int langid)
 {
-	std::string ret = lookupitemname(itemid,generation,langid).c_str();
+	std::string ret = lookupitemname(itemid, generation, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
 EXPORT BSTR GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int versiongroup)
 {
-	std::string ret = lookupitemflavortext(itemid,generation,langid,versiongroup).c_str();
+	std::string ret = lookupitemflavortext(itemid, generation, langid, versiongroup).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
 EXPORT BSTR GetMoveName(int moveid, int langid)
@@ -50,13 +50,13 @@ EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
 }
 EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
 {
-	std::wstring trainername = getwstring(sav->cur.trainername,OTLENGTH);
-	std::string trainernamestr = std::string(trainername.begin(),trainername.end());
+	std::wstring trainername = getwstring(sav->cur.trainername, OTLENGTH);
+	std::string trainernamestr = std::string(trainername.begin(), trainername.end());
 	return ANSItoBSTR(trainernamestr.c_str());
 }
 EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, int namelength)
 {
-	setsavetrainername(sav,name,namelength);
+	setsavetrainername(sav, name, namelength);
 }
 EXPORT BSTR GetCharacteristic(pokemon_obj * pkm)
 {
@@ -105,102 +105,102 @@ EXPORT uint32 GetPKMEXPCurLevel(pokemon_obj * pkm)
 }
 EXPORT uint32 GetPKMEXPGivenLevel(pokemon_obj * pkm, int level)
 {
-	return getpkmexpatlevel(pkm->species,level);
+	return getpkmexpatlevel(pkm->species, level);
 }
 EXPORT BSTR GetBoxName(bw2sav_obj * sav, int box)
 {
 	std::wstring boxname = getwstring(sav->cur.boxnames[box]);
-	std::string boxstr = std::string(boxname.begin(),boxname.end());
+	std::string boxstr = std::string(boxname.begin(), boxname.end());
 	return ANSItoBSTR(boxstr.c_str());
 }
 EXPORT int GetPKMStat(bw2sav_obj * sav, int box, int slot, int stat)
 {
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
+	int ret = getpkmstat(pkm, Stat_IDs::stat_ids(stat));
 	return ret;
 }
 EXPORT void GetTypePic_INTERNAL(int type, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	gettypesql(o,type);
-	getapic(o,picdata,size);
+	gettypesql(o, type);
+	getapic(o, picdata, size);
 }
 EXPORT void GetShinyStar_INTERNAL(byte ** picdata, int * size)
 {
 	std::ostringstream o;
 	o << "select image from misc where identifier = \"shiny\"";
-	getapic(o,picdata,size);
+	getapic(o, picdata, size);
 }
 EXPORT void GetGenderPic_INTERNAL(int gender, byte ** picdata, int * size)
 {
 	std::ostringstream o;
 	std::string strgender = "male";
-	if(gender == int(Genders::female))
+	if (gender == int(Genders::female))
 	{
 		strgender = "female";
 	}
 	o << "select image from misc where identifier = \"" + strgender + "\"";
-	getapic(o,picdata,size);
+	getapic(o, picdata, size);
 }
-EXPORT void GetWallpaperImage_INTERNAL(int wallpaper,byte ** picdata, int * size)
+EXPORT void GetWallpaperImage_INTERNAL(int wallpaper, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	getwallpapersql(o,wallpaper);
-	getapic(o,picdata,size);
+	getwallpapersql(o, wallpaper);
+	getapic(o, picdata, size);
 }
-EXPORT void GetItemImage_INTERNAL(int item,byte ** picdata, int * size)
+EXPORT void GetItemImage_INTERNAL(int item, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	if(((item >= (int)Items::tm01) & (item <= (int)Items::tm92)) | ((item >= (int)Items::tm93) & (item <= (int)Items::tm95)) | ((item >= (int)Items::hm01) & (item <= (int)Items::hm06)))
+	if (((item >= (int)Items::tm01) & (item <= (int)Items::tm92)) | ((item >= (int)Items::tm93) & (item <= (int)Items::tm95)) | ((item >= (int)Items::hm01) & (item <= (int)Items::hm06)))
 	{
 		std::string mprefix = "tm-";
-		if((item >= (int)Items::hm01) & (item <= (int)Items::hm06)){mprefix = "hm-";}
+		if ((item >= (int)Items::hm01) & (item <= (int)Items::hm06)){ mprefix = "hm-"; }
 		std::string sql = "select image from items where (identifier = \"" + mprefix + getmachinetypename(Items::items(item)) + "\")";
 		o << sql.c_str();
 	}
-	else if((item >= (int)Items::datacard01) & (item <= (int)Items::datacard27))
+	else if ((item >= (int)Items::datacard01) & (item <= (int)Items::datacard27))
 	{
 		std::string sql = "select image from items where (identifier = \"data-card\")";
 		o << sql.c_str();
 	}
 	else
 	{
-		getitemsql(o,item);
+		getitemsql(o, item);
 	}
-	getapic(o,picdata,size);
+	getapic(o, picdata, size);
 }
 EXPORT int GetPKMType_INTERNAL(pokemon_obj * pkm, int type, int generation)
 {
-	return lookuppkmtype(pkm,type,generation);
+	return lookuppkmtype(pkm, type, generation);
 }
-EXPORT void GetMarkingImage_INTERNAL(int marking, bool marked,byte ** picdata, int * size)
+EXPORT void GetMarkingImage_INTERNAL(int marking, bool marked, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	getmarkingsql(o,Markings::markings(marking),marked);
-	getapic(o,picdata,size);
+	getmarkingsql(o, Markings::markings(marking), marked);
+	getapic(o, picdata, size);
 }
-EXPORT void GetBallPic_INTERNAL(int ball,byte ** picdata, int * size)
+EXPORT void GetBallPic_INTERNAL(int ball, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	getballsql(o,Balls::balls(ball));
-	getapic(o,picdata,size);
+	getballsql(o, Balls::balls(ball));
+	getapic(o, picdata, size);
 }
-EXPORT void GetMoveCategoryImage_INTERNAL(int move,byte ** picdata, int * size)
+EXPORT void GetMoveCategoryImage_INTERNAL(int move, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	getmovecatsql(o,Moves::moves(move));
-	getapic(o,picdata,size);
+	getmovecatsql(o, Moves::moves(move));
+	getapic(o, picdata, size);
 }
-EXPORT void GetPokerusImage_INTERNAL(int strain, int days,byte ** picdata, int * size)
+EXPORT void GetPokerusImage_INTERNAL(int strain, int days, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	if(strain != 0)
+	if (strain != 0)
 	{
-		if(days > 0)
+		if (days > 0)
 		{
 			o << "select image from misc where identifier = \"pokerus_infected\"";
 		}
@@ -209,28 +209,28 @@ EXPORT void GetPokerusImage_INTERNAL(int strain, int days,byte ** picdata, int *
 			o << "select image from misc where identifier = \"pokerus_cured\"";
 		}
 	}
-	getapic(o,picdata,size);
+	getapic(o, picdata, size);
 }
-EXPORT void GetRibbonImage_INTERNAL(string ribbon, bool hoenn,byte ** picdata, int * size)
+EXPORT void GetRibbonImage_INTERNAL(string ribbon, bool hoenn, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	o << getribbonsql(ribbon,hoenn);
-	getapic(o,picdata,size);
+	o << getribbonsql(ribbon, hoenn);
+	getapic(o, picdata, size);
 }
 EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 {
 	bool isbw2 = savisbw2(sav);
 	pokemon_obj * pkm = new pokemon_obj();
 	party_pkm * ppkm = new party_pkm();
-	for(int partyslot = 0; partyslot < sav->cur.party.size; partyslot++)
+	for (int partyslot = 0; partyslot < sav->cur.party.size; partyslot++)
 	{
 		ppkm = &(sav->cur.party.pokemon[partyslot]);
-		if(ppkm->isboxdatadecrypted)
+		if (ppkm->isboxdatadecrypted)
 		{
 			calcchecksum(ppkm);
 			encryptpkm(ppkm);
 		}
-		else if(ppkm->isboxdatadecrypted)
+		else if (ppkm->isboxdatadecrypted)
 		{
 			pkm = ppkm;
 			calcchecksum(pkm);
@@ -243,13 +243,13 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 			encryptpkm(pkm);
 		}
 	}
-	calcpartychecksum(&(sav->cur),isbw2);
-	for(int box = 0; box < 24; box++)
+	calcpartychecksum(&(sav->cur), isbw2);
+	for (int box = 0; box < 24; box++)
 	{
-		for(int slot = 0; slot < 30; slot++)
+		for (int slot = 0; slot < 30; slot++)
 		{
 			pkm = &(sav->cur.boxes[box].pokemon[slot]);
-			if(pkm->isboxdatadecrypted)
+			if (pkm->isboxdatadecrypted)
 			{
 				calcchecksum(pkm);
 				encryptpkm(pkm);
@@ -261,18 +261,18 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 				encryptpkm(pkm);
 			}
 		}
-		calcboxchecksum(&(sav->cur),box,isbw2);
+		calcboxchecksum(&(sav->cur), box, isbw2);
 	}
-	sav->cur.block1checksum = getchecksum(&(sav->cur),0x0,0x3e0);
+	sav->cur.block1checksum = getchecksum(&(sav->cur), 0x0, 0x3e0);
 	fixtrainerdatachecksum(&(sav->cur));
 	fixbagchecksum(&(sav->cur));
-	fixsavchecksum(sav,isbw2);
+	fixsavchecksum(sav, isbw2);
 }
 EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
 {
 	cout << "Eat my heart out!\n";
 	FixSaveChecksums(sav);
-	write(filename,sav);
+	write(filename, sav);
 }
 EXPORT int GetCurrentBox(bw2sav_obj * sav)
 {
@@ -292,16 +292,16 @@ EXPORT void SetPartySize(bw2sav_obj * sav, int size)
 }
 EXPORT void SetBoxName(bw2sav_obj * sav, int box, wchar_t * name, int namelength)
 {
-	setsaveboxname(sav,box,name,namelength);
+	setsaveboxname(sav, box, name, namelength);
 }
 EXPORT BSTR GetPKMName(int speciesid, int langid)
 {
-	std::string ret = lookuppkmname(speciesid,langid).c_str();
+	std::string ret = lookuppkmname(speciesid, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
 EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
 {
-	if(pkm->isboxdatadecrypted)
+	if (pkm->isboxdatadecrypted)
 	{
 		calcchecksum(pkm);
 	}
@@ -310,16 +310,16 @@ EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encr
 		decryptpkm(pkm);
 		calcchecksum(pkm);
 	}
-	if(encrypt)
+	if (encrypt)
 	{
 		encryptpkm(pkm);
 	}
-	write(filename,pkm);
+	write(filename, pkm);
 }
 EXPORT void GetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box, int slot)
 {
 	pokemon_obj * pkm = &(sav->cur.boxes[box].pokemon[slot]);
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -328,7 +328,7 @@ EXPORT void GetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box
 EXPORT void GetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int slot)
 {
 	party_pkm * pkm = &(sav->cur.party.pokemon[slot]);
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -336,7 +336,7 @@ EXPORT void GetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int 
 };
 EXPORT void SetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int slot)
 {
-	if(!(pokemon->isboxdatadecrypted))
+	if (!(pokemon->isboxdatadecrypted))
 	{
 		decryptpkm(pokemon);
 	}
@@ -345,11 +345,11 @@ EXPORT void SetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int 
 };
 EXPORT void GetPKMDataFromFile_INTERNAL(pokemon_obj * pokemon, const char * filename)
 {
-	read(filename,pokemon);
+	read(filename, pokemon);
 };
 EXPORT void SetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box, int slot)
 {
-	if(!(pokemon->isboxdatadecrypted))
+	if (!(pokemon->isboxdatadecrypted))
 	{
 		decryptpkm(pokemon);
 	}
@@ -358,7 +358,7 @@ EXPORT void SetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box
 };
 EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -367,7 +367,7 @@ EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
 }
 EXPORT uint16 GetPKMMoveID(pokemon_obj * pokemon, int moveid)
 {
-	if(!(pokemon->isboxdatadecrypted))
+	if (!(pokemon->isboxdatadecrypted))
 	{
 		decryptpkm(pokemon);
 	}
@@ -375,36 +375,36 @@ EXPORT uint16 GetPKMMoveID(pokemon_obj * pokemon, int moveid)
 }
 EXPORT int GetPKMStat_FromObj(pokemon_obj * pkm, int stat)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	int ret = getpkmstat(pkm,Stat_IDs::stat_ids(stat));
+	int ret = getpkmstat(pkm, Stat_IDs::stat_ids(stat));
 	return ret;
 }
 EXPORT void GetPKMSprite_INTERNAL(pokemon_obj * pkm, byte ** picdata, int * size, int generation)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
 	std::ostringstream o;
-	getspritesql(o,pkm,generation);
-	getapic(o,picdata,size);
+	getspritesql(o, pkm, generation);
+	getapic(o, picdata, size);
 }
 EXPORT void GetPKMIcon_INTERNAL(pokemon_obj * pkm, byte ** picdata, int * size, int generation)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
 	std::ostringstream o;
-	geticonsql(o,pkm,generation);
-	getapic(o,picdata,size);
+	geticonsql(o, pkm, generation);
+	getapic(o, picdata, size);
 }
 EXPORT int GetPKMLevel(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -412,15 +412,15 @@ EXPORT int GetPKMLevel(pokemon_obj * pkm)
 }
 EXPORT void SetPKMLevel(pokemon_obj * pkm, int level)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	pkm->exp = getpkmexpatlevel(pkm->species,level);
+	pkm->exp = getpkmexpatlevel(pkm->species, level);
 }
 EXPORT uint16 GetPKMSpeciesID(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -428,7 +428,7 @@ EXPORT uint16 GetPKMSpeciesID(pokemon_obj * pkm)
 }
 EXPORT void SetPKMSpeciesID(pokemon_obj * pkm, int speciesid)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -436,7 +436,7 @@ EXPORT void SetPKMSpeciesID(pokemon_obj * pkm, int speciesid)
 }
 EXPORT uint32 GetPKMPID(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -444,7 +444,7 @@ EXPORT uint32 GetPKMPID(pokemon_obj * pkm)
 }
 EXPORT void SetPKMPID(pokemon_obj * pkm, int pid)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -452,7 +452,7 @@ EXPORT void SetPKMPID(pokemon_obj * pkm, int pid)
 }
 EXPORT uint16 GetPKMItemIndex(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -460,7 +460,7 @@ EXPORT uint16 GetPKMItemIndex(pokemon_obj * pkm)
 }
 EXPORT void SetPKMItemIndex(pokemon_obj * pkm, int item)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -468,7 +468,7 @@ EXPORT void SetPKMItemIndex(pokemon_obj * pkm, int item)
 }
 EXPORT uint16 GetPKMTID(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -476,7 +476,7 @@ EXPORT uint16 GetPKMTID(pokemon_obj * pkm)
 }
 EXPORT void SetPKMTID(pokemon_obj * pkm, int tid)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -484,7 +484,7 @@ EXPORT void SetPKMTID(pokemon_obj * pkm, int tid)
 }
 EXPORT uint16 GetPKMSID(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -492,7 +492,7 @@ EXPORT uint16 GetPKMSID(pokemon_obj * pkm)
 }
 EXPORT void SetPKMSID(pokemon_obj * pkm, int sid)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -500,7 +500,7 @@ EXPORT void SetPKMSID(pokemon_obj * pkm, int sid)
 }
 EXPORT uint32 GetPKMEXP(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -508,7 +508,7 @@ EXPORT uint32 GetPKMEXP(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEXP(pokemon_obj * pkm, int exp)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -516,7 +516,7 @@ EXPORT void SetPKMEXP(pokemon_obj * pkm, int exp)
 }
 EXPORT int GetPKMTameness(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -524,7 +524,7 @@ EXPORT int GetPKMTameness(pokemon_obj * pkm)
 }
 EXPORT void SetPKMTameness(pokemon_obj * pkm, int tameness)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -532,7 +532,7 @@ EXPORT void SetPKMTameness(pokemon_obj * pkm, int tameness)
 }
 EXPORT int GetPKMAbilityIndex(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -540,7 +540,7 @@ EXPORT int GetPKMAbilityIndex(pokemon_obj * pkm)
 }
 EXPORT void SetPKMAbilityIndex(pokemon_obj * pkm, int ability)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -548,12 +548,12 @@ EXPORT void SetPKMAbilityIndex(pokemon_obj * pkm, int ability)
 }
 EXPORT bool GetPKMMarking(pokemon_obj * pkm, int marking)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
 
-	switch(Markings::markings(marking))
+	switch (Markings::markings(marking))
 	{
 	case Markings::circle:
 		return (pkm->markings.circle == true);
@@ -580,11 +580,11 @@ EXPORT bool GetPKMMarking(pokemon_obj * pkm, int marking)
 }
 EXPORT void SetPKMMarking(pokemon_obj * pkm, int marking, bool marked)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(Markings::markings(marking))
+	switch (Markings::markings(marking))
 	{
 	case Markings::circle:
 		pkm->markings.circle = (marked == true);
@@ -608,7 +608,7 @@ EXPORT void SetPKMMarking(pokemon_obj * pkm, int marking, bool marked)
 }
 EXPORT int GetPKMLanguage(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -616,7 +616,7 @@ EXPORT int GetPKMLanguage(pokemon_obj * pkm)
 }
 EXPORT void SetPKMLanguage(pokemon_obj * pkm, int language)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -624,11 +624,11 @@ EXPORT void SetPKMLanguage(pokemon_obj * pkm, int language)
 }
 EXPORT int GetPKMEV(pokemon_obj * pkm, int evindex)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(Stats::stats(evindex))
+	switch (Stats::stats(evindex))
 	{
 	case Stats::attack:
 		return pkm->evs.attack;
@@ -652,11 +652,11 @@ EXPORT int GetPKMEV(pokemon_obj * pkm, int evindex)
 }
 EXPORT void SetPKMEV(pokemon_obj * pkm, int evindex, int ev)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(Stats::stats(evindex))
+	switch (Stats::stats(evindex))
 	{
 	case Stats::attack:
 		pkm->evs.attack = ev;
@@ -680,11 +680,11 @@ EXPORT void SetPKMEV(pokemon_obj * pkm, int evindex, int ev)
 }
 EXPORT int GetPKMIV(pokemon_obj * pkm, int ivindex)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(Stats::stats(ivindex))
+	switch (Stats::stats(ivindex))
 	{
 	case Stats::attack:
 		return pkm->ivs.attack;
@@ -708,11 +708,11 @@ EXPORT int GetPKMIV(pokemon_obj * pkm, int ivindex)
 }
 EXPORT void SetPKMIV(pokemon_obj * pkm, int ivindex, int iv)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(Stats::stats(ivindex))
+	switch (Stats::stats(ivindex))
 	{
 	case Stats::attack:
 		pkm->ivs.attack = iv;
@@ -736,11 +736,11 @@ EXPORT void SetPKMIV(pokemon_obj * pkm, int ivindex, int iv)
 }
 EXPORT int GetPKMContest(pokemon_obj * pkm, int contestindex)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(ContestStats::conteststats(contestindex))
+	switch (ContestStats::conteststats(contestindex))
 	{
 	case ContestStats::beauty:
 		return pkm->contest.beauty;
@@ -764,11 +764,11 @@ EXPORT int GetPKMContest(pokemon_obj * pkm, int contestindex)
 }
 EXPORT void SetPKMContest(pokemon_obj * pkm, int contestindex, int contest)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	switch(ContestStats::conteststats(contestindex))
+	switch (ContestStats::conteststats(contestindex))
 	{
 	case ContestStats::beauty:
 		pkm->contest.beauty = contest;
@@ -792,7 +792,7 @@ EXPORT void SetPKMContest(pokemon_obj * pkm, int contestindex, int contest)
 }
 EXPORT int GetPKMMovePP(pokemon_obj * pkm, int move)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -800,7 +800,7 @@ EXPORT int GetPKMMovePP(pokemon_obj * pkm, int move)
 }
 EXPORT void SetPKMMovePP(pokemon_obj * pkm, int move, int pp)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -808,7 +808,7 @@ EXPORT void SetPKMMovePP(pokemon_obj * pkm, int move, int pp)
 }
 EXPORT int GetPKMMovePPUp(pokemon_obj * pkm, int move)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -816,7 +816,7 @@ EXPORT int GetPKMMovePPUp(pokemon_obj * pkm, int move)
 }
 EXPORT void SetPKMMovePPUp(pokemon_obj * pkm, int move, int ppup)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -824,7 +824,7 @@ EXPORT void SetPKMMovePPUp(pokemon_obj * pkm, int move, int ppup)
 }
 EXPORT bool GetPKMIsEgg(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -832,7 +832,7 @@ EXPORT bool GetPKMIsEgg(pokemon_obj * pkm)
 }
 EXPORT void SetPKMIsEgg(pokemon_obj * pkm, bool isegg)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -840,7 +840,7 @@ EXPORT void SetPKMIsEgg(pokemon_obj * pkm, bool isegg)
 }
 EXPORT bool GetPKMIsNicknamed(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -848,7 +848,7 @@ EXPORT bool GetPKMIsNicknamed(pokemon_obj * pkm)
 }
 EXPORT void SetPKMIsNicknamed(pokemon_obj * pkm, bool isnicknamed)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -856,7 +856,7 @@ EXPORT void SetPKMIsNicknamed(pokemon_obj * pkm, bool isnicknamed)
 }
 EXPORT bool GetPKMFateful(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -864,7 +864,7 @@ EXPORT bool GetPKMFateful(pokemon_obj * pkm)
 }
 EXPORT void SetPKMFateful(pokemon_obj * pkm, bool isfateful)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -872,7 +872,7 @@ EXPORT void SetPKMFateful(pokemon_obj * pkm, bool isfateful)
 }
 EXPORT int GetPKMGender(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -880,15 +880,15 @@ EXPORT int GetPKMGender(pokemon_obj * pkm)
 }
 EXPORT void SetPKMGender(pokemon_obj * pkm, int gender)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	setpkmgender(pkm,gender);
+	setpkmgender(pkm, gender);
 }
 EXPORT int GetPKMForm(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -896,7 +896,7 @@ EXPORT int GetPKMForm(pokemon_obj * pkm)
 }
 EXPORT void SetPKMForm(pokemon_obj * pkm, int form)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -904,7 +904,7 @@ EXPORT void SetPKMForm(pokemon_obj * pkm, int form)
 }
 EXPORT int GetPKMNature(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -912,7 +912,7 @@ EXPORT int GetPKMNature(pokemon_obj * pkm)
 }
 EXPORT void SetPKMNature(pokemon_obj * pkm, int nature)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -920,7 +920,7 @@ EXPORT void SetPKMNature(pokemon_obj * pkm, int nature)
 }
 EXPORT bool GetPKMDWAbility(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -928,7 +928,7 @@ EXPORT bool GetPKMDWAbility(pokemon_obj * pkm)
 }
 EXPORT void SetPKMDWAbility(pokemon_obj * pkm, bool hasdwability)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -936,7 +936,7 @@ EXPORT void SetPKMDWAbility(pokemon_obj * pkm, bool hasdwability)
 }
 EXPORT bool GetPKMNsPokemon(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -944,7 +944,7 @@ EXPORT bool GetPKMNsPokemon(pokemon_obj * pkm)
 }
 EXPORT void SetPKMNsPokemon(pokemon_obj * pkm, bool isnspokemon)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -952,25 +952,25 @@ EXPORT void SetPKMNsPokemon(pokemon_obj * pkm, bool isnspokemon)
 }
 EXPORT BSTR GetPKMNickname(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	std::wstring nickname = getwstring(pkm->nickname,NICKLENGTH);
-	std::string nicknamestr = std::string(nickname.begin(),nickname.end());
+	std::wstring nickname = getwstring(pkm->nickname, NICKLENGTH);
+	std::string nicknamestr = std::string(nickname.begin(), nickname.end());
 	return ANSItoBSTR(nicknamestr.c_str());
 }
 EXPORT void SetPKMNickname(pokemon_obj * pkm, wchar_t * nickname, int nicknamelength)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	setpkmnickname(pkm,nickname,nicknamelength);
+	setpkmnickname(pkm, nickname, nicknamelength);
 }
 EXPORT int GetPKMHometown(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -978,7 +978,7 @@ EXPORT int GetPKMHometown(pokemon_obj * pkm)
 }
 EXPORT void SetPKMHometown(pokemon_obj * pkm, int hometown)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -986,25 +986,25 @@ EXPORT void SetPKMHometown(pokemon_obj * pkm, int hometown)
 }
 EXPORT BSTR GetPKMOTName(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	std::wstring otname = getwstring(pkm->otname,OTLENGTH);
-	std::string otnamestr = std::string(otname.begin(),otname.end());
+	std::wstring otname = getwstring(pkm->otname, OTLENGTH);
+	std::string otnamestr = std::string(otname.begin(), otname.end());
 	return ANSItoBSTR(otnamestr.c_str());
 }
 EXPORT void SetPKMOTName(pokemon_obj * pkm, wchar_t * otname, int otnamelength)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	setpkmotname(pkm,otname,otnamelength);
+	setpkmotname(pkm, otname, otnamelength);
 }
 EXPORT int GetPKMEggYear(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1012,7 +1012,7 @@ EXPORT int GetPKMEggYear(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEggYear(pokemon_obj * pkm, int year)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1020,7 +1020,7 @@ EXPORT void SetPKMEggYear(pokemon_obj * pkm, int year)
 }
 EXPORT int GetPKMEggMonth(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1028,7 +1028,7 @@ EXPORT int GetPKMEggMonth(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEggMonth(pokemon_obj * pkm, int month)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1036,7 +1036,7 @@ EXPORT void SetPKMEggMonth(pokemon_obj * pkm, int month)
 }
 EXPORT int GetPKMEggDay(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1044,7 +1044,7 @@ EXPORT int GetPKMEggDay(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEggDay(pokemon_obj * pkm, int day)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1052,7 +1052,7 @@ EXPORT void SetPKMEggDay(pokemon_obj * pkm, int day)
 }
 EXPORT int GetPKMMetYear(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1060,7 +1060,7 @@ EXPORT int GetPKMMetYear(pokemon_obj * pkm)
 }
 EXPORT void SetPKMMetYear(pokemon_obj * pkm, int year)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1068,7 +1068,7 @@ EXPORT void SetPKMMetYear(pokemon_obj * pkm, int year)
 }
 EXPORT int GetPKMMetMonth(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1076,7 +1076,7 @@ EXPORT int GetPKMMetMonth(pokemon_obj * pkm)
 }
 EXPORT void SetPKMMetMonth(pokemon_obj * pkm, int month)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1084,7 +1084,7 @@ EXPORT void SetPKMMetMonth(pokemon_obj * pkm, int month)
 }
 EXPORT int GetPKMMetDay(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1092,7 +1092,7 @@ EXPORT int GetPKMMetDay(pokemon_obj * pkm)
 }
 EXPORT void SetPKMMetDay(pokemon_obj * pkm, int day)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1100,7 +1100,7 @@ EXPORT void SetPKMMetDay(pokemon_obj * pkm, int day)
 }
 EXPORT uint16 GetPKMEggLocation(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1108,7 +1108,7 @@ EXPORT uint16 GetPKMEggLocation(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEggLocation(pokemon_obj * pkm, int location)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1116,7 +1116,7 @@ EXPORT void SetPKMEggLocation(pokemon_obj * pkm, int location)
 }
 EXPORT uint16 GetPKMMetLocation(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1124,7 +1124,7 @@ EXPORT uint16 GetPKMMetLocation(pokemon_obj * pkm)
 }
 EXPORT void SetPKMMetLocation(pokemon_obj * pkm, int location)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1132,7 +1132,7 @@ EXPORT void SetPKMMetLocation(pokemon_obj * pkm, int location)
 }
 EXPORT int GetPKMPokerusStrain(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1140,7 +1140,7 @@ EXPORT int GetPKMPokerusStrain(pokemon_obj * pkm)
 }
 EXPORT void SetPKMPokerusStrain(pokemon_obj * pkm, int strain)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1148,7 +1148,7 @@ EXPORT void SetPKMPokerusStrain(pokemon_obj * pkm, int strain)
 }
 EXPORT int GetPKMPokerusDays(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1156,7 +1156,7 @@ EXPORT int GetPKMPokerusDays(pokemon_obj * pkm)
 }
 EXPORT void SetPKMPokerusDays(pokemon_obj * pkm, int days)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1164,7 +1164,7 @@ EXPORT void SetPKMPokerusDays(pokemon_obj * pkm, int days)
 }
 EXPORT int GetPKMBall(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1172,7 +1172,7 @@ EXPORT int GetPKMBall(pokemon_obj * pkm)
 }
 EXPORT void SetPKMBall(pokemon_obj * pkm, int ball)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1180,7 +1180,7 @@ EXPORT void SetPKMBall(pokemon_obj * pkm, int ball)
 }
 EXPORT int GetPKMMetLevel(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1188,7 +1188,7 @@ EXPORT int GetPKMMetLevel(pokemon_obj * pkm)
 }
 EXPORT void SetPKMMetLevel(pokemon_obj * pkm, int level)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1196,7 +1196,7 @@ EXPORT void SetPKMMetLevel(pokemon_obj * pkm, int level)
 }
 EXPORT int GetPKMOTGender(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1204,7 +1204,7 @@ EXPORT int GetPKMOTGender(pokemon_obj * pkm)
 }
 EXPORT void SetPKMOTGender(pokemon_obj * pkm, int gender)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1212,7 +1212,7 @@ EXPORT void SetPKMOTGender(pokemon_obj * pkm, int gender)
 }
 EXPORT int GetPKMEncounter(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1220,7 +1220,7 @@ EXPORT int GetPKMEncounter(pokemon_obj * pkm)
 }
 EXPORT void SetPKMEncounter(pokemon_obj * pkm, int encounter)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1229,7 +1229,7 @@ EXPORT void SetPKMEncounter(pokemon_obj * pkm, int encounter)
 EXPORT bool IsPKMModified(pokemon_obj * pkm)
 {
 	uint16 chk = pkm->checksum;
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1237,7 +1237,7 @@ EXPORT bool IsPKMModified(pokemon_obj * pkm)
 }
 EXPORT void FixPokemonChecksum(pokemon_obj * pkm)
 {
-	if(!(pkm->isboxdatadecrypted))
+	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
@@ -1256,6 +1256,6 @@ BSTR ANSItoBSTR(const char* input)
 	{
 		result = ::SysAllocStringLen(0, lenW);
 		::MultiByteToWideChar(CP_ACP, 0, input, lenA, result, lenW);
-	} 
+	}
 	return result;
 }
