@@ -107,11 +107,19 @@ EXPORT uint32 GetPKMEXPGivenLevel(pokemon_obj * pkm, int level)
 {
 	return getpkmexpatlevel(pkm->species, level);
 }
-EXPORT BSTR GetBoxName(bw2sav_obj * sav, int box)
+EXPORT void GetBoxName_INTERNAL(bw2sav_obj * sav, int box, wchar_t ** boxname, int* length)
 {
-	std::wstring boxname = getwstring(sav->cur.boxnames[box]);
-	std::string boxstr = std::string(boxname.begin(), boxname.end());
-	return ANSItoBSTR(boxstr.c_str());
+	wstring wstr_boxname = getboxname(&(sav->cur), box);
+	*length = wstr_boxname.length();
+	*boxname = new wchar_t[BOXNAMELENGTH];
+	memset(*boxname, 0xff, BOXNAMELENGTH);
+	for (int i = 0; i < BOXNAMELENGTH; i++)
+	{
+		if (i < wstr_boxname.length())
+		{
+			(*boxname)[i] = wstr_boxname[i];
+		}
+	}
 }
 EXPORT int GetPKMStat(bw2sav_obj * sav, int box, int slot, int stat)
 {
@@ -356,14 +364,23 @@ EXPORT void SetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box
 	calcchecksum(pokemon);
 	sav->cur.boxes[box].pokemon[slot] = *pokemon;
 };
-EXPORT BSTR GetPKMName_FromObj(pokemon_obj * pkm)
+EXPORT void GetPKMName_FromObj_INTERNAL(pokemon_obj * pkm, wchar_t ** pkmname, int* length)
 {
 	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	std::string ret = lookuppkmname(pkm);
-	return ANSItoBSTR(ret.c_str());
+	std::wstring wstr_pkmname = lookuppkmnamewstring(pkm);
+	*length = wstr_pkmname.length();
+	*pkmname = new wchar_t[NICKLENGTH];
+	memset(*pkmname, 0xff, NICKLENGTH);
+	for (int i = 0; i < NICKLENGTH; i++)
+	{
+		if (i < wstr_pkmname.length())
+		{
+			(*pkmname)[i] = wstr_pkmname[i];
+		}
+	}
 }
 EXPORT uint16 GetPKMMoveID(pokemon_obj * pokemon, int moveid)
 {
@@ -950,16 +967,16 @@ EXPORT void SetPKMNsPokemon(pokemon_obj * pkm, bool isnspokemon)
 	}
 	pkm->n_pkm = isnspokemon;
 }
-EXPORT BSTR GetPKMNickname(pokemon_obj * pkm)
-{
-	if (!(pkm->isboxdatadecrypted))
-	{
-		decryptpkm(pkm);
-	}
-	std::wstring nickname = getwstring(pkm->nickname, NICKLENGTH);
-	std::string nicknamestr = std::string(nickname.begin(), nickname.end());
-	return ANSItoBSTR(nicknamestr.c_str());
-}
+//EXPORT BSTR GetPKMNickname(pokemon_obj * pkm)
+//{
+//	if (!(pkm->isboxdatadecrypted))
+//	{
+//		decryptpkm(pkm);
+//	}
+//	std::wstring nickname = getwstring(pkm->nickname, NICKLENGTH);
+//	std::string nicknamestr = std::string(nickname.begin(), nickname.end());
+//	return ANSItoBSTR(nicknamestr.c_str());
+//}
 EXPORT void SetPKMNickname(pokemon_obj * pkm, wchar_t * nickname, int nicknamelength)
 {
 	if (!(pkm->isboxdatadecrypted))
@@ -984,16 +1001,54 @@ EXPORT void SetPKMHometown(pokemon_obj * pkm, int hometown)
 	}
 	pkm->hometown_int = hometown;
 }
-EXPORT BSTR GetPKMOTName(pokemon_obj * pkm)
+//EXPORT BSTR GetPKMOTName(pokemon_obj * pkm)
+//{
+//	if (!(pkm->isboxdatadecrypted))
+//	{
+//		decryptpkm(pkm);
+//	}
+//	std::wstring otname = getwstring(pkm->otname, OTLENGTH);
+//	std::string otnamestr = std::string(otname.begin(), otname.end());
+//	return ANSItoBSTR(otnamestr.c_str());
+//}
+
+EXPORT void GetPKMOTName_INTERNAL(pokemon_obj * pkm, wchar_t ** otname, int* length)
 {
 	if (!(pkm->isboxdatadecrypted))
 	{
 		decryptpkm(pkm);
 	}
-	std::wstring otname = getwstring(pkm->otname, OTLENGTH);
-	std::string otnamestr = std::string(otname.begin(), otname.end());
-	return ANSItoBSTR(otnamestr.c_str());
+	wstring wstr_otname = getpkmotname(pkm);
+	*length = wstr_otname.length();
+	*otname = new wchar_t[OTLENGTH];
+	memset(*otname, 0xff, OTLENGTH);
+	for (int i = 0; i < OTLENGTH; i++)
+	{
+		if (i < wstr_otname.length())
+		{
+			(*otname)[i] = wstr_otname[i];
+		}
+	}
 }
+EXPORT void GetPKMNickName_INTERNAL(pokemon_obj * pkm, wchar_t ** nickname, int* length)
+{
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+	wstring wstr_nickname = getpkmnickname(pkm);
+	*length = wstr_nickname.length();
+	*nickname = new wchar_t[NICKLENGTH];
+	memset(*nickname, 0xff, NICKLENGTH);
+	for (int i = 0; i < NICKLENGTH; i++)
+	{
+		if (i < wstr_nickname.length())
+		{
+			(*nickname)[i] = wstr_nickname[i];
+		}
+	}
+}
+
 EXPORT void SetPKMOTName(pokemon_obj * pkm, wchar_t * otname, int otnamelength)
 {
 	if (!(pkm->isboxdatadecrypted))
