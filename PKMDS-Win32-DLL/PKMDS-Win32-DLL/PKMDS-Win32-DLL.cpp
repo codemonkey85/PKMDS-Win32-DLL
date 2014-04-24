@@ -48,11 +48,19 @@ EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
 	std::string ret = lookupmovetypename(moveid, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
-EXPORT BSTR GetTrainerName_FromSav(bw2sav_obj * sav)
+EXPORT void GetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t ** name, int* length)
 {
-	std::wstring trainername = getwstring(sav->cur.trainername, OTLENGTH);
-	std::string trainernamestr = std::string(trainername.begin(), trainername.end());
-	return ANSItoBSTR(trainernamestr.c_str());
+	wstring wstr_otname = getsavtrainername(&(sav->cur));
+	*length = wstr_otname.length();
+	*name = new wchar_t[OTLENGTH];
+	memset(*name, 0xff, OTLENGTH);
+	for (int i = 0; i < OTLENGTH; i++)
+	{
+		if (i < wstr_otname.length())
+		{
+			(*name)[i] = wstr_otname[i];
+		}
+	}
 }
 EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, int namelength)
 {

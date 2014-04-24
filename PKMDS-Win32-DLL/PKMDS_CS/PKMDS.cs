@@ -2077,7 +2077,16 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        private static extern string GetTrainerName_FromSav([In][Out] Save sav);
+        private static extern unsafe void GetTrainerName_FromSav_INTERNAL([In][Out] Save sav, [In][Out] IntPtr* name, [In][Out] int* length);
+
+        private static unsafe string GetTrainerName_FromSav([In][Out] Save sav) 
+        {
+            IntPtr test = new IntPtr();
+            int length = new int();
+            PKMDS.GetTrainerName_FromSav_INTERNAL(sav, &test, &length);
+            string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
+            return ret.Substring(0, length);
+        }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
