@@ -18,7 +18,7 @@ namespace PKMDS_CS
         #endregion
 
         #region Enums
-        public enum Species
+        public enum PKMSpecies
         {
             NOTHING,
             Bulbasaur,
@@ -2079,7 +2079,7 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern unsafe void GetTrainerName_FromSav_INTERNAL([In][Out] Save sav, [In][Out] IntPtr* name, [In][Out] int* length);
 
-        private static unsafe string GetTrainerName_FromSav([In][Out] Save sav) 
+        private static unsafe string GetTrainerName_FromSav([In][Out] Save sav)
         {
             IntPtr test = new IntPtr();
             int length = new int();
@@ -2212,6 +2212,24 @@ namespace PKMDS_CS
         public static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP)
         {
             return GetItemFlavor_INTERNAL(itemid, generation, langid, versiongroup);
+        }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        private static extern string GetAbilityName_INTERNAL(int abilityid, int langid = LANG_ID);
+
+        public static string GetAbilityName(int abilityid, int langid = LANG_ID)
+        {
+            return GetAbilityName_INTERNAL(abilityid, langid);
+        }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        private static extern string GetAbilityFlavor_INTERNAL(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID);
+
+        public static string GetAbilityFlavor(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID)
+        {
+            return GetAbilityFlavor_INTERNAL(abilityid, versiongroup, langid);
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
@@ -2434,7 +2452,7 @@ namespace PKMDS_CS
         private static extern void SetPKMTameness([In][Out] Pokemon pkm, int tameness);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMAbilityIndex([In][Out] Pokemon pkm);
+        private static extern UInt16 GetPKMAbilityIndex([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMAbilityIndex([In][Out] Pokemon pkm, int ability);
@@ -2782,6 +2800,310 @@ namespace PKMDS_CS
             }
         }
 
+        public class Ability
+        {
+            private UInt16 abilityid;
+            public Ability(UInt16 abilityid)
+            {
+                this.abilityid = abilityid;
+            }
+            public Ability()
+            {
+                this.abilityid = 0;
+            }
+            public UInt16 AbilityID
+            {
+                get
+                {
+                    return abilityid;
+                }
+                set
+                {
+                    abilityid = value;
+                }
+            }
+            public string AbilityName
+            {
+                get
+                {
+                    return PKMDS.GetAbilityName(this.AbilityID);
+                }
+            }
+            public string AbilityFlavor
+            {
+                get
+                {
+                    return PKMDS.GetAbilityFlavor(this.AbilityID);
+                }
+            }
+        }
+
+        public class Species
+        {
+            private UInt16 speciesid;
+            public Species(UInt16 speciesid)
+            {
+                this.speciesid = speciesid;
+            }
+            public Species()
+            {
+                this.speciesid = 0;
+            }
+            public UInt16 SpeciesID
+            {
+                get
+                {
+                    return speciesid;
+                }
+                set
+                {
+                    speciesid = value;
+                }
+            }
+            public string SpeciesName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+        }
+
+        public class Ball
+        {
+            private UInt16 ballid;
+            public Ball(UInt16 ballid)
+            {
+                this.ballid = ballid;
+            }
+            public Ball()
+            {
+                this.ballid = 0;
+            }
+            public UInt16 BallID
+            {
+                get
+                {
+                    return ballid;
+                }
+                set
+                {
+                    ballid = value;
+                }
+            }
+            public string BallName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+            public System.Drawing.Image BallImage
+            {
+                get
+                {
+                    return null;
+                }
+            }
+        }
+
+        public class Nature
+        {
+            private UInt16 natureid;
+            public Nature(UInt16 natureid)
+            {
+                this.natureid = natureid;
+            }
+            public Nature()
+            {
+                this.natureid = 0;
+            }
+            public UInt16 NatureID
+            {
+                get
+                {
+                    return natureid;
+                }
+                set
+                {
+                    natureid = value;
+                }
+            }
+            public string NatureName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+        }
+
+        public class Location
+        {
+            private UInt16 locationid;
+            public Location(UInt16 locationid)
+            {
+                this.locationid = locationid;
+            }
+            public Location()
+            {
+                this.locationid = 0;
+            }
+            public UInt16 LocationID
+            {
+                get
+                {
+                    return locationid;
+                }
+                set
+                {
+                    locationid = value;
+                }
+            }
+            public string LocationName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+        }
+
+        public class Move
+        {
+            private UInt16 moveid;
+            public Move(UInt16 moveid)
+            {
+                this.moveid = moveid;
+            }
+            public Move()
+            {
+                this.moveid = 0;
+            }
+            public UInt16 MoveID
+            {
+                get
+                {
+                    return moveid;
+                }
+                set
+                {
+                    moveid = value;
+                }
+            }
+            public string MoveName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+            public string MoveFlavor
+            {
+                get
+                {
+                    return "";
+                }
+            }
+            public System.Drawing.Image MoveTypeImage
+            {
+                get
+                {
+                    return null;
+                }
+            }
+            public System.Drawing.Image MoveCategoryImage
+            {
+                get
+                {
+                    return null;
+                }
+            }
+            public int MovePower
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+            public decimal MoveAccuracy
+            {
+                get
+                {
+                    return 0M;
+                }
+            }
+            public int MoveBasePP
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public class Hometown
+        {
+            private UInt16 hometownid;
+            public Hometown(UInt16 hometownid)
+            {
+                this.hometownid = hometownid;
+            }
+            public Hometown()
+            {
+                this.hometownid = 0;
+            }
+            public UInt16 HometownID
+            {
+                get
+                {
+                    return hometownid;
+                }
+                set
+                {
+                    hometownid = value;
+                }
+            }
+            public string HometownName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+        }
+
+        public class Country
+        {
+            private UInt16 countryid;
+            public Country(UInt16 countryid)
+            {
+                this.countryid = countryid;
+            }
+            public Country()
+            {
+                this.countryid = 0;
+            }
+            public UInt16 CountryID
+            {
+                get
+                {
+                    return countryid;
+                }
+                set
+                {
+                    countryid = value;
+                }
+            }
+            public string CountryName
+            {
+                get
+                {
+                    return "";
+                }
+            }
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         public class Pokemon
         {
@@ -2905,7 +3227,7 @@ namespace PKMDS_CS
                     SetPKMTameness(this, value);
                 }
             }
-            public int AbilityID
+            public UInt16 AbilityID
             {
                 get
                 {

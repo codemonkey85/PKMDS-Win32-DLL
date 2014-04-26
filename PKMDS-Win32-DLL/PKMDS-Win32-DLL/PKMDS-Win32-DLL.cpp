@@ -38,6 +38,16 @@ EXPORT BSTR GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int v
 	std::string ret = lookupitemflavortext(itemid, generation, langid, versiongroup).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
+EXPORT BSTR GetAbilityName_INTERNAL(int abilityid, int langid)
+{
+	std::string ret = lookupabilityname(abilityid, langid);
+	return ANSItoBSTR(ret.c_str());
+}
+EXPORT BSTR GetAbilityFlavor_INTERNAL(int abilityid, int versiongroup, int langid)
+{
+	std::string ret = lookupabilityflavortext(abilityid, versiongroup, langid);
+	return ANSItoBSTR(ret.c_str());
+}
 EXPORT BSTR GetMoveName(int moveid, int langid)
 {
 	std::string ret = lookupmovename(moveid, langid).c_str();
@@ -555,7 +565,7 @@ EXPORT void SetPKMTameness(pokemon_obj * pkm, int tameness)
 	}
 	pkm->tid = tameness;
 }
-EXPORT int GetPKMAbilityIndex(pokemon_obj * pkm)
+EXPORT uint16 GetPKMAbilityIndex(pokemon_obj * pkm)
 {
 	if (!(pkm->isboxdatadecrypted))
 	{
