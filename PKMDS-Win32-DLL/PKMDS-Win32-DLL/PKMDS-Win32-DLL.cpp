@@ -53,6 +53,11 @@ EXPORT BSTR GetMoveName(int moveid, int langid)
 	std::string ret = lookupmovename(moveid, langid).c_str();
 	return ANSItoBSTR(ret.c_str());
 }
+EXPORT BSTR GetMoveFlavor(int moveid, int langid, int versiongroup)
+{
+	std::string ret = lookupmoveflavortext(moveid, langid, versiongroup).c_str();
+	return ANSItoBSTR(ret.c_str());
+}
 EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
 {
 	std::string ret = lookupmovetypename(moveid, langid).c_str();
@@ -88,6 +93,16 @@ EXPORT int GetNatureIncrease(pokemon_obj * pkm)
 EXPORT int GetNatureDecrease(pokemon_obj * pkm)
 {
 	return getnaturedecrease(pkm);
+}
+EXPORT BSTR GetNatureName(int natureid, int langid)
+{
+	std::string nature = getnaturename(natureid, langid);
+	return ANSItoBSTR(nature.c_str());
+}
+EXPORT BSTR GetLocationName(int locationid, int generation, int langid)
+{
+	std::string location = lookuplocname(locationid, generation, langid);
+	return ANSItoBSTR(location.c_str());
 }
 EXPORT int GetBoxWallpaper(bw2sav_obj * sav, int box)
 {
@@ -911,7 +926,14 @@ EXPORT int GetPKMGender(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return int(calcpkmgender(pkm));
+	if (pkm->genderless == true)
+	{
+		return 2;
+	}
+	else
+	{
+		return int(calcpkmgender(pkm));
+	}
 }
 EXPORT void SetPKMGender(pokemon_obj * pkm, int gender)
 {

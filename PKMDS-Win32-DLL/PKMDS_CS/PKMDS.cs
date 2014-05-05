@@ -2234,7 +2234,19 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetNatureName(int natureid, int langid = LANG_ID);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetLocationName(int locationid, int generation = GENERATION, int langid = LANG_ID);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveName(int moveid, int langid = LANG_ID);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetMoveFlavor(int moveid, int langid = LANG_ID, int versiongroup = VERSION_GROUP);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
@@ -2325,6 +2337,10 @@ namespace PKMDS_CS
 
         private static unsafe System.Drawing.Image GetGenderPic(int gender)
         {
+            if (gender == 2)
+            {
+                return null;
+            }
             IntPtr picdata = new IntPtr();
             int size = new int();
             GetGenderPic_INTERNAL(gender, &picdata, &size);
@@ -2864,7 +2880,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    return PKMDS.GetPKMName(SpeciesID);
                 }
             }
         }
@@ -2896,6 +2912,8 @@ namespace PKMDS_CS
                 get
                 {
                     return "";
+                    //return PKMDS.GetBallName(BallID);
+                    // Try to do images only?
                 }
             }
             public System.Drawing.Image BallImage
@@ -2933,7 +2951,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    return PKMDS.GetNatureName(NatureID);
                 }
             }
         }
@@ -2964,7 +2982,21 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    switch (LocationID)
+                    {
+                        case 2000:
+                            return "Day-Care Couple (Gen IV)";
+                        case 30001:
+                            return "Poké Transfer";
+                        case 30015:
+                            return "Pokémon Dream Radar";
+                        case 40001:
+                            return "Lovely Place";
+                        case 60002:
+                            return "Day-Care Couple";
+                        default:
+                            return PKMDS.GetLocationName(LocationID);
+                    }
                 }
             }
         }
@@ -2995,14 +3027,30 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    string ret = PKMDS.GetMoveName(MoveID);
+                    if (ret == null)
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        return ret;
+                    }
                 }
             }
             public string MoveFlavor
             {
                 get
                 {
-                    return "";
+                    string ret = PKMDS.GetMoveFlavor(MoveID);
+                    if (ret == null)
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        return ret;
+                    }
                 }
             }
             public System.Drawing.Image MoveTypeImage
@@ -3024,6 +3072,8 @@ namespace PKMDS_CS
                 get
                 {
                     return 0;
+                    // TODO: move power
+
                 }
             }
             public decimal MoveAccuracy
@@ -3031,6 +3081,8 @@ namespace PKMDS_CS
                 get
                 {
                     return 0M;
+                    // TODO: move accuracy
+
                 }
             }
             public int MoveBasePP
@@ -3038,6 +3090,8 @@ namespace PKMDS_CS
                 get
                 {
                     return 0;
+                    // TODO: move base pp
+
                 }
             }
         }
@@ -3068,7 +3122,43 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    switch (HometownID)
+                    {
+                        case 0:
+                            return "Colosseum Bonus";
+                        case 1:
+                            return "Sapphire";
+                        case 2:
+                            return "Ruby";
+                        case 3:
+                            return "Emerald";
+                        case 4:
+                            return "FireRed";
+                        case 5:
+                            return "LeafGreen";
+                        case 7:
+                            return "HeartGold";
+                        case 8:
+                            return "SoulSilver";
+                        case 10:
+                            return "Diamond";
+                        case 11:
+                            return "Pearl";
+                        case 12:
+                            return "Platinum";
+                        case 15:
+                            return "Colosseum / XD";
+                        case 20:
+                            return "White";
+                        case 21:
+                            return "Black";
+                        case 22:
+                            return "White 2";
+                        case 23:
+                            return "Black 2";
+                        default:
+                            return "";
+                    }
                 }
             }
         }
@@ -3099,7 +3189,25 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
+                    switch (CountryID)
+                    {
+                        case 1:
+                            return "JA";
+                        case 2:
+                            return "ENG/UK/AUS";
+                        case 3:
+                            return "FR";
+                        case 4:
+                            return "ITA";
+                        case 5:
+                            return "DE";
+                        case 7:
+                            return "SPA";
+                        case 8:
+                            return "SOK";
+                        default:
+                            return "";
+                    }
                 }
             }
         }
@@ -3280,6 +3388,22 @@ namespace PKMDS_CS
             public void SetContest(int contestindex, int contest)
             {
                 SetPKMContest(this, contestindex, contest);
+            }
+            public UInt16[] GetMoveIDs
+            {
+                get
+                {
+                    UInt16[] moveids = { 0, 0, 0, 0 };
+                    for (int movenum = 0; movenum < 4; movenum++)
+                    {
+                        moveids[movenum] = GetPKMMoveID(this, movenum);
+                    }
+                    return moveids;
+                }
+            }
+            public void SetMoveID(int moveid, int movenum)
+            {
+                // TODO: Set Move ID
             }
             public int GetMovePP(int move)
             {
