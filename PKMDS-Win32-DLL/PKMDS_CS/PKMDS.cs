@@ -2064,6 +2064,25 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetPKMFormNames_INTERNAL(UInt16 speciesid);
+
+        public static string[] GetPKMFormNames(UInt16 speciesid)
+        {
+            string formnames = GetPKMFormNames_INTERNAL(speciesid);
+            if (formnames != null)
+            {
+                formnames = formnames.Remove(formnames.Length - 1, 1);
+                if ((formnames != null) && (formnames != ""))
+                {
+                    return formnames.Split(',');
+                }
+            }
+            string[] formnamesarray = { "" };
+            return formnamesarray;
+        }
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
         private static extern unsafe void GetPKMName_FromObj_INTERNAL([In][Out] Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
 
         private static unsafe string GetPKMName_FromObj([In][Out] Pokemon pkm)
@@ -2101,6 +2120,9 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool IsPKMShiny([In][Out] Pokemon pkm);
 
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern bool GetPKMMetAsEgg([In][Out] Pokemon pkm);
+
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetTrainerName_FromSav_INTERNAL([In][Out] Save sav, string name, int namelength);
 
@@ -2122,6 +2144,9 @@ namespace PKMDS_CS
         private static extern int GetBoxWallpaper([In][Out] Save sav, int box);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern UInt32 GetPKMColorValue([In][Out] Pokemon pkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetBoxWallpaper([In][Out] Save sav, int box, int wallpaper);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2141,6 +2166,15 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetBoxName([In][Out] Save sav, int box, string name, int namelength);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetMovePower(UInt16 moveid);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetMoveAccuracy(UInt16 moveid);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetMoveBasePP(UInt16 moveid);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetNatureIncrease([In][Out] Pokemon pkm);
@@ -2180,6 +2214,9 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMMoveID([In][Out] Pokemon pokemon, int moveid);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void SetPKMMoveID([In][Out] Pokemon pokemon, int moveid, UInt16 moveindex);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool IsPKMModified([In][Out] Pokemon pokemon);
@@ -2283,6 +2320,12 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetWallpaperImage_INTERNAL(int wallpaper, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetBoxGrid_INTERNAL([In][Out] Save sav, int box, [In][Out] IntPtr* picdata);
+
+
+
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetItemImage_INTERNAL(int item, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
@@ -2290,10 +2333,13 @@ namespace PKMDS_CS
         private static unsafe extern void GetMarkingImage_INTERNAL(int marking, bool marked, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetBallPic_INTERNAL(int ball, [In][Out] IntPtr* picdata, [In][Out] int* size);
+        private static unsafe extern void GetBallPic_INTERNAL(Byte ball, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetMoveCategoryImage_INTERNAL(int move, [In][Out] IntPtr* picdata, [In][Out] int* size);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern void GetMoveTypeImage_INTERNAL(int move, [In][Out] IntPtr* picdata, [In][Out] int* size);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static unsafe extern void GetPokerusImage_INTERNAL(int strain, int days, [In][Out] IntPtr* picdata, [In][Out] int* size);
@@ -2371,7 +2417,7 @@ namespace PKMDS_CS
             return GetPic(picdata, size);
         }
 
-        private static unsafe System.Drawing.Image GetBallPic(int ball)
+        private static unsafe System.Drawing.Image GetBallPic(Byte ball)
         {
             IntPtr picdata = new IntPtr();
             int size = new int();
@@ -2475,16 +2521,16 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         /*private*/
-        public static extern bool GetPKMMarking([In][Out] Pokemon pkm, int marking);
+        private static extern bool GetPKMMarking([In][Out] Pokemon pkm, int marking);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMarking([In][Out] Pokemon pkm, int marking, bool marked);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMLanguage([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMLanguage([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetPKMLanguage([In][Out] Pokemon pkm, int language);
+        private static extern void SetPKMLanguage([In][Out] Pokemon pkm, Byte language);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEV([In][Out] Pokemon pkm, int evindex);
@@ -2523,13 +2569,13 @@ namespace PKMDS_CS
         private static extern void SetPKMIsEgg([In][Out] Pokemon pkm, bool isegg);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern bool GetPKMIsNicknamed([In][Out] Pokemon pkm);
+        private static extern int GetPKMIsNicknamed([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMIsNicknamed([In][Out] Pokemon pkm, bool isnicknamed);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern bool GetPKMFateful([In][Out] Pokemon pkm);
+        private static extern int GetPKMFateful([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMFateful([In][Out] Pokemon pkm, bool isfateful);
@@ -2541,16 +2587,16 @@ namespace PKMDS_CS
         private static extern void SetPKMGender([In][Out] Pokemon pkm, int gender);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMForm([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMForm([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMForm([In][Out] Pokemon pkm, int form);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMNature([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMNature([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetPKMNature([In][Out] Pokemon pkm, int nature);
+        private static extern void SetPKMNature([In][Out] Pokemon pkm, Byte nature);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool GetPKMDWAbility([In][Out] Pokemon pkm);
@@ -2559,7 +2605,7 @@ namespace PKMDS_CS
         private static extern void SetPKMDWAbility([In][Out] Pokemon pkm, bool hasdwability);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern bool GetPKMNsPokemon([In][Out] Pokemon pkm);
+        private static extern int GetPKMNsPokemon([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMNsPokemon([In][Out] Pokemon pkm, bool isnspokemon);
@@ -2572,10 +2618,10 @@ namespace PKMDS_CS
         private static extern void SetPKMNickname([In][Out] Pokemon pkm, string nickname, int nicknamelength);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMHometown([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMHometown([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetPKMHometown([In][Out] Pokemon pkm, int hometown);
+        private static extern void SetPKMHometown([In][Out] Pokemon pkm, Byte hometown);
 
         //[DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         //[return: MarshalAs(UnmanagedType.BStr)]
@@ -2645,16 +2691,16 @@ namespace PKMDS_CS
         private static extern void SetPKMPokerusDays([In][Out] Pokemon pkm, int days);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMBall([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMBall([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMBall([In][Out] Pokemon pkm, int ball);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetPKMMetLevel([In][Out] Pokemon pkm);
+        private static extern Byte GetPKMMetLevel([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void SetPKMMetLevel([In][Out] Pokemon pkm, int level);
+        private static extern void SetPKMMetLevel([In][Out] Pokemon pkm, Byte level);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMOTGender([In][Out] Pokemon pkm);
@@ -2707,7 +2753,7 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] Save sav, int slot);
 
-        public static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot)
+        private static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot)
         {
             SetPKMData_INTERNAL(pokemon, sav, box, slot);
         }
@@ -2887,8 +2933,8 @@ namespace PKMDS_CS
 
         public class Ball
         {
-            private UInt16 ballid;
-            public Ball(UInt16 ballid)
+            private Byte ballid;
+            public Ball(Byte ballid)
             {
                 this.ballid = ballid;
             }
@@ -2896,7 +2942,7 @@ namespace PKMDS_CS
             {
                 this.ballid = 0;
             }
-            public UInt16 BallID
+            public Byte BallID
             {
                 get
                 {
@@ -2911,24 +2957,76 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return "";
-                    //return PKMDS.GetBallName(BallID);
-                    // Try to do images only?
+                    switch (BallID)
+                    {
+                        case 0:
+                            return "Poké Ball";
+                        case 1:
+                            return "Master Ball";
+                        case 2:
+                            return "Ultra Ball";
+                        case 3:
+                            return "Great Ball";
+                        case 4:
+                            return "Poké Ball";
+                        case 5:
+                            return "Safari Ball";
+                        case 6:
+                            return "Net Ball";
+                        case 7:
+                            return "Dive Ball";
+                        case 8:
+                            return "Nest Ball";
+                        case 9:
+                            return "Repeat Ball";
+                        case 10:
+                            return "Timer Ball";
+                        case 11:
+                            return "Luxury Ball";
+                        case 12:
+                            return "Premier Ball";
+                        case 13:
+                            return "Dusk Ball";
+                        case 14:
+                            return "Heal Ball";
+                        case 15:
+                            return "Quick Ball";
+                        case 16:
+                            return "Cherish Ball";
+                        case 17:
+                            return "Fast Ball";
+                        case 18:
+                            return "Level Ball";
+                        case 19:
+                            return "Lure Ball";
+                        case 20:
+                            return "Heavy Ball";
+                        case 21:
+                            return "Love Ball";
+                        case 22:
+                            return "Friend Ball";
+                        case 23:
+                            return "Moon Ball";
+                        case 24:
+                            return "Sport Ball";
+                        default:
+                            return "Dream Ball";
+                    }
                 }
             }
             public System.Drawing.Image BallImage
             {
                 get
                 {
-                    return null;
+                    return GetBallPic(ballid);
                 }
             }
         }
 
         public class Nature
         {
-            private UInt16 natureid;
-            public Nature(UInt16 natureid)
+            private Byte natureid;
+            public Nature(Byte natureid)
             {
                 this.natureid = natureid;
             }
@@ -2936,7 +3034,7 @@ namespace PKMDS_CS
             {
                 this.natureid = 0;
             }
-            public UInt16 NatureID
+            public Byte NatureID
             {
                 get
                 {
@@ -2992,6 +3090,8 @@ namespace PKMDS_CS
                             return "Pokémon Dream Radar";
                         case 40001:
                             return "Lovely Place";
+                        case 40069:
+                            return "Wi-Fi Gift";
                         case 60002:
                             return "Day-Care Couple";
                         default:
@@ -3053,53 +3153,53 @@ namespace PKMDS_CS
                     }
                 }
             }
-            public System.Drawing.Image MoveTypeImage
+            public unsafe System.Drawing.Image MoveTypeImage
             {
                 get
                 {
-                    return null;
+                    IntPtr picdata = new IntPtr();
+                    int size = new int();
+                    GetMoveTypeImage_INTERNAL(MoveID, &picdata, &size);
+                    return GetPic(picdata, size);
                 }
             }
-            public System.Drawing.Image MoveCategoryImage
+            public unsafe System.Drawing.Image MoveCategoryImage
             {
                 get
                 {
-                    return null;
+                    IntPtr picdata = new IntPtr();
+                    int size = new int();
+                    GetMoveCategoryImage_INTERNAL(MoveID, &picdata, &size);
+                    return GetPic(picdata, size);
                 }
             }
             public int MovePower
             {
                 get
                 {
-                    return 0;
-                    // TODO: move power
-
+                    return GetMovePower(MoveID);
                 }
             }
             public decimal MoveAccuracy
             {
                 get
                 {
-                    return 0M;
-                    // TODO: move accuracy
-
+                    return GetMoveAccuracy(MoveID);
                 }
             }
             public int MoveBasePP
             {
                 get
                 {
-                    return 0;
-                    // TODO: move base pp
-
+                    return GetMoveBasePP(MoveID);
                 }
             }
         }
 
         public class Hometown
         {
-            private UInt16 hometownid;
-            public Hometown(UInt16 hometownid)
+            private Byte hometownid;
+            public Hometown(Byte hometownid)
             {
                 this.hometownid = hometownid;
             }
@@ -3107,7 +3207,7 @@ namespace PKMDS_CS
             {
                 this.hometownid = 0;
             }
-            public UInt16 HometownID
+            public Byte HometownID
             {
                 get
                 {
@@ -3165,8 +3265,8 @@ namespace PKMDS_CS
 
         public class Country
         {
-            private UInt16 countryid;
-            public Country(UInt16 countryid)
+            private Byte countryid;
+            public Country(Byte countryid)
             {
                 this.countryid = countryid;
             }
@@ -3174,7 +3274,7 @@ namespace PKMDS_CS
             {
                 this.countryid = 0;
             }
-            public UInt16 CountryID
+            public Byte CountryID
             {
                 get
                 {
@@ -3216,7 +3316,7 @@ namespace PKMDS_CS
         public class Pokemon
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 136)]
-            private byte[] Data;
+            public byte[] Data;
             public string SpeciesName
             {
                 get
@@ -3354,7 +3454,7 @@ namespace PKMDS_CS
             {
                 SetPKMMarking(this, marking, marked);
             }
-            public int LanguageID
+            public Byte LanguageID
             {
                 get
                 {
@@ -3401,9 +3501,9 @@ namespace PKMDS_CS
                     return moveids;
                 }
             }
-            public void SetMoveID(int moveid, int movenum)
+            public void SetMoveID(int moveid, UInt16 movenum)
             {
-                // TODO: Set Move ID
+                SetPKMMoveID(this, moveid, movenum);
             }
             public int GetMovePP(int move)
             {
@@ -3421,6 +3521,13 @@ namespace PKMDS_CS
             {
                 SetPKMMovePPUp(this, move, ppup);
             }
+            public bool MetAsEgg
+            {
+                get
+                {
+                    return GetPKMMetAsEgg(this);
+                }
+            }
             public bool IsEgg
             {
                 get
@@ -3436,7 +3543,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return GetPKMIsNicknamed(this);
+                    return GetPKMIsNicknamed(this) == 1;
                 }
                 set
                 {
@@ -3447,7 +3554,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return GetPKMFateful(this);
+                    return GetPKMFateful(this) == 1;
                 }
                 set
                 {
@@ -3465,7 +3572,7 @@ namespace PKMDS_CS
                     SetPKMGender(this, value);
                 }
             }
-            public int FormID
+            public Byte FormID
             {
                 get
                 {
@@ -3476,7 +3583,7 @@ namespace PKMDS_CS
                     SetPKMForm(this, value);
                 }
             }
-            public int NatureID
+            public Byte NatureID
             {
                 get
                 {
@@ -3502,7 +3609,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return GetPKMNsPokemon(this);
+                    return GetPKMNsPokemon(this) == 1;
                 }
                 set
                 {
@@ -3520,7 +3627,7 @@ namespace PKMDS_CS
                     SetPKMNickname(this, value, value.Length);
                 }
             }
-            public int HometownID
+            public Byte HometownID
             {
                 get
                 {
@@ -3541,6 +3648,12 @@ namespace PKMDS_CS
                 {
                     SetPKMOTName(this, value, value.Length);
                 }
+            }
+            public void SetNoEggDate()
+            {
+                this.Data[0x78] = 0;
+                this.Data[0x79] = 0;
+                this.Data[0x7A] = 0;
             }
             public DateTime EggDate
             {
@@ -3612,7 +3725,7 @@ namespace PKMDS_CS
                     SetPKMPokerusDays(this, value);
                 }
             }
-            public int BallID
+            public Byte BallID
             {
                 get
                 {
@@ -3623,7 +3736,7 @@ namespace PKMDS_CS
                     SetPKMBall(this, value);
                 }
             }
-            public int MetLevel
+            public Byte MetLevel
             {
                 get
                 {
@@ -3713,6 +3826,13 @@ namespace PKMDS_CS
             public UInt32 EXPAtGivenLevel(int Level)
             {
                 return GetPKMEXPGivenLevel(this, Level);
+            }
+            public System.Drawing.Color Color
+            {
+                get
+                {
+                    return System.Drawing.ColorTranslator.FromHtml("#" + GetPKMColorValue(this).ToString("X6"));
+                }
             }
             public System.Drawing.Image ShinyIcon
             {
@@ -3921,6 +4041,329 @@ namespace PKMDS_CS
                     SetCurrentBox(this, value);
                 }
             }
+            public unsafe System.Drawing.Bitmap GetBoxGrid(int box)
+            {
+                //IntPtr picdata = new IntPtr();
+                //int size = 57600;
+                //GetBoxGrid_INTERNAL(this, box, &picdata);
+                //return new System.Drawing.Bitmap( GetPic(picdata, size));
+                System.Drawing.Bitmap img = new System.Drawing.Bitmap(60, 50);
+                //LockBitmap bmp = new LockBitmap(img);
+                //bmp.LockBits();
+                for (int sloty = 0; sloty < 5; sloty++)
+                {
+                    for (int slotx = 0; slotx < 6; slotx++)
+                    {
+                        Pokemon pkm = GetStoredPokemon(box, (sloty * 6 + slotx));
+                        if (pkm.SpeciesID != 0)
+                        {
+                            for (int x = 0; x < 10; x++)
+                            {
+                                for (int y = 0; y < 10; y++)
+                                {
+                                    img.SetPixel((slotx * 10) + x, (sloty * 10) + y, pkm.Color);
+                                }
+                            }
+                        }
+                    }
+                }
+                //bmp.UnlockBits();
+                return img;
+            }
         }
     }
+    //public class LockBitmap
+    //{
+
+    //    System.Drawing.Bitmap source = null;
+
+    //    IntPtr Iptr = IntPtr.Zero;
+
+    //    System.Drawing.Imaging.BitmapData bitmapData = null;
+
+
+
+    //    public byte[] Pixels { get; set; }
+
+    //    public int Depth { get; private set; }
+
+    //    public int Width { get; private set; }
+
+    //    public int Height { get; private set; }
+
+
+
+    //    public LockBitmap(System.Drawing.Bitmap source)
+    //    {
+
+    //        this.source = source;
+
+    //    }
+
+
+
+    //    /// <summary>
+
+    //    /// Lock bitmap data
+
+    //    /// </summary>
+
+    //    public void LockBits()
+    //    {
+
+    //        try
+    //        {
+
+    //            // Get width and height of bitmap
+
+    //            Width = source.Width;
+
+    //            Height = source.Height;
+
+
+
+    //            // get total locked pixels count
+
+    //            int PixelCount = Width * Height;
+
+
+
+    //            // Create rectangle to lock
+
+    //            System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, Width, Height);
+
+
+
+    //            // get source bitmap pixel format size
+
+    //            Depth = System.Drawing.Bitmap.GetPixelFormatSize(source.PixelFormat);
+
+
+
+    //            // Check if bpp (Bits Per Pixel) is 8, 24, or 32
+
+    //            if (Depth != 8 && Depth != 24 && Depth != 32)
+    //            {
+
+    //                throw new ArgumentException("Only 8, 24 and 32 bpp images are supported.");
+
+    //            }
+
+
+
+    //            // Lock bitmap and return bitmap data
+
+    //            bitmapData = source.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite,
+
+    //                                         source.PixelFormat);
+
+
+
+    //            // create byte array to copy pixel values
+
+    //            int step = Depth / 8;
+
+    //            Pixels = new byte[PixelCount * step];
+
+    //            Iptr = bitmapData.Scan0;
+
+
+
+    //            // Copy data from pointer to array
+
+    //            Marshal.Copy(Iptr, Pixels, 0, Pixels.Length);
+
+    //        }
+
+    //        catch (Exception ex)
+    //        {
+
+    //            throw ex;
+
+    //        }
+
+    //    }
+
+
+
+    //    /// <summary>
+
+    //    /// Unlock bitmap data
+
+    //    /// </summary>
+
+    //    public void UnlockBits()
+    //    {
+
+    //        try
+    //        {
+
+    //            // Copy data from byte array to pointer
+
+    //            Marshal.Copy(Pixels, 0, Iptr, Pixels.Length);
+
+
+
+    //            // Unlock bitmap data
+
+    //            source.UnlockBits(bitmapData);
+
+    //        }
+
+    //        catch (Exception ex)
+    //        {
+
+    //            throw ex;
+
+    //        }
+
+    //    }
+
+
+
+    //    /// <summary>
+
+    //    /// Get the color of the specified pixel
+
+    //    /// </summary>
+
+    //    /// <param name="x"></param>
+
+    //    /// <param name="y"></param>
+
+    //    /// <returns></returns>
+
+    //    public System.Drawing.Color GetPixel(int x, int y)
+    //    {
+
+    //        System.Drawing.Color clr = System.Drawing.Color.Empty;
+
+
+
+    //        // Get color components count
+
+    //        int cCount = Depth / 8;
+
+
+
+    //        // Get start index of the specified pixel
+
+    //        int i = ((y * Width) + x) * cCount;
+
+
+
+    //        if (i > Pixels.Length - cCount)
+
+    //            throw new IndexOutOfRangeException();
+
+
+
+    //        if (Depth == 32) // For 32 bpp get Red, Green, Blue and Alpha
+    //        {
+
+    //            byte b = Pixels[i];
+
+    //            byte g = Pixels[i + 1];
+
+    //            byte r = Pixels[i + 2];
+
+    //            byte a = Pixels[i + 3]; // a
+
+    //            clr = System.Drawing.Color.FromArgb(a, r, g, b);
+
+    //        }
+
+    //        if (Depth == 24) // For 24 bpp get Red, Green and Blue
+    //        {
+
+    //            byte b = Pixels[i];
+
+    //            byte g = Pixels[i + 1];
+
+    //            byte r = Pixels[i + 2];
+
+    //            clr = System.Drawing.Color.FromArgb(r, g, b);
+
+    //        }
+
+    //        if (Depth == 8)
+
+    //        // For 8 bpp get color value (Red, Green and Blue values are the same)
+    //        {
+
+    //            byte c = Pixels[i];
+
+    //            clr = System.Drawing.Color.FromArgb(c, c, c);
+
+    //        }
+
+    //        return clr;
+
+    //    }
+
+
+
+    //    /// <summary>
+
+    //    /// Set the color of the specified pixel
+
+    //    /// </summary>
+
+    //    /// <param name="x"></param>
+
+    //    /// <param name="y"></param>
+
+    //    /// <param name="color"></param>
+
+    //    public void SetPixel(int x, int y, System.Drawing.Color color)
+    //    {
+
+    //        // Get color components count
+
+    //        int cCount = Depth / 8;
+
+
+
+    //        // Get start index of the specified pixel
+
+    //        int i = ((y * Width) + x) * cCount;
+
+
+
+    //        if (Depth == 32) // For 32 bpp set Red, Green, Blue and Alpha
+    //        {
+
+    //            Pixels[i] = color.B;
+
+    //            Pixels[i + 1] = color.G;
+
+    //            Pixels[i + 2] = color.R;
+
+    //            Pixels[i + 3] = color.A;
+
+    //        }
+
+    //        if (Depth == 24) // For 24 bpp set Red, Green and Blue
+    //        {
+
+    //            Pixels[i] = color.B;
+
+    //            Pixels[i + 1] = color.G;
+
+    //            Pixels[i + 2] = color.R;
+
+    //        }
+
+    //        if (Depth == 8)
+
+    //        // For 8 bpp set color value (Red, Green and Blue values are the same)
+    //        {
+
+    //            Pixels[i] = color.B;
+
+    //        }
+
+    //    }
+
+    //}
 }
