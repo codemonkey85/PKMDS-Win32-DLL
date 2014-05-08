@@ -986,7 +986,31 @@ EXPORT void SetPKMGender(pokemon_obj * pkm, int gender)
 EXPORT BSTR GetPKMFormNames_INTERNAL(uint16 speciesid)
 {
 	std::ostringstream forms;
-	switch (Species::species(speciesid))	{	case Species::castform:		forms << "" << ",";		break;	case Species::rotom:		forms << "" << ",";		break;	case Species::kyurem:		forms << "" << ",";		break;	case Species::genesect:		forms << "" << ",";		break;	default:		break;	}	for (int formid = 0; formid < 28; formid++)	{		std::string formname = getpkmformname((int)(speciesid), formid);		if (formname != "")		{			forms << formname << ",";		}	}
+	switch (Species::species(speciesid))
+	{
+	case Species::castform:
+		forms << "" << ",";
+		break;
+	case Species::rotom:
+		forms << "" << ",";
+		break;
+	case Species::kyurem:
+		forms << "" << ",";
+		break;
+	case Species::genesect:
+		forms << "" << ",";
+		break;
+	default:
+		break;
+	}
+	for (int formid = 0; formid < 28; formid++)
+	{
+		std::string formname = getpkmformname((int)(speciesid), formid);
+		if (formname != "")
+		{
+			forms << formname << ",";
+		}
+	}
 	return ANSItoBSTR(forms.str().c_str());
 	//std::string formsreturned = forms.str();
 	//formsreturned = formsreturned.erase(formsreturned.length - 1, 1);
