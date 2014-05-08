@@ -123,6 +123,17 @@ EXPORT void SetTrainerSID_FromSav(bw2sav_obj * sav, int sid)
 }
 EXPORT uint32 GetPKMColorValue(pokemon_obj * pkm)
 {
+	if (pkm->isegg)
+	{
+		if (pkm->species == Species::manaphy)
+		{
+			return getpkmcolorhex(PokemonColors::blue);
+		}
+		else
+		{
+			return getpkmcolorhex(PokemonColors::white);
+		}
+	}
 	return getpkmcolor(pkm->species);
 }
 EXPORT uint16 GetTrainerSID_FromSav(bw2sav_obj * sav)
@@ -586,7 +597,7 @@ EXPORT void SetPKMSID(pokemon_obj * pkm, int sid)
 	{
 		decryptpkm(pkm);
 	}
-	pkm->tid = sid;
+	pkm->sid = sid;
 }
 EXPORT uint32 GetPKMEXP(pokemon_obj * pkm)
 {
@@ -912,7 +923,7 @@ EXPORT void SetPKMMovePPUp(pokemon_obj * pkm, int move, int ppup)
 	}
 	pkm->ppup[move] = ppup;
 }
-EXPORT bool GetPKMIsEgg(pokemon_obj * pkm)
+EXPORT int GetPKMIsEgg(pokemon_obj * pkm)
 {
 	if (!(pkm->isboxdatadecrypted))
 	{
