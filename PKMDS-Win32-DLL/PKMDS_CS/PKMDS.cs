@@ -2041,6 +2041,12 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static unsafe extern void GetPKMNickName_INTERNAL([In][Out] Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
 
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern bool DepositPKM([In][Out] Save sav, Pokemon pkm, int startbox, bool failiffull);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static unsafe extern bool WithdrawPKM([In][Out] Save sav, Pokemon pkm);
+
         private static unsafe string GetPKMOTName([In][Out]Pokemon pkm)
         {
             IntPtr test = new IntPtr();
@@ -2168,6 +2174,9 @@ namespace PKMDS_CS
         private static extern void SetBoxName([In][Out] Save sav, int box, string name, int namelength);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int GetBoxCount([In][Out] Save sav, int box);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetMovePower(UInt16 moveid);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2223,6 +2232,27 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FixPokemonChecksum([In][Out] Pokemon pokemon);
+
+
+
+
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SwapBoxParty([In][Out] Save sav, int box, int boxslot, int partyslot);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SwapPartyBox([In][Out] Save sav, int partyslot, int box, int boxslot);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SwapBoxBox([In][Out] Save sav, int boxa, int boxslota, int boxb, int boxslotb);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SwapPartyParty([In][Out] Save sav, int partyslota, int partyslotb);
+
+
+
+
+
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMTNL([In][Out] Pokemon pkm);
@@ -2713,6 +2743,12 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEncounter([In][Out] Pokemon pkm, int encounter);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void DeletePartyPKM([In][Out] Save sav, int slot);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void DeleteStoredPKM([In][Out] Save sav, int box, int slot);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
@@ -4074,6 +4110,27 @@ namespace PKMDS_CS
                 }
                 b.UnlockBits(bData);
                 return b;
+            }
+            public int BoxCount(int box)
+            {
+                return PKMDS.GetBoxCount(this, box);
+            }
+            public bool DepositPokemon(Pokemon pokemon, int box) 
+            {
+                return PKMDS.DepositPKM(this, pokemon, box, true);
+            }
+            public bool WithdrawPokemon(Pokemon pokemon) 
+            {
+                //this.PartySize++;
+                return PKMDS.WithdrawPKM(this, pokemon);
+            }
+            public void RemovePartyPokemon(int slot) 
+            {
+                PKMDS.DeletePartyPKM(this, slot);
+            }
+            public void RemoveStoredPokemon(int box, int slot) 
+            {
+                PKMDS.DeleteStoredPKM(this, box, slot);
             }
         }
     }

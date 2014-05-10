@@ -1408,6 +1408,95 @@ EXPORT bool IsPKMShiny(pokemon_obj * pkm)
 {
 	return (getpkmshiny(pkm) == true);
 }
+EXPORT int GetBoxCount(bw2sav_obj * sav, int box)
+{
+	int count = 0;
+	pokemon_obj * pkm = new pokemon_obj();
+	for (int slot = 0; slot < 30; slot++)
+	{
+		pkm = &(sav->cur.boxes[box].pokemon[slot]);
+		if (!(pkm->isboxdatadecrypted))
+		{
+			decryptpkm(pkm);
+		}
+		if (pkm->species != 0)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+EXPORT bool DepositPKM(bw2sav_obj * sav, pokemon_obj * pkm, int startbox, bool failiffull)
+{
+	if (failiffull)
+	{
+		if (GetBoxCount(sav, startbox) == 30)
+		{
+			return false;
+		}
+	}
+	storepkm(sav, pkm, startbox);
+	return true;
+}
+EXPORT bool WithdrawPKM(bw2sav_obj * sav, pokemon_obj * pkm)
+{
+	if (sav->cur.party.size == 6)
+	{
+		return false;
+	}
+	party_pkm * ppkm = new party_pkm();
+	pctoparty(ppkm, pkm);
+	int startsize = sav->cur.party.size;
+	for (int slot = 0; slot < 6; slot++)
+	{
+		if ((sav->cur.party.pokemon[slot].species == Species::NOTHING) && (slot == startsize))
+		{
+			sav->cur.party.pokemon[slot] = *ppkm;
+			sav->cur.party.size++;
+		}
+	}
+	return true;
+}
+EXPORT void DeletePartyPKM(bw2sav_obj * sav, int slot)
+{
+	if (sav->cur.party.size > 1)
+	{
+		//remove_pkm(&(sav->cur.party.pokemon[slot]));
+		if (sav->cur.party.pokemon[slot].species != Species::NOTHING)
+		{
+			sav->cur.party.size--;
+		}
+		remove_pkm(sav, slot);
+	}
+}
+EXPORT void DeleteStoredPKM(bw2sav_obj * sav, int box, int slot)
+{
+	remove_pkm(&(sav->cur.boxes[box].pokemon[slot]));
+}
+EXPORT void SwapBoxParty(bw2sav_obj * sav, int box, int boxslot, int partyslot)
+{
+	if (sav->cur.party.pokemon[partyslot].species == Species::NOTHING)
+	{
+		sav->cur.party.size++;
+	}
+	swap_pkm(&(sav->cur.boxes[box].pokemon[boxslot]), &(sav->cur.party.pokemon[partyslot]));
+}
+EXPORT void SwapPartyBox(bw2sav_obj * sav, int partyslot, int box, int boxslot)
+{
+	if (sav->cur.boxes[box].pokemon[boxslot].species == Species::NOTHING)
+	{
+		sav->cur.party.size--;
+	}
+	swap_pkm(&(sav->cur.party.pokemon[partyslot]), &(sav->cur.boxes[box].pokemon[boxslot]));
+}
+EXPORT void SwapBoxBox(bw2sav_obj * sav, int boxa, int boxslota, int boxb, int boxslotb)
+{
+	swap_pkm(&(sav->cur.boxes[boxa].pokemon[boxslota]), &(sav->cur.boxes[boxb].pokemon[boxslotb]));
+}
+EXPORT void SwapPartyParty(bw2sav_obj * sav, int partyslota, int partyslotb)
+{
+	swap_pkm(&(sav->cur.party.pokemon[partyslota]), &(sav->cur.party.pokemon[partyslotb]));
+}
 BSTR ANSItoBSTR(const char* input)
 {
 	BSTR result = NULL;
