@@ -3125,6 +3125,10 @@ namespace PKMDS_CS
                             return "Day-Care Couple (Gen IV)";
                         case 30001:
                             return "Poké Transfer";
+                        case 30012:
+                            return "a special place (1)";
+                        case 30013:
+                            return "a special place (2)";
                         case 30015:
                             return "Pokémon Dream Radar";
                         case 40001:
