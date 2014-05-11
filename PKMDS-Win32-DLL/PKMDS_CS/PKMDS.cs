@@ -2754,6 +2754,9 @@ namespace PKMDS_CS
         private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void RecalcPartyPKM([In][Out] PartyPokemon ppkm);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] Save sav, int slot);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -4127,6 +4130,18 @@ namespace PKMDS_CS
             public void RemovePartyPokemon(int slot) 
             {
                 PKMDS.DeletePartyPKM(this, slot);
+            }
+            public void RecalculateParty() 
+            {
+                for (int slot = 0; slot < this.PartySize; slot++) 
+                {
+                    PartyPokemon ppkm = this.GetPartyPokemon(slot);
+                    if (ppkm.PokemonData.SpeciesID != 0) 
+                    {
+                        PKMDS.RecalcPartyPKM(ppkm);
+                        this.SetPartyPokemon(ppkm, slot);
+                    }
+                }
             }
             public void RemoveStoredPokemon(int box, int slot) 
             {
