@@ -354,7 +354,6 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 }
 EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
 {
-	cout << "Eat my heart out!\n";
 	FixSaveChecksums(sav);
 	write(filename, sav);
 }
@@ -1459,7 +1458,7 @@ EXPORT bool WithdrawPKM(bw2sav_obj * sav, pokemon_obj * pkm)
 }
 EXPORT void DeletePartyPKM(bw2sav_obj * sav, int slot)
 {
-	if (sav->cur.party.size > 1)
+	if (sav->cur.party.size >= 1)
 	{
 		//remove_pkm(&(sav->cur.party.pokemon[slot]));
 		if (sav->cur.party.pokemon[slot].species != Species::NOTHING)
@@ -1496,6 +1495,10 @@ EXPORT void SwapBoxBox(bw2sav_obj * sav, int boxa, int boxslota, int boxb, int b
 EXPORT void SwapPartyParty(bw2sav_obj * sav, int partyslota, int partyslotb)
 {
 	swap_pkm(&(sav->cur.party.pokemon[partyslota]), &(sav->cur.party.pokemon[partyslotb]));
+}
+EXPORT void RecalcPartyPKM(party_pkm * ppkm)
+{
+	pctoparty(ppkm, ppkm);
 }
 BSTR ANSItoBSTR(const char* input)
 {
