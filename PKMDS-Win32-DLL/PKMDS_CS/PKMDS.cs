@@ -2020,6 +2020,21 @@ namespace PKMDS_CS
             Turboblaze,
             Teravolt,
         }
+        public enum SpindaColorsBase
+        {
+            BaseLight = 0xe6d6a5,
+            BaseShaded = 0xcea573
+        }
+        public enum SpindaColorsNormalSpot
+        {
+            NormalSpotLight = 0xef524a,
+            NormalSpotShaded = 0xbd4a31
+        }
+        public enum SpindaColorsShinySpot
+        {
+            ShinySpotLight = 0xa5ce10,
+            ShinyShaded = 0x7b9c00
+        }
         #endregion
         #region DBAccess
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2805,6 +2820,21 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetSAVData_INTERNAL([In][Out] Save save, string savefile);
 
+
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsBase spindacolor)
+        {
+            return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
+        }
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsNormalSpot spindacolor)
+        {
+            return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
+        }
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsShinySpot spindacolor)
+        {
+            return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
+        }
+
+
         public static Save ReadSaveFile(string savefile)
         {
             Save sav = new Save();
@@ -3371,7 +3401,15 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetPKMSprite(this);
+                    if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda))
+                    {
+                        return PKMDS.GetPKMSprite(this);
+                    }
+                    else
+                    {
+                        // TODO: Spinda's sprite
+                        return PKMDS.GetPKMSprite(this);
+                    }
                 }
             }
             public int[] GetStats
@@ -4122,32 +4160,32 @@ namespace PKMDS_CS
             {
                 return PKMDS.GetBoxCount(this, box);
             }
-            public bool DepositPokemon(Pokemon pokemon, int box) 
+            public bool DepositPokemon(Pokemon pokemon, int box)
             {
                 return PKMDS.DepositPKM(this, pokemon, box, true);
             }
-            public bool WithdrawPokemon(Pokemon pokemon) 
+            public bool WithdrawPokemon(Pokemon pokemon)
             {
                 //this.PartySize++;
                 return PKMDS.WithdrawPKM(this, pokemon);
             }
-            public void RemovePartyPokemon(int slot) 
+            public void RemovePartyPokemon(int slot)
             {
                 PKMDS.DeletePartyPKM(this, slot);
             }
-            public void RecalculateParty() 
+            public void RecalculateParty()
             {
-                for (int slot = 0; slot < this.PartySize; slot++) 
+                for (int slot = 0; slot < this.PartySize; slot++)
                 {
                     PartyPokemon ppkm = this.GetPartyPokemon(slot);
-                    if (ppkm.PokemonData.SpeciesID != 0) 
+                    if (ppkm.PokemonData.SpeciesID != 0)
                     {
                         PKMDS.RecalcPartyPKM(ppkm);
                         this.SetPartyPokemon(ppkm, slot);
                     }
                 }
             }
-            public void RemoveStoredPokemon(int box, int slot) 
+            public void RemoveStoredPokemon(int box, int slot)
             {
                 PKMDS.DeleteStoredPKM(this, box, slot);
             }
