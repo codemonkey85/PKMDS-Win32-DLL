@@ -2820,7 +2820,7 @@ namespace PKMDS_CS
         private static extern void GetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] Save sav, int slot);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void GetPKMDataFromFile_INTERNAL([In][Out] Pokemon pokemon, string filename);
+        private static extern void GetPKMDataFromFile_INTERNAL([In][Out] Pokemon pokemon, string filename, bool encrypted);
 
         private static void GetPKMData([In][Out] ref Pokemon pokemon, [In][Out] Save sav, int box, int slot)
         {
@@ -2894,14 +2894,14 @@ namespace PKMDS_CS
             return save;
         }
 
-        public static Pokemon ReadPokemonFile(string pokemonfile)
+        public static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false)
         {
             Pokemon pkm = new Pokemon();
             Pokemon pokemon = new Pokemon();
             int size = Marshal.SizeOf(typeof(Pokemon));
             IntPtr savptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(pkm, savptr, false);
-            GetPKMDataFromFile_INTERNAL(pkm, pokemonfile);
+            GetPKMDataFromFile_INTERNAL(pkm, pokemonfile, encrypted);
             pokemon = pkm;
             Marshal.FreeHGlobal(savptr);
             savptr = IntPtr.Zero;
