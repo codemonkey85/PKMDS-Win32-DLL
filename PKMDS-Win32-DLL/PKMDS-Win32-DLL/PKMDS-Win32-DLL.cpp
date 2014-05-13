@@ -232,6 +232,28 @@ EXPORT void GetWallpaperImage_INTERNAL(int wallpaper, byte ** picdata, int * siz
 	getwallpapersql(o, wallpaper);
 	getapic(o, picdata, size);
 }
+EXPORT int ValidateSave_INTERNAL(bw2sav_obj * sav, wchar_t ** message, int * length)
+{
+	int result = 1;
+	wstring wstr_message = L"";
+	bool isbw2 = savisbw2(sav);
+	if (!((getchecksum(sav->cur, (long)BW2_OFFSETS::chkcalcloc, (long)BW2_OFFSETS::chkcalclen)) == (getchkfromsav(sav->cur, true))) ||
+		(getchecksum(sav->cur, (long)BW_OFFSETS::chkcalcloc, (long)BW_OFFSETS::chkcalclen)) == (getchkfromsav(sav->cur, false)))
+	{
+		result = 0;
+		wstr_message = L"Invalid save file!";
+	}
+	*length = wstr_message.length();
+	*message = new wchar_t[wstr_message.length()];
+	for (int i = 0; i < wstr_message.length(); i++)
+	{
+		if (i < wstr_message.length())
+		{
+			(*message)[i] = wstr_message[i];
+		}
+	}
+	return result;
+}
 EXPORT void GetItemImage_INTERNAL(int item, byte ** picdata, int * size)
 {
 	std::ostringstream o;
