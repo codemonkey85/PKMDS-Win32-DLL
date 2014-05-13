@@ -448,9 +448,14 @@ EXPORT void SetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int 
 	calcchecksum(pokemon);
 	sav->cur.party.pokemon[slot] = *pokemon;
 };
-EXPORT void GetPKMDataFromFile_INTERNAL(pokemon_obj * pokemon, const char * filename)
+EXPORT void GetPKMDataFromFile_INTERNAL(pokemon_obj * pokemon, const char * filename, bool encrypted = false)
 {
 	read(filename, pokemon);
+	if(encrypted)
+	{
+		decryptpkm(pokemon);
+	}
+	pokemon->isboxdatadecrypted = true;
 };
 EXPORT void SetPKMData_INTERNAL(pokemon_obj * pokemon, bw2sav_obj * sav, int box, int slot)
 {
