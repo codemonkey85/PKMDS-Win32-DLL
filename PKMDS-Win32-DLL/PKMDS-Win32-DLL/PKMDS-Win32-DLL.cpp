@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "../../externals/PKMDS/include/pkmds/pkmds_sql.h"
 #include <comutil.h>
-BSTR ANSItoBSTR(const char* input);
+BSTR UTF8toBSTR(const char* input);
 #define EXPORT extern "C" __declspec(dllexport)
 EXPORT void OpenDB(const char * dbfilename)
 {
@@ -28,37 +28,37 @@ EXPORT void GetSAVData_INTERNAL(bw2sav_obj * save, const char * savefile)
 EXPORT BSTR GetItemName_INTERNAL(int itemid, int generation, int langid)
 {
 	std::string ret = lookupitemname(itemid, generation, langid).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int versiongroup)
 {
 	std::string ret = lookupitemflavortext(itemid, generation, langid, versiongroup).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetAbilityName_INTERNAL(int abilityid, int langid)
 {
 	std::string ret = lookupabilityname(abilityid, langid);
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetAbilityFlavor_INTERNAL(int abilityid, int versiongroup, int langid)
 {
 	std::string ret = lookupabilityflavortext(abilityid, versiongroup, langid);
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetMoveName(int moveid, int langid)
 {
 	std::string ret = lookupmovename(moveid, langid).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetMoveFlavor(int moveid, int langid, int versiongroup)
 {
 	std::string ret = lookupmoveflavortext(moveid, langid, versiongroup).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
 {
 	std::string ret = lookupmovetypename(moveid, langid).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT void GetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t ** name, int* length)
 {
@@ -81,7 +81,7 @@ EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, in
 EXPORT BSTR GetCharacteristic(pokemon_obj * pkm)
 {
 	std::string characteristic = lookupcharacteristic(pkm);
-	return ANSItoBSTR(characteristic.c_str());
+	return UTF8toBSTR(characteristic.c_str());
 }
 EXPORT int GetNatureIncrease(pokemon_obj * pkm)
 {
@@ -94,12 +94,12 @@ EXPORT int GetNatureDecrease(pokemon_obj * pkm)
 EXPORT BSTR GetNatureName(int natureid, int langid)
 {
 	std::string nature = getnaturename(natureid, langid);
-	return ANSItoBSTR(nature.c_str());
+	return UTF8toBSTR(nature.c_str());
 }
 EXPORT BSTR GetLocationName(int locationid, int generation, int langid)
 {
 	std::string location = lookuplocname(locationid, generation, langid);
-	return ANSItoBSTR(location.c_str());
+	return UTF8toBSTR(location.c_str());
 }
 EXPORT int GetBoxWallpaper(bw2sav_obj * sav, int box)
 {
@@ -402,7 +402,7 @@ EXPORT void SetBoxName(bw2sav_obj * sav, int box, wchar_t * name, int namelength
 EXPORT BSTR GetPKMName(int speciesid, int langid)
 {
 	std::string ret = lookuppkmname(speciesid, langid).c_str();
-	return ANSItoBSTR(ret.c_str());
+	return UTF8toBSTR(ret.c_str());
 }
 EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
 {
@@ -1048,10 +1048,10 @@ EXPORT BSTR GetPKMFormNames_INTERNAL(uint16 speciesid)
 			forms << formname << ",";
 		}
 	}
-	return ANSItoBSTR(forms.str().c_str());
+	return UTF8toBSTR(forms.str().c_str());
 	//std::string formsreturned = forms.str();
 	//formsreturned = formsreturned.erase(formsreturned.length - 1, 1);
-	//return ANSItoBSTR(formsreturned.c_str);
+	//return UTF8toBSTR(formsreturned.c_str);
 }
 EXPORT byte GetPKMForm(pokemon_obj * pkm)
 {
@@ -1527,15 +1527,15 @@ EXPORT void RecalcPartyPKM(party_pkm * ppkm)
 {
 	pctoparty(ppkm, ppkm);
 }
-BSTR ANSItoBSTR(const char* input)
+BSTR UTF8toBSTR(const char* input)
 {
 	BSTR result = NULL;
 	int lenA = lstrlenA(input);
-	int lenW = ::MultiByteToWideChar(CP_ACP, 0, input, lenA, NULL, 0);
+	int lenW = ::MultiByteToWideChar(CP_UTF8, 0, input, lenA, NULL, 0);
 	if (lenW > 0)
 	{
 		result = ::SysAllocStringLen(0, lenW);
-		::MultiByteToWideChar(CP_ACP, 0, input, lenA, result, lenW);
+		::MultiByteToWideChar(CP_UTF8, 0, input, lenA, result, lenW);
 	}
 	return result;
 }
