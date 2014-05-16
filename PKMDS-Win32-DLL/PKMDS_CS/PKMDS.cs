@@ -2043,19 +2043,35 @@ namespace PKMDS_CS
             ShinyShaded = 0xff7b9c00
         }
         #endregion
+
         #region DBAccess
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void OpenDB(string dbfilename);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CloseDB();
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void OpenImgDB(string dbfilename);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CloseImgDB();
+        public static class SQL
+        {
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void OpenDB(string dbfilename);
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void CloseDB();
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void OpenImgDB(string dbfilename);
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern void CloseImgDB();
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+            [return: MarshalAs(UnmanagedType.BStr)]
+            public static unsafe extern string GetAString(string sql);
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            public static extern int GetAnInt(string sql);
+            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+            private static unsafe extern void GetAPic_INTERNAL(string sql, [In][Out] IntPtr* picdata, [In][Out]int* size);
+            public static unsafe System.Drawing.Image GetAPic(string sql)
+            {
+                IntPtr picdata = new IntPtr();
+                int size = new int();
+                GetAPic_INTERNAL(sql, &picdata, &size);
+                return GetPic(picdata, size);
+            }
+        }
         #endregion
+
         public static System.Drawing.Bitmap GetSpindaSprite(bool Shiny = false)
         {
             if (Shiny)
@@ -2086,7 +2102,7 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern unsafe int ValidateSave_INTERNAL([In][Out] Save sav, [In][Out] IntPtr* nickname, [In][Out] int* length);
-        private static unsafe bool ValidateSave([In][Out] Save sav, out string message) 
+        private static unsafe bool ValidateSave([In][Out] Save sav, out string message)
         {
             IntPtr test = new IntPtr();
             int length = new int();
@@ -2177,10 +2193,10 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetCharacteristic([In][Out] Pokemon pkm);
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void WritePokemonFile([In][Out] Pokemon pkm, string filename, bool encrypt = false);
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void WriteSaveFile([In][Out] Save sav, string filename);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2819,7 +2835,7 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] Save sav, int slot);
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void GetPKMDataFromFile_INTERNAL([In][Out] Pokemon pokemon, string filename, bool encrypted);
 
         private static void GetPKMData([In][Out] ref Pokemon pokemon, [In][Out] Save sav, int box, int slot)
@@ -2862,7 +2878,7 @@ namespace PKMDS_CS
             SetPartyPKMData_INTERNAL(pokemon, sav, slot);
         }
 
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void GetSAVData_INTERNAL([In][Out] Save save, string savefile);
 
 
