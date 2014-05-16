@@ -21,7 +21,20 @@ EXPORT void CloseImgDB()
 {
 	openimgdb();
 }
-EXPORT void GetSAVData_INTERNAL(bw2sav_obj * save, const char * savefile)
+EXPORT BSTR GetAString(const char * sql)
+{
+	std::string str_pkmname = getastring(sql);
+	return UTF8toBSTR(str_pkmname.c_str());
+}
+EXPORT int GetAnInt(const char * sql)
+{
+	return getanint(sql);
+}
+EXPORT void GetAPic_INTERNAL(const char * sql, byte ** picdata, int * size)
+{
+	getapic(sql, picdata, size);
+}
+EXPORT void GetSAVData_INTERNAL(bw2sav_obj * save, const wchar_t * savefile)
 {
 	read(savefile, save);
 };
@@ -374,7 +387,7 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 	fixbagchecksum(&(sav->cur));
 	fixsavchecksum(sav, isbw2);
 }
-EXPORT void WriteSaveFile(bw2sav_obj * sav, const char * filename)
+EXPORT void WriteSaveFile(bw2sav_obj * sav, const wchar_t * filename)
 {
 	FixSaveChecksums(sav);
 	write(filename, sav);
@@ -404,7 +417,7 @@ EXPORT BSTR GetPKMName(int speciesid, int langid)
 	std::string ret = lookuppkmname(speciesid, langid).c_str();
 	return UTF8toBSTR(ret.c_str());
 }
-EXPORT void WritePokemonFile(pokemon_obj * pkm, const char * filename, bool encrypt = false)
+EXPORT void WritePokemonFile(pokemon_obj * pkm, const wchar_t * filename, bool encrypt = false)
 {
 	if (pkm->isboxdatadecrypted)
 	{
@@ -448,10 +461,10 @@ EXPORT void SetPartyPKMData_INTERNAL(party_pkm * pokemon, bw2sav_obj * sav, int 
 	calcchecksum(pokemon);
 	sav->cur.party.pokemon[slot] = *pokemon;
 };
-EXPORT void GetPKMDataFromFile_INTERNAL(pokemon_obj * pokemon, const char * filename, bool encrypted = false)
+EXPORT void GetPKMDataFromFile_INTERNAL(pokemon_obj * pokemon, const wchar_t * filename, bool encrypted = false)
 {
 	read(filename, pokemon);
-	if(encrypted)
+	if (encrypted)
 	{
 		decryptpkm(pokemon);
 	}
