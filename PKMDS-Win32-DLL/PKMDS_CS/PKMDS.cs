@@ -2072,6 +2072,115 @@ namespace PKMDS_CS
         }
         #endregion
 
+        #region Resources
+        public static System.Drawing.Image GetResourceByName(string name)
+        {
+            if ((name == "") || (name == null))
+            {
+                return null;
+            }
+            else
+            {
+                return (System.Drawing.Image)Properties.Resources.ResourceManager.GetObject(name);
+            }
+        }
+        public static System.Drawing.Image GetSprite(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false)
+        {
+            string sprite = "s";
+            if (Female)
+            {
+                sprite += "f";
+            }
+            if (Shiny)
+            {
+                sprite += "s";
+            }
+            sprite += "_" + Species.ToString();
+            if (Form != 0)
+            {
+                sprite += "_" + Form.ToString();
+            }
+            return PKMDS.GetResourceByName(sprite);
+        }
+        public static System.Drawing.Image GetIcon(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false)
+        {
+            string icon = "bi_" + Species.ToString();
+            if (Female)
+            {
+                icon = "f" + icon;
+            }
+            if (Form != 0)
+            {
+                icon += "_" + Form.ToString();
+            }
+            return PKMDS.GetResourceByName(icon);
+        }
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int HasFemaleSprite([In][Out] Pokemon pkm);
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int HasFemaleIcon([In][Out] Pokemon pkm);
+        public static System.Drawing.Image GetItemImage(UInt16 itemid)
+        {
+            if (itemid == 0U)
+            {
+                return null;
+            }
+            else
+            {
+                string identifier = GetItemIdentifier(itemid);
+                if ((identifier != "") && identifier != null)
+                {
+                    identifier = identifier.Replace('-', '_');
+                    return GetResourceByName(identifier);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public static System.Drawing.Image GetBallImage(byte ballid)
+        {
+            return GetResourceByName("b_" + ballid.ToString());
+        }
+        public static System.Drawing.Image GetTypeImage(int typeid)
+        {
+            string type = GetTypeName(typeid);
+            if ((type == "") || (type == null))
+            {
+                return null;
+            }
+            else
+            {
+                return GetResourceByName(type.ToLower());
+            }
+        }
+
+        public static System.Drawing.Image GetMarkingImage(int marking, bool marked)
+        {
+            //IntPtr picdata = new IntPtr();
+            //int size = new int();
+            //GetMarkingImage_INTERNAL(marking, marked, &picdata, &size);
+            //return GetPic(picdata, size);
+            int markedint = 0;
+            if (marked)
+            {
+                markedint = 1;
+            }
+            return GetResourceByName("m_" + marking.ToString() + markedint.ToString());
+        }
+
+
+        #endregion
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetTypeName(int type);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetItemIdentifier(UInt16 item);
+
         public static System.Drawing.Bitmap GetSpindaSprite(bool Shiny = false)
         {
             if (Shiny)
@@ -2499,29 +2608,38 @@ namespace PKMDS_CS
             return GetPic(picdata, size);
         }
 
-        private static unsafe System.Drawing.Image GetWallpaperImage(int wallpaper)
+        //private static unsafe System.Drawing.Image GetWallpaperImage(int wallpaper)
+        //{
+        //    IntPtr picdata = new IntPtr();
+        //    int size = new int();
+        //    GetWallpaperImage_INTERNAL(wallpaper, &picdata, &size);
+        //    return GetPic(picdata, size);
+        //}
+        private static System.Drawing.Image GetWallpaperImage(int wallpaper)
         {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetWallpaperImage_INTERNAL(wallpaper, &picdata, &size);
-            return GetPic(picdata, size);
+            //IntPtr picdata = new IntPtr();
+            //int size = new int();
+            //GetWallpaperImage_INTERNAL(wallpaper, &picdata, &size);
+            //return GetPic(picdata, size);
+            return GetResourceByName("wc_" + wallpaper.ToString());
         }
 
-        private static unsafe System.Drawing.Image GetItemImage(UInt16 item)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetItemImage_INTERNAL(item, &picdata, &size);
-            return GetPic(picdata, size);
-        }
 
-        private static unsafe System.Drawing.Image GetMarkingImage(int marking, bool marked)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetMarkingImage_INTERNAL(marking, marked, &picdata, &size);
-            return GetPic(picdata, size);
-        }
+        //private static unsafe System.Drawing.Image GetItemImage(UInt16 item)
+        //{
+        //    IntPtr picdata = new IntPtr();
+        //    int size = new int();
+        //    GetItemImage_INTERNAL(item, &picdata, &size);
+        //    return GetPic(picdata, size);
+        //}
+
+        //private static unsafe System.Drawing.Image GetMarkingImage(int marking, bool marked)
+        //{
+        //    IntPtr picdata = new IntPtr();
+        //    int size = new int();
+        //    GetMarkingImage_INTERNAL(marking, marked, &picdata, &size);
+        //    return GetPic(picdata, size);
+        //}
 
         private static unsafe System.Drawing.Image GetBallPic(Byte ball)
         {
@@ -3148,7 +3266,8 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return GetBallPic(ballid);
+                    return GetBallImage(ballid);
+                    //return GetBallPic(ballid);
                 }
             }
         }
@@ -3291,10 +3410,11 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    IntPtr picdata = new IntPtr();
-                    int size = new int();
-                    GetMoveTypeImage_INTERNAL(MoveID, &picdata, &size);
-                    return GetPic(picdata, size);
+                    //IntPtr picdata = new IntPtr();
+                    //int size = new int();
+                    //GetMoveTypeImage_INTERNAL(MoveID, &picdata, &size);
+                    //return GetPic(picdata, size);
+                    return PKMDS.GetResourceByName(PKMDS.GetMoveTypeName(MoveID).ToLower());
                 }
             }
             public unsafe System.Drawing.Image MoveCategoryImage
@@ -3464,7 +3584,15 @@ namespace PKMDS_CS
                 {
                     if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda))
                     {
-                        return PKMDS.GetPKMSprite(this);
+                        System.Drawing.Image sprite = PKMDS.GetSprite(this.SpeciesID, this.IsShiny, this.FormID, PKMDS.HasFemaleSprite(this) == 1);
+                        if (sprite == null)
+                        {
+                            return PKMDS.GetPKMSprite(this);
+                        }
+                        else
+                        {
+                            return sprite;
+                        }
                     }
                     else
                     {
@@ -3998,7 +4126,16 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetPKMIcon(this);
+                    System.Drawing.Image icon = PKMDS.GetIcon(this.SpeciesID, this.IsShiny, this.FormID, PKMDS.HasFemaleIcon(this) == 1);
+                    if (icon == null)
+                    {
+                        return PKMDS.GetPKMIcon(this);
+                    }
+                    else
+                    {
+                        return icon;
+                    }
+
                 }
             }
             public bool IsShiny
@@ -4016,7 +4153,8 @@ namespace PKMDS_CS
             {
                 if ((Slot == 1) | (Slot == 2))
                 {
-                    return PKMDS.GetTypePic(this.GetType(Slot));
+                    //return PKMDS.GetTypePic(this.GetType(Slot));
+                    return PKMDS.GetTypeImage(this.GetType(Slot));
                 }
                 else
                 {
@@ -4085,7 +4223,8 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetBallPic(this.BallID);
+                    //return PKMDS.GetBallPic(this.BallID);
+                    return PKMDS.GetBallImage(this.BallID);
                 }
             }
             public System.Drawing.Image MoveCategoryPic(UInt16 move)
