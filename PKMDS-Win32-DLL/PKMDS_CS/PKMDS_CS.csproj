@@ -12716,6 +12716,15 @@
   <ItemGroup>
     <None Include="resources\m_51.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\other.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\physical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\special.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
