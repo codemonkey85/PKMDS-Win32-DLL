@@ -5,6 +5,14 @@
 #include <comutil.h>
 BSTR UTF8toBSTR(const char* input);
 #define EXPORT extern "C" __declspec(dllexport)
+EXPORT int HasFemaleSprite(pokemon_obj * pkm)
+{
+	return (pkmhasgenddiff(pkm) && (calcpkmgender(pkm) == Genders::female)) & (pkm->species != Species::torchic) & (pkm->species != Species::buizel) & (pkm->species != Species::floatzel);
+}
+EXPORT int HasFemaleIcon(pokemon_obj * pkm)
+{
+	return ((pkm->species == Species::unfezant) | (pkm->species == Species::frillish) | (pkm->species == Species::jellicent)) && (calcpkmgender(pkm) == Genders::female);
+}
 EXPORT void OpenDB(const char * dbfilename)
 {
 	opendb(dbfilename);
@@ -66,6 +74,11 @@ EXPORT BSTR GetMoveName(int moveid, int langid)
 EXPORT BSTR GetMoveFlavor(int moveid, int langid, int versiongroup)
 {
 	std::string ret = lookupmoveflavortext(moveid, langid, versiongroup).c_str();
+	return UTF8toBSTR(ret.c_str());
+}
+EXPORT BSTR GetTypeName(int type)
+{
+	std::string ret = lookuptypename(type);
 	return UTF8toBSTR(ret.c_str());
 }
 EXPORT BSTR GetMoveTypeName(uint16 moveid, int langid)
@@ -267,6 +280,33 @@ EXPORT int ValidateSave_INTERNAL(bw2sav_obj * sav, wchar_t ** message, int * len
 	}
 	return result;
 }
+EXPORT BSTR GetItemIdentifier(uint16 item)
+{
+	string ret = "";
+	if (((item >= (uint16)Items::tm01) & (item <= (uint16)Items::tm92)) | ((item >= (uint16)Items::tm93) & (item <= (uint16)Items::tm95)) | ((item >= (uint16)Items::hm01) & (item <= (uint16)Items::hm06)))
+	{
+		std::string mprefix = "tm-";
+		if ((item >= (uint16)Items::hm01) & (item <= (uint16)Items::hm06)){ mprefix = "hm-"; }
+		ret = mprefix + getmachinetypename(Items::items(item));
+	}
+	else if ((item >= (uint16)Items::datacard01) & (item <= (uint16)Items::datacard27))
+	{
+		ret = "data-card";
+	}
+	else
+	{
+		ostringstream o;
+		o << ""
+			<< "SELECT items.identifier "
+			<< "FROM   items "
+			<< "       INNER JOIN item_game_indices "
+			<< "               ON items.id = item_game_indices.item_id "
+			<< "WHERE  ( item_game_indices.game_index = " << (int)(item) << " ) "
+			<< "       AND ( item_game_indices.generation_id = " << GENERATION << ") ";
+		ret = getastring(o);
+	}
+	return UTF8toBSTR(ret.c_str());
+}
 EXPORT void GetItemImage_INTERNAL(int item, byte ** picdata, int * size)
 {
 	std::ostringstream o;
@@ -303,6 +343,23 @@ EXPORT void GetBallPic_INTERNAL(byte ball, byte ** picdata, int * size)
 	std::ostringstream o;
 	getballsql(o, Balls::balls(ball));
 	getapic(o, picdata, size);
+}
+EXPORT BSTR GetMoveCategory(uint16 move)
+{
+	string catname = "";
+	switch((MoveCategories::movecategories)getmovecategory(Moves::moves(move)))
+	{
+	case MoveCategories::physical:
+		catname = "physical";
+		break;
+	case MoveCategories::special:
+		catname = "special";
+		break;
+	case MoveCategories::other:
+		catname = "other";
+		break;
+	}
+	return UTF8toBSTR(catname.c_str());
 }
 EXPORT void GetMoveCategoryImage_INTERNAL(int move, byte ** picdata, int * size)
 {
@@ -1065,6 +1122,23 @@ EXPORT BSTR GetPKMFormNames_INTERNAL(uint16 speciesid)
 	//std::string formsreturned = forms.str();
 	//formsreturned = formsreturned.erase(formsreturned.length - 1, 1);
 	//return UTF8toBSTR(formsreturned.c_str);
+}
+EXPORT BSTR GetPKMFormName_INTERNAL(uint16 speciesid, byte formid)
+{
+	//	ostringstream o;
+	//o << ""
+	//	<< "select pokemon_form_names.form_name "
+	//	<< "from pokemon "
+	//	<< "inner join pokemon_forms on pokemon.id = pokemon_forms.pokemon_id "
+	//	<< "inner join pokemon_form_names on pokemon_forms.id = pokemon_form_names.pokemon_form_id "
+	//	<< "inner join pokemon_form_generations on pokemon_forms.id = pokemon_form_generations.pokemon_form_id "
+	//	<< "where local_language_id = " << 9 << " "
+	//	<< "and generation_id = " << 5 << " "
+	//	<< "and species_id = " << (int)speciesid << " "
+	//	<< "and game_index = " << (int)formid << " "
+	//	<< "order by pokemon_form_generations.game_index";
+	std::string formname = getpkmformname((int)(speciesid), formid);
+	return UTF8toBSTR(formname.c_str());
 }
 EXPORT byte GetPKMForm(pokemon_obj * pkm)
 {

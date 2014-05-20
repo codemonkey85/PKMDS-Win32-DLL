@@ -2051,26 +2051,200 @@ namespace PKMDS_CS
             public static extern void OpenDB(string dbfilename);
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern void CloseDB();
-            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-            public static extern void OpenImgDB(string dbfilename);
-            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-            public static extern void CloseImgDB();
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
             [return: MarshalAs(UnmanagedType.BStr)]
             public static unsafe extern string GetAString(string sql);
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern int GetAnInt(string sql);
-            [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-            private static unsafe extern void GetAPic_INTERNAL(string sql, [In][Out] IntPtr* picdata, [In][Out]int* size);
-            public static unsafe System.Drawing.Image GetAPic(string sql)
-            {
-                IntPtr picdata = new IntPtr();
-                int size = new int();
-                GetAPic_INTERNAL(sql, &picdata, &size);
-                return GetPic(picdata, size);
-            }
         }
         #endregion
+
+        #region Resources
+        public static System.Drawing.Image GetResourceByName(string name)
+        {
+            if ((name == "") || (name == null))
+            {
+                return null;
+            }
+            else
+            {
+                return (System.Drawing.Image)Properties.Resources.ResourceManager.GetObject(name);
+            }
+        }
+        public static System.Drawing.Image GetSprite(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false)
+        {
+            System.Drawing.Image ret = null;
+            string sprite = "s";
+            if (Female)
+            {
+                sprite += "f";
+            }
+            if (Shiny)
+            {
+                sprite += "s";
+            }
+            sprite += "_" + Species.ToString();
+            if (Form != 0)
+            {
+                string basestr = sprite;
+                sprite += "_" + Form.ToString();
+                ret = PKMDS.GetResourceByName(sprite);
+                if (ret == null)
+                {
+                    sprite = basestr;
+                    string formname = "";
+                    switch ((PKMSpecies)(Species))
+                    {
+                        case PKMSpecies.Unown:
+                            switch (Form)
+                            {
+                                case 26:
+                                    formname = "exclamation";
+                                    break;
+                                case 27:
+                                    formname = "question";
+                                    break;
+                                default:
+                                    formname = GetPKMFormName_INTERNAL(Species, Form).Split(' ')[0];
+                                    break;
+                            }
+                            break;
+                        case PKMSpecies.Keldeo:
+                            if (Form == 1)
+                            {
+                                formname = "resolute";
+                            }
+                            break;
+                        case PKMSpecies.Meloetta:
+                            if (Form == 1)
+                            {
+                                formname = "pirouette";
+                            }
+                            break;
+                        default:
+                            formname = GetPKMFormName_INTERNAL(Species, Form).Split(' ')[0];
+                            break;
+                    }
+                    sprite += "_" + formname.ToLower();
+                    ret = PKMDS.GetResourceByName(sprite.Replace('-', '_'));
+                }
+            }
+            else
+            {
+                ret = PKMDS.GetResourceByName(sprite.Replace('-', '_'));
+            }
+            return ret;
+        }
+        public static System.Drawing.Image GetIcon(UInt16 Species, byte Form = 0, bool Female = false)
+        {
+            System.Drawing.Image ret = null;
+            string icon = "bi_" + Species.ToString();
+            if (Female)
+            {
+                icon = "f" + icon;
+            }
+            if (Form != 0)
+            {
+                string basestr = icon;
+                icon += "_" + Form.ToString();
+                ret = PKMDS.GetResourceByName(icon);
+                if (ret == null)
+                {
+                    icon = basestr + "_" + PKMDS.GetPKMFormName_INTERNAL(Species, Form).Split(' ')[0].ToLower();
+                }
+            }
+            ret = PKMDS.GetResourceByName(icon);
+            return ret;
+        }
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int HasFemaleSprite([In][Out] Pokemon pkm);
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int HasFemaleIcon([In][Out] Pokemon pkm);
+        public static System.Drawing.Image GetItemImage(UInt16 itemid)
+        {
+            if (itemid == 0U)
+            {
+                return null;
+            }
+            else
+            {
+                string identifier = GetItemIdentifier(itemid);
+                if ((identifier != "") && identifier != null)
+                {
+                    identifier = identifier.Replace('-', '_');
+                    return GetResourceByName(identifier);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        public static System.Drawing.Image GetBallImage(byte ballid)
+        {
+            return GetResourceByName("b_" + ballid.ToString());
+        }
+        public static System.Drawing.Image GetTypeImage(int typeid)
+        {
+            string type = GetTypeName(typeid);
+            if ((type == "") || (type == null))
+            {
+                return null;
+            }
+            else
+            {
+                return GetResourceByName(type.ToLower());
+            }
+        }
+        public static System.Drawing.Image GetMarkingImage(int marking, bool marked)
+        {
+            int markedint = 0;
+            if (marked)
+            {
+                markedint = 1;
+            }
+            return GetResourceByName("m_" + marking.ToString() + markedint.ToString());
+        }
+        public static System.Drawing.Image GetGenderIcon(int gender)
+        {
+            switch (gender)
+            {
+                case 0:
+                    return GetResourceByName("male");
+                case 1:
+                    return GetResourceByName("female");
+                default:
+                    return null;
+            }
+        }
+        public static System.Drawing.Image GetShinyStar(bool shiny)
+        {
+            if (shiny)
+            {
+                return GetResourceByName("shiny");
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static System.Drawing.Image GetMoveCategoryImage(UInt16 move)
+        {
+            return GetResourceByName(GetMoveCategory(move));
+        }
+        #endregion
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetTypeName(int type);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetMoveCategory(UInt16 move);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetItemIdentifier(UInt16 item);
 
         public static System.Drawing.Bitmap GetSpindaSprite(bool Shiny = false)
         {
@@ -2147,6 +2321,10 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMFormNames_INTERNAL(UInt16 speciesid);
+
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetPKMFormName_INTERNAL(UInt16 speciesid, byte formid);
 
         public static string[] GetPKMFormNames(UInt16 speciesid)
         {
@@ -2395,164 +2573,9 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetMoveTypeName(int moveid, int langid = LANG_ID);
 
-        private static unsafe System.Drawing.Image GetPic(IntPtr picdata, int size)
+        private static System.Drawing.Image GetWallpaperImage(int wallpaper)
         {
-            if (size == 0)
-            {
-                return null;
-            }
-            byte[] thedata = new byte[size];
-            System.Runtime.InteropServices.Marshal.Copy(picdata, thedata, 0, size);
-            System.IO.Stream picstream = new System.IO.MemoryStream(thedata);
-            System.Drawing.Image pic = System.Drawing.Image.FromStream(picstream);
-            return pic;
-        }
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetPKMSprite_INTERNAL([In][Out] Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetPKMIcon_INTERNAL([In][Out] Pokemon pokemon, [In][Out] IntPtr* picdata, [In][Out] int* size, int generation);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetTypePic_INTERNAL(int type, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetShinyStar_INTERNAL([In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetGenderPic_INTERNAL(int gender, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetWallpaperImage_INTERNAL(int wallpaper, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetBoxGrid_INTERNAL([In][Out] Save sav, int box, [In][Out] IntPtr* picdata);
-
-
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetItemImage_INTERNAL(int item, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetMarkingImage_INTERNAL(int marking, bool marked, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetBallPic_INTERNAL(Byte ball, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetMoveCategoryImage_INTERNAL(int move, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetMoveTypeImage_INTERNAL(int move, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetPokerusImage_INTERNAL(int strain, int days, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern void GetRibbonImage_INTERNAL(string ribbon, bool hoenn, [In][Out] IntPtr* picdata, [In][Out] int* size);
-
-        private static unsafe System.Drawing.Image GetPKMSprite([In][Out] Pokemon pokemon, int Generation = GENERATION)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetPKMSprite_INTERNAL(pokemon, &picdata, &size, Generation);
-            return GetPic(picdata, size);
-        }
-        private static unsafe System.Drawing.Image GetPKMIcon([In][Out] Pokemon pokemon, int Generation = GENERATION)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetPKMIcon_INTERNAL(pokemon, &picdata, &size, Generation);
-            return GetPic(picdata, size);
-        }
-        private static unsafe System.Drawing.Image GetTypePic(int type)
-        {
-            if (type == -1)
-            {
-                return null;
-            }
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetTypePic_INTERNAL(type, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetShinyStar()
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetShinyStar_INTERNAL(&picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetGenderPic(int gender)
-        {
-            if (gender == 2)
-            {
-                return null;
-            }
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetGenderPic_INTERNAL(gender, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetWallpaperImage(int wallpaper)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetWallpaperImage_INTERNAL(wallpaper, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetItemImage(UInt16 item)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetItemImage_INTERNAL(item, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetMarkingImage(int marking, bool marked)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetMarkingImage_INTERNAL(marking, marked, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetBallPic(Byte ball)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetBallPic_INTERNAL(ball, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetMoveCategoryImage(UInt16 move)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetMoveCategoryImage_INTERNAL(move, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetPokerusImage(int strain, int days)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetPokerusImage_INTERNAL(strain, days, &picdata, &size);
-            return GetPic(picdata, size);
-        }
-
-        private static unsafe System.Drawing.Image GetRibbonImage(string ribbon, bool hoenn)
-        {
-            IntPtr picdata = new IntPtr();
-            int size = new int();
-            GetRibbonImage_INTERNAL(ribbon, hoenn, &picdata, &size);
-            return GetPic(picdata, size);
+            return GetResourceByName("wc_" + wallpaper.ToString());
         }
 
         private static string[] GetPKMMoveNames([In][Out] Pokemon pkm, int langid = LANG_ID)
@@ -2716,10 +2739,6 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMNsPokemon([In][Out] Pokemon pkm, bool isnspokemon);
 
-        //[DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
-        //[return: MarshalAs(UnmanagedType.BStr)]
-        //private static extern string GetPKMNickname([In][Out] Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetPKMNickname([In][Out] Pokemon pkm, string nickname, int nicknamelength);
 
@@ -2728,10 +2747,6 @@ namespace PKMDS_CS
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMHometown([In][Out] Pokemon pkm, Byte hometown);
-
-        //[DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
-        //[return: MarshalAs(UnmanagedType.BStr)]
-        //private static extern string GetPKMOTName([In][Out] Pokemon pkm);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetPKMOTName([In][Out] Pokemon pkm, string otname, int otnamelength);
@@ -3148,7 +3163,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return GetBallPic(ballid);
+                    return GetBallImage(ballid);
                 }
             }
         }
@@ -3291,20 +3306,14 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    IntPtr picdata = new IntPtr();
-                    int size = new int();
-                    GetMoveTypeImage_INTERNAL(MoveID, &picdata, &size);
-                    return GetPic(picdata, size);
+                    return PKMDS.GetResourceByName(PKMDS.GetMoveTypeName(MoveID).ToLower());
                 }
             }
             public unsafe System.Drawing.Image MoveCategoryImage
             {
                 get
                 {
-                    IntPtr picdata = new IntPtr();
-                    int size = new int();
-                    GetMoveCategoryImage_INTERNAL(MoveID, &picdata, &size);
-                    return GetPic(picdata, size);
+                    return GetMoveCategoryImage(this.MoveID);
                 }
             }
             public int MovePower
@@ -3464,7 +3473,7 @@ namespace PKMDS_CS
                 {
                     if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda))
                     {
-                        return PKMDS.GetPKMSprite(this);
+                        return PKMDS.GetSprite(this.SpeciesID, this.IsShiny, this.FormID, PKMDS.HasFemaleSprite(this) == 1);
                     }
                     else
                     {
@@ -3998,7 +4007,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetPKMIcon(this);
+                    return PKMDS.GetIcon(this.SpeciesID, this.FormID, PKMDS.HasFemaleIcon(this) == 1);
                 }
             }
             public bool IsShiny
@@ -4016,7 +4025,7 @@ namespace PKMDS_CS
             {
                 if ((Slot == 1) | (Slot == 2))
                 {
-                    return PKMDS.GetTypePic(this.GetType(Slot));
+                    return PKMDS.GetTypeImage(this.GetType(Slot));
                 }
                 else
                 {
@@ -4045,7 +4054,6 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    //return System.Drawing.Color.FromArgb((int)(GetPKMColorValue(this)));
                     return System.Drawing.ColorTranslator.FromHtml("#" + GetPKMColorValue(this).ToString("X6"));
                 }
             }
@@ -4053,21 +4061,14 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    if (IsShiny)
-                    {
-                        return GetShinyStar();
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return GetShinyStar(this.IsShiny);
                 }
             }
             public System.Drawing.Image GenderIcon
             {
                 get
                 {
-                    return PKMDS.GetGenderPic(this.GenderID);
+                    return PKMDS.GetGenderIcon(this.GenderID);
                 }
             }
             public System.Drawing.Image ItemPic
@@ -4085,7 +4086,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetBallPic(this.BallID);
+                    return PKMDS.GetBallImage(this.BallID);
                 }
             }
             public System.Drawing.Image MoveCategoryPic(UInt16 move)
@@ -4096,7 +4097,21 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    return PKMDS.GetPokerusImage(this.PokerusStrain, this.PokerusDays);
+                    if (this.PokerusStrain > 0)
+                    {
+                        if (this.PokerusDays > 0)
+                        {
+                            return GetResourceByName("pokerus_infected");
+                        }
+                        else
+                        {
+                            return GetResourceByName("pokerus_cured");
+                        }
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
             }
             public string Characteristic
@@ -4120,13 +4135,6 @@ namespace PKMDS_CS
                     return GetNatureDecrease(this);
                 }
             }
-            //public System.Drawing.Image RibbonPic
-            //{
-            //    get
-            //    {
-            //        return PKMDS.GetRibbonImage(this);
-            //    }
-            //}
             public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
@@ -4136,7 +4144,7 @@ namespace PKMDS_CS
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-        public class PartyPokemon //: Pokemon
+        public class PartyPokemon
         {
             public PartyPokemon()
             {
@@ -4148,7 +4156,7 @@ namespace PKMDS_CS
             private byte[] PartyData;
             public void WriteToFile(string FileName, bool encrypt = false)
             {
-                //WritePokemonFile(this, FileName, encrypt);
+                WritePokemonFile(this.PokemonData, FileName, encrypt);
             }
         }
 
@@ -4299,7 +4307,6 @@ namespace PKMDS_CS
             }
             public bool WithdrawPokemon(Pokemon pokemon)
             {
-                //this.PartySize++;
                 return PKMDS.WithdrawPKM(this, pokemon);
             }
             public void RemovePartyPokemon(int slot)
@@ -4324,7 +4331,6 @@ namespace PKMDS_CS
             }
             public bool Validate(out string message)
             {
-                //message = "";
                 return ValidateSave(this, out message);
             }
         }
