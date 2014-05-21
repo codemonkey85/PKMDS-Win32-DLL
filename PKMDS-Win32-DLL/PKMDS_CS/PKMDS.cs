@@ -2020,6 +2020,52 @@ namespace PKMDS_CS
             Turboblaze,
             Teravolt,
         }
+        public enum PokemonColors
+        {
+            Black = 0x5A5A5A,
+            Blue = 0x318CF7,
+            Brown = 0xB57331,
+            Gray = 0xA5A5A5,
+            Green = 0x42BD6B,
+            Pink = 0xFF94CE,
+            Purple = 0xAD6BC6,
+            Red = 0xF75A6B,
+            White = 0xF7F7F7,
+            Yellow = 0xF7D64A
+            /*
+             	case 1:// 1 = black
+		return 0x5A5A5A;
+		break;
+	case 2:// 2 = blue
+		return 0x318CF7;
+		break;
+	case 3:// 3 = brown
+		return 0xB57331;
+		break;
+	case 4:// 4 = gray
+		return 0xA5A5A5;
+		break;
+	case 5:// 5 = green
+		return 0x42BD6B;
+		break;
+	case 6:// 6 = pink
+		return 0xFF94CE;
+		break;
+	case 7:// 7 = purple
+		return 0xAD6BC6;
+		break;
+	case 8:// 8 = red
+		return 0xF75A6B;
+		break;
+	case 9:// 9 = white
+		return 0xF7F7F7;
+		break;
+	case 10:// 10 = yellow
+		return 0xF7D64A;
+		break;
+
+             */
+        }
         public enum SpindaSpots
         {
             TopLeft,
@@ -2053,7 +2099,7 @@ namespace PKMDS_CS
             public static extern void CloseDB();
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
             [return: MarshalAs(UnmanagedType.BStr)]
-            public static unsafe extern string GetAString(string sql);
+            public static extern string GetAString(string sql);
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern int GetAnInt(string sql);
         }
@@ -2246,7 +2292,7 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetItemIdentifier(UInt16 item);
 
-        public static System.Drawing.Bitmap GetSpindaSprite(bool Shiny = false)
+        public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false)
         {
             if (Shiny)
             {
@@ -2292,10 +2338,10 @@ namespace PKMDS_CS
         private static unsafe extern void GetPKMNickName_INTERNAL([In][Out] Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern bool DepositPKM([In][Out] Save sav, Pokemon pkm, int startbox, bool failiffull);
+        private static extern bool DepositPKM([In][Out] Save sav, Pokemon pkm, int startbox, bool failiffull);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern bool WithdrawPKM([In][Out] Save sav, Pokemon pkm);
+        private static extern bool WithdrawPKM([In][Out] Save sav, Pokemon pkm);
 
         private static unsafe string GetPKMOTName([In][Out]Pokemon pkm)
         {
@@ -3302,14 +3348,14 @@ namespace PKMDS_CS
                     }
                 }
             }
-            public unsafe System.Drawing.Image MoveTypeImage
+            public System.Drawing.Image MoveTypeImage
             {
                 get
                 {
                     return PKMDS.GetResourceByName(PKMDS.GetMoveTypeName(MoveID).ToLower());
                 }
             }
-            public unsafe System.Drawing.Image MoveCategoryImage
+            public System.Drawing.Image MoveCategoryImage
             {
                 get
                 {
@@ -3455,6 +3501,85 @@ namespace PKMDS_CS
             }
         }
 
+        public static unsafe System.Drawing.Image GetSpindaSprite(UInt32 PID, bool IsShiny = false) 
+        {
+            System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
+            System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
+            System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
+            System.Drawing.Point BottomRightOrigin = new System.Drawing.Point(38, 33);
+            System.Drawing.Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
+            System.Drawing.Point TopLeftOffsets = new System.Drawing.Point((int)(PID & 0xf), (int)(PID >> 4 & 0xf));
+            System.Drawing.Point TopRightOffsets = new System.Drawing.Point((int)(PID >> 8 & 0xf), (int)(PID >> 12 & 0xf));
+            System.Drawing.Point BottomLeftOffsets = new System.Drawing.Point((int)(PID >> 16 & 0xf), (int)(PID >> 20 & 0xf));
+            System.Drawing.Point BottomRightOffsets = new System.Drawing.Point((int)(PID >> 24 & 0xf), (int)(PID >> 28 & 0xf));
+            System.Drawing.Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
+            System.Drawing.Bitmap BaseSprite = GetSpindaBaseSprite(IsShiny);
+            System.Drawing.Bitmap TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
+            System.Drawing.Bitmap TopRight = GetSpindaSpot(SpindaSpots.TopRight);
+            System.Drawing.Bitmap BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
+            System.Drawing.Bitmap BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
+            System.Drawing.Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
+            System.Drawing.Imaging.BitmapData bData = BaseSprite.LockBits(new System.Drawing.Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
+            byte* scan0 = (byte*)bData.Scan0.ToPointer();
+            uint color;
+            int startx;
+            int starty;
+            for (int i = 0; i < 4; i++)
+            {
+                startx = SpotOrigins[i].X + SpotOffsets[i].X;
+                starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
+                for (int x = 0; x < 96; x++)
+                {
+                    for (int y = 0; y < 96; y++)
+                    {
+                        color = 0;
+                        if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
+                        {
+                            byte* data = scan0 + y * bData.Stride + x * 4;
+                            if (data[0] != 0)
+                            {
+                                byte[] datab = { data[0], data[1], data[2], data[3] };
+                                uint SpriteColor = BitConverter.ToUInt32(datab, 0);
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
+                                {
+                                    if (IsShiny)
+                                    {
+                                        color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
+                                    }
+                                    else
+                                    {
+                                        color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
+                                    }
+                                }
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
+                                {
+                                    if (IsShiny)
+                                    {
+                                        color = (uint)(SpindaColorsShinySpot.ShinyShaded);
+                                    }
+                                    else
+                                    {
+                                        color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
+                                    }
+                                }
+                                if (color != 0)
+                                {
+                                    byte[] colordata = BitConverter.GetBytes(color);
+                                    data[0] = colordata[0];
+                                    data[1] = colordata[1];
+                                    data[2] = colordata[2];
+                                    data[3] = 0xFF;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            BaseSprite.UnlockBits(bData);
+            return BaseSprite;
+
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         public class Pokemon
         {
@@ -3477,80 +3602,81 @@ namespace PKMDS_CS
                     }
                     else
                     {
-                        System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
-                        System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
-                        System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
-                        System.Drawing.Point BottomRightOrigin = new System.Drawing.Point(38, 33);
-                        System.Drawing.Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
-                        System.Drawing.Point TopLeftOffsets = new System.Drawing.Point((int)(this.PID & 0xf), (int)(this.PID >> 4 & 0xf));
-                        System.Drawing.Point TopRightOffsets = new System.Drawing.Point((int)(this.PID >> 8 & 0xf), (int)(this.PID >> 12 & 0xf));
-                        System.Drawing.Point BottomLeftOffsets = new System.Drawing.Point((int)(this.PID >> 16 & 0xf), (int)(this.PID >> 20 & 0xf));
-                        System.Drawing.Point BottomRightOffsets = new System.Drawing.Point((int)(this.PID >> 24 & 0xf), (int)(this.PID >> 28 & 0xf));
-                        System.Drawing.Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
-                        System.Drawing.Bitmap BaseSprite = GetSpindaSprite(this.IsShiny);
-                        System.Drawing.Bitmap TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
-                        System.Drawing.Bitmap TopRight = GetSpindaSpot(SpindaSpots.TopRight);
-                        System.Drawing.Bitmap BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
-                        System.Drawing.Bitmap BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
-                        System.Drawing.Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
-                        System.Drawing.Imaging.BitmapData bData = BaseSprite.LockBits(new System.Drawing.Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
-                        byte* scan0 = (byte*)bData.Scan0.ToPointer();
-                        uint color;
-                        int startx;
-                        int starty;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            startx = SpotOrigins[i].X + SpotOffsets[i].X;
-                            starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
-                            for (int x = 0; x < 96; x++)
-                            {
-                                for (int y = 0; y < 96; y++)
-                                {
-                                    color = 0;
-                                    if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
-                                    {
-                                        byte* data = scan0 + y * bData.Stride + x * 4;
-                                        if (data[0] != 0)
-                                        {
-                                            byte[] datab = { data[0], data[1], data[2], data[3] };
-                                            uint SpriteColor = BitConverter.ToUInt32(datab, 0);
-                                            if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
-                                            {
-                                                if (this.IsShiny)
-                                                {
-                                                    color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
-                                                }
-                                                else
-                                                {
-                                                    color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
-                                                }
-                                            }
-                                            if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
-                                            {
-                                                if (this.IsShiny)
-                                                {
-                                                    color = (uint)(SpindaColorsShinySpot.ShinyShaded);
-                                                }
-                                                else
-                                                {
-                                                    color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
-                                                }
-                                            }
-                                            if (color != 0)
-                                            {
-                                                byte[] colordata = BitConverter.GetBytes(color);
-                                                data[0] = colordata[0];
-                                                data[1] = colordata[1];
-                                                data[2] = colordata[2];
-                                                data[3] = 0xFF;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        BaseSprite.UnlockBits(bData);
-                        return BaseSprite;
+                        return GetSpindaSprite(this.PID, this.IsShiny);
+                        //System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
+                        //System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
+                        //System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
+                        //System.Drawing.Point BottomRightOrigin = new System.Drawing.Point(38, 33);
+                        //System.Drawing.Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
+                        //System.Drawing.Point TopLeftOffsets = new System.Drawing.Point((int)(this.PID & 0xf), (int)(this.PID >> 4 & 0xf));
+                        //System.Drawing.Point TopRightOffsets = new System.Drawing.Point((int)(this.PID >> 8 & 0xf), (int)(this.PID >> 12 & 0xf));
+                        //System.Drawing.Point BottomLeftOffsets = new System.Drawing.Point((int)(this.PID >> 16 & 0xf), (int)(this.PID >> 20 & 0xf));
+                        //System.Drawing.Point BottomRightOffsets = new System.Drawing.Point((int)(this.PID >> 24 & 0xf), (int)(this.PID >> 28 & 0xf));
+                        //System.Drawing.Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
+                        //System.Drawing.Bitmap BaseSprite = GetSpindaBaseSprite(this.IsShiny);
+                        //System.Drawing.Bitmap TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
+                        //System.Drawing.Bitmap TopRight = GetSpindaSpot(SpindaSpots.TopRight);
+                        //System.Drawing.Bitmap BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
+                        //System.Drawing.Bitmap BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
+                        //System.Drawing.Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
+                        //System.Drawing.Imaging.BitmapData bData = BaseSprite.LockBits(new System.Drawing.Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
+                        //byte* scan0 = (byte*)bData.Scan0.ToPointer();
+                        //uint color;
+                        //int startx;
+                        //int starty;
+                        //for (int i = 0; i < 4; i++)
+                        //{
+                        //    startx = SpotOrigins[i].X + SpotOffsets[i].X;
+                        //    starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
+                        //    for (int x = 0; x < 96; x++)
+                        //    {
+                        //        for (int y = 0; y < 96; y++)
+                        //        {
+                        //            color = 0;
+                        //            if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
+                        //            {
+                        //                byte* data = scan0 + y * bData.Stride + x * 4;
+                        //                if (data[0] != 0)
+                        //                {
+                        //                    byte[] datab = { data[0], data[1], data[2], data[3] };
+                        //                    uint SpriteColor = BitConverter.ToUInt32(datab, 0);
+                        //                    if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
+                        //                    {
+                        //                        if (this.IsShiny)
+                        //                        {
+                        //                            color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
+                        //                        }
+                        //                    }
+                        //                    if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
+                        //                    {
+                        //                        if (this.IsShiny)
+                        //                        {
+                        //                            color = (uint)(SpindaColorsShinySpot.ShinyShaded);
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
+                        //                        }
+                        //                    }
+                        //                    if (color != 0)
+                        //                    {
+                        //                        byte[] colordata = BitConverter.GetBytes(color);
+                        //                        data[0] = colordata[0];
+                        //                        data[1] = colordata[1];
+                        //                        data[2] = colordata[2];
+                        //                        data[3] = 0xFF;
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                        //BaseSprite.UnlockBits(bData);
+                        //return BaseSprite;
                     }
                 }
             }
