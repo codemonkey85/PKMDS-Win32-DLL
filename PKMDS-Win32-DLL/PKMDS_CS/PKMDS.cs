@@ -3566,7 +3566,7 @@ namespace PKMDS_CS
             }
             public Pokemon()
             {
-
+                Data = new byte[136];
             }
             public string SpeciesName
             {
