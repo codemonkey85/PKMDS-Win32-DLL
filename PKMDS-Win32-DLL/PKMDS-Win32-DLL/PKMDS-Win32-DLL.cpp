@@ -451,7 +451,7 @@ EXPORT void WriteSaveFile(bw2sav_obj * sav, const wchar_t * filename)
 }
 EXPORT int GetCurrentBox(bw2sav_obj * sav)
 {
-	return sav->cur.curbox;
+	return (int)(sav->cur.curbox);
 }
 EXPORT void SetCurrentBox(bw2sav_obj * sav, int box)
 {
