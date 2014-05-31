@@ -2020,6 +2020,19 @@ namespace PKMDS_CS
             Turboblaze,
             Teravolt,
         }
+        public enum PokemonColors
+        {
+            Black = 0x5A5A5A,
+            Blue = 0x318CF7,
+            Brown = 0xB57331,
+            Gray = 0xA5A5A5,
+            Green = 0x42BD6B,
+            Pink = 0xFF94CE,
+            Purple = 0xAD6BC6,
+            Red = 0xF75A6B,
+            White = 0xF7F7F7,
+            Yellow = 0xF7D64A
+        }
         public enum SpindaSpots
         {
             TopLeft,
@@ -2053,7 +2066,7 @@ namespace PKMDS_CS
             public static extern void CloseDB();
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
             [return: MarshalAs(UnmanagedType.BStr)]
-            public static unsafe extern string GetAString(string sql);
+            public static extern string GetAString(string sql);
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern int GetAnInt(string sql);
         }
@@ -2234,6 +2247,9 @@ namespace PKMDS_CS
         }
         #endregion
 
+        //[DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        //public static extern void /*IntPtr*/ /*byte **/ GetPKMDataPTR([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
+
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetTypeName(int type);
@@ -2246,7 +2262,7 @@ namespace PKMDS_CS
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetItemIdentifier(UInt16 item);
 
-        public static System.Drawing.Bitmap GetSpindaSprite(bool Shiny = false)
+        public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false)
         {
             if (Shiny)
             {
@@ -2292,10 +2308,10 @@ namespace PKMDS_CS
         private static unsafe extern void GetPKMNickName_INTERNAL([In][Out] Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern bool DepositPKM([In][Out] Save sav, Pokemon pkm, int startbox, bool failiffull);
+        private static extern bool DepositPKM([In][Out] Save sav, Pokemon pkm, int startbox, bool failiffull);
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        private static unsafe extern bool WithdrawPKM([In][Out] Save sav, Pokemon pkm);
+        private static extern bool WithdrawPKM([In][Out] Save sav, Pokemon pkm);
 
         private static unsafe string GetPKMOTName([In][Out]Pokemon pkm)
         {
@@ -3302,14 +3318,14 @@ namespace PKMDS_CS
                     }
                 }
             }
-            public unsafe System.Drawing.Image MoveTypeImage
+            public System.Drawing.Image MoveTypeImage
             {
                 get
                 {
                     return PKMDS.GetResourceByName(PKMDS.GetMoveTypeName(MoveID).ToLower());
                 }
             }
-            public unsafe System.Drawing.Image MoveCategoryImage
+            public System.Drawing.Image MoveCategoryImage
             {
                 get
                 {
@@ -3455,11 +3471,103 @@ namespace PKMDS_CS
             }
         }
 
+        public static unsafe System.Drawing.Image GetSpindaSprite(UInt32 PID, bool IsShiny = false)
+        {
+            System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
+            System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
+            System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
+            System.Drawing.Point BottomRightOrigin = new System.Drawing.Point(38, 33);
+            System.Drawing.Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
+            System.Drawing.Point TopLeftOffsets = new System.Drawing.Point((int)(PID & 0xf), (int)(PID >> 4 & 0xf));
+            System.Drawing.Point TopRightOffsets = new System.Drawing.Point((int)(PID >> 8 & 0xf), (int)(PID >> 12 & 0xf));
+            System.Drawing.Point BottomLeftOffsets = new System.Drawing.Point((int)(PID >> 16 & 0xf), (int)(PID >> 20 & 0xf));
+            System.Drawing.Point BottomRightOffsets = new System.Drawing.Point((int)(PID >> 24 & 0xf), (int)(PID >> 28 & 0xf));
+            System.Drawing.Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
+            System.Drawing.Bitmap BaseSprite = GetSpindaBaseSprite(IsShiny);
+            System.Drawing.Bitmap TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
+            System.Drawing.Bitmap TopRight = GetSpindaSpot(SpindaSpots.TopRight);
+            System.Drawing.Bitmap BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
+            System.Drawing.Bitmap BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
+            System.Drawing.Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
+            System.Drawing.Imaging.BitmapData bData = BaseSprite.LockBits(new System.Drawing.Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
+            byte* scan0 = (byte*)bData.Scan0.ToPointer();
+            uint color;
+            int startx;
+            int starty;
+            for (int i = 0; i < 4; i++)
+            {
+                startx = SpotOrigins[i].X + SpotOffsets[i].X;
+                starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
+                for (int x = 0; x < 96; x++)
+                {
+                    for (int y = 0; y < 96; y++)
+                    {
+                        color = 0;
+                        if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
+                        {
+                            byte* data = scan0 + y * bData.Stride + x * 4;
+                            if (data[0] != 0)
+                            {
+                                byte[] datab = { data[0], data[1], data[2], data[3] };
+                                uint SpriteColor = BitConverter.ToUInt32(datab, 0);
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
+                                {
+                                    if (IsShiny)
+                                    {
+                                        color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
+                                    }
+                                    else
+                                    {
+                                        color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
+                                    }
+                                }
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
+                                {
+                                    if (IsShiny)
+                                    {
+                                        color = (uint)(SpindaColorsShinySpot.ShinyShaded);
+                                    }
+                                    else
+                                    {
+                                        color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
+                                    }
+                                }
+                                if (color != 0)
+                                {
+                                    byte[] colordata = BitConverter.GetBytes(color);
+                                    data[0] = colordata[0];
+                                    data[1] = colordata[1];
+                                    data[2] = colordata[2];
+                                    data[3] = 0xFF;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            BaseSprite.UnlockBits(bData);
+            return BaseSprite;
+
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        [Serializable]
         public class Pokemon
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 136)]
             public byte[] Data;
+            public void GetPTR(/*ref */IntPtr ptr)
+            {
+                System.Runtime.InteropServices.Marshal.StructureToPtr(this, ptr, false);
+            }
+            public Pokemon(IntPtr ptr)
+            {
+                Data = ((Pokemon)(System.Runtime.InteropServices.Marshal.PtrToStructure(ptr, typeof(Pokemon)))).Data;
+            }
+            public Pokemon()
+            {
+                Data = new byte[136];
+            }
             public string SpeciesName
             {
                 get
@@ -3477,80 +3585,7 @@ namespace PKMDS_CS
                     }
                     else
                     {
-                        System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
-                        System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
-                        System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
-                        System.Drawing.Point BottomRightOrigin = new System.Drawing.Point(38, 33);
-                        System.Drawing.Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
-                        System.Drawing.Point TopLeftOffsets = new System.Drawing.Point((int)(this.PID & 0xf), (int)(this.PID >> 4 & 0xf));
-                        System.Drawing.Point TopRightOffsets = new System.Drawing.Point((int)(this.PID >> 8 & 0xf), (int)(this.PID >> 12 & 0xf));
-                        System.Drawing.Point BottomLeftOffsets = new System.Drawing.Point((int)(this.PID >> 16 & 0xf), (int)(this.PID >> 20 & 0xf));
-                        System.Drawing.Point BottomRightOffsets = new System.Drawing.Point((int)(this.PID >> 24 & 0xf), (int)(this.PID >> 28 & 0xf));
-                        System.Drawing.Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
-                        System.Drawing.Bitmap BaseSprite = GetSpindaSprite(this.IsShiny);
-                        System.Drawing.Bitmap TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
-                        System.Drawing.Bitmap TopRight = GetSpindaSpot(SpindaSpots.TopRight);
-                        System.Drawing.Bitmap BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
-                        System.Drawing.Bitmap BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
-                        System.Drawing.Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
-                        System.Drawing.Imaging.BitmapData bData = BaseSprite.LockBits(new System.Drawing.Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
-                        byte* scan0 = (byte*)bData.Scan0.ToPointer();
-                        uint color;
-                        int startx;
-                        int starty;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            startx = SpotOrigins[i].X + SpotOffsets[i].X;
-                            starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
-                            for (int x = 0; x < 96; x++)
-                            {
-                                for (int y = 0; y < 96; y++)
-                                {
-                                    color = 0;
-                                    if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
-                                    {
-                                        byte* data = scan0 + y * bData.Stride + x * 4;
-                                        if (data[0] != 0)
-                                        {
-                                            byte[] datab = { data[0], data[1], data[2], data[3] };
-                                            uint SpriteColor = BitConverter.ToUInt32(datab, 0);
-                                            if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
-                                            {
-                                                if (this.IsShiny)
-                                                {
-                                                    color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
-                                                }
-                                                else
-                                                {
-                                                    color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
-                                                }
-                                            }
-                                            if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
-                                            {
-                                                if (this.IsShiny)
-                                                {
-                                                    color = (uint)(SpindaColorsShinySpot.ShinyShaded);
-                                                }
-                                                else
-                                                {
-                                                    color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
-                                                }
-                                            }
-                                            if (color != 0)
-                                            {
-                                                byte[] colordata = BitConverter.GetBytes(color);
-                                                data[0] = colordata[0];
-                                                data[1] = colordata[1];
-                                                data[2] = colordata[2];
-                                                data[3] = 0xFF;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        BaseSprite.UnlockBits(bData);
-                        return BaseSprite;
+                        return GetSpindaSprite(this.PID, this.IsShiny);
                     }
                 }
             }
@@ -4144,6 +4179,7 @@ namespace PKMDS_CS
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        [Serializable]
         public class PartyPokemon
         {
             public PartyPokemon()
@@ -4161,10 +4197,267 @@ namespace PKMDS_CS
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        [Serializable]
+        public class Box
+        {
+            public Pokemon Pokemon(int slot)
+            {
+                switch (slot)
+                {
+                    case 0:
+                        return Pokemon01;
+                    case 1:
+                        return Pokemon02;
+                    case 2:
+                        return Pokemon03;
+                    case 3:
+                        return Pokemon04;
+                    case 4:
+                        return Pokemon05;
+                    case 5:
+                        return Pokemon06;
+                    case 6:
+                        return Pokemon07;
+                    case 7:
+                        return Pokemon08;
+                    case 8:
+                        return Pokemon09;
+                    case 9:
+                        return Pokemon10;
+                    case 10:
+                        return Pokemon11;
+                    case 11:
+                        return Pokemon12;
+                    case 12:
+                        return Pokemon13;
+                    case 13:
+                        return Pokemon14;
+                    case 14:
+                        return Pokemon15;
+                    case 15:
+                        return Pokemon16;
+                    case 16:
+                        return Pokemon17;
+                    case 17:
+                        return Pokemon18;
+                    case 18:
+                        return Pokemon19;
+                    case 19:
+                        return Pokemon20;
+                    case 20:
+                        return Pokemon21;
+                    case 21:
+                        return Pokemon22;
+                    case 22:
+                        return Pokemon23;
+                    case 23:
+                        return Pokemon24;
+                    case 24:
+                        return Pokemon25;
+                    case 25:
+                        return Pokemon26;
+                    case 26:
+                        return Pokemon27;
+                    case 27:
+                        return Pokemon28;
+                    case 28:
+                        return Pokemon29;
+                    case 29:
+                        return Pokemon30;
+                    default:
+                        return null;
+                }
+            }
+            [NonSerialized()]
+            private Pokemon Pokemon01 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon02 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon03 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon04 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon05 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon06 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon07 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon08 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon09 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon10 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon11 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon12 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon13 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon14 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon15 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon16 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon17 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon18 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon19 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon20 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon21 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon22 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon23 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon24 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon25 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon26 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon27 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon28 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon29 = new Pokemon();
+            [NonSerialized()]
+            private Pokemon Pokemon30 = new Pokemon();
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
+            private byte[] Data;
+            public Box()
+            {
+
+            }
+        }
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        [Serializable]
+        public class PCStorage
+        {
+            public Box Box(int box)
+            {
+                switch (box)
+                {
+                    case 0:
+                        return Box01;
+                    case 1:
+                        return Box02;
+                    case 2:
+                        return Box03;
+                    case 3:
+                        return Box04;
+                    case 4:
+                        return Box05;
+                    case 5:
+                        return Box06;
+                    case 6:
+                        return Box07;
+                    case 7:
+                        return Box08;
+                    case 8:
+                        return Box09;
+                    case 9:
+                        return Box10;
+                    case 10:
+                        return Box11;
+                    case 11:
+                        return Box12;
+                    case 12:
+                        return Box13;
+                    case 13:
+                        return Box14;
+                    case 14:
+                        return Box15;
+                    case 15:
+                        return Box16;
+                    case 16:
+                        return Box17;
+                    case 17:
+                        return Box18;
+                    case 18:
+                        return Box19;
+                    case 19:
+                        return Box20;
+                    case 20:
+                        return Box21;
+                    case 21:
+                        return Box22;
+                    case 22:
+                        return Box23;
+                    case 23:
+                        return Box24;
+                    default:
+                        return null;
+                }
+            }
+            [NonSerialized()]
+            private Box Box01 = new Box();
+            [NonSerialized()]
+            private Box Box02 = new Box();
+            [NonSerialized()]
+            private Box Box03 = new Box();
+            [NonSerialized()]
+            private Box Box04 = new Box();
+            [NonSerialized()]
+            private Box Box05 = new Box();
+            [NonSerialized()]
+            private Box Box06 = new Box();
+            [NonSerialized()]
+            private Box Box07 = new Box();
+            [NonSerialized()]
+            private Box Box08 = new Box();
+            [NonSerialized()]
+            private Box Box09 = new Box();
+            [NonSerialized()]
+            private Box Box10 = new Box();
+            [NonSerialized()]
+            private Box Box11 = new Box();
+            [NonSerialized()]
+            private Box Box12 = new Box();
+            [NonSerialized()]
+            private Box Box13 = new Box();
+            [NonSerialized()]
+            private Box Box14 = new Box();
+            [NonSerialized()]
+            private Box Box15 = new Box();
+            [NonSerialized()]
+            private Box Box16 = new Box();
+            [NonSerialized()]
+            private Box Box17 = new Box();
+            [NonSerialized()]
+            private Box Box18 = new Box();
+            [NonSerialized()]
+            private Box Box19 = new Box();
+            [NonSerialized()]
+            private Box Box20 = new Box();
+            [NonSerialized()]
+            private Box Box21 = new Box();
+            [NonSerialized()]
+            private Box Box22 = new Box();
+            [NonSerialized()]
+            private Box Box23 = new Box();
+            [NonSerialized()]
+            private Box Box24 = new Box();
+            public PCStorage()
+            {
+
+            }
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        [Serializable]
         public class Save
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x80000)]
-            private byte[] Data;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x00400 /*0x80000*/)]
+            private byte[] FirstBuff;
+            public PCStorage PCStorage;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x67C00 /*0x80000*/)]
+            private byte[] SecondBuff;
             public string TrainerName
             {
                 get
@@ -4228,6 +4521,23 @@ namespace PKMDS_CS
                 GetPKMData(ref pkm, this, Box, Slot);
                 return pkm;
             }
+            //public void GetStoredPokemonPTRObj(ref Pokemon pkm, int Box, int Slot)
+            //{
+            //    //GetPKMData(ref pkm, this, Box, Slot);
+            //    GetPKMDataPTR(pkm, this, Box, Slot);
+            //}
+            ////public IntPtr /*byte **/ GetStoredPokemonPTR(int Box, int Slot)
+            ////{
+            ////    return GetPKMDataPTR(this, Box, Slot);
+            ////}
+            ////public Pokemon GetStoredPokemonPTRAsObj(int Box, int Slot) 
+            ////{
+            ////    Pokemon test = GetStoredPokemon(Box, Slot);
+            ////    IntPtr ptr = new IntPtr();
+            ////    ptr = GetPKMDataPTR(this, Box, Slot);
+            ////    byte testbyte = System.Runtime.InteropServices.Marshal.ReadByte(ptr, 0);
+            ////    return (Pokemon)Marshal.PtrToStructure(ptr, typeof(Pokemon));
+            ////}
             public void SetStoredPokemon(Pokemon pokemon, int Box, int Slot)
             {
                 SetPKMData(pokemon, this, Box, Slot);
