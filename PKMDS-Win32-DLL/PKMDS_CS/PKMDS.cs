@@ -10,7 +10,7 @@ namespace PKMDS_CS
         #region Constants
         private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
         private const int LANG_ID = 9;
-        private const int VERSION_GROUP = 11;
+        private const int VERSION_GROUP = 14;
         private const int GENERATION = 5;
         private const int BUFF_SIZE = 955;
         private const int NICKLENGTH = 11;
@@ -1777,8 +1777,10 @@ namespace PKMDS_CS
             Bug_Gem = 0x022E,
             Rock_Gem = 0x022F,
             Ghost_Gem = 0x0230,
+            Dragon_Gem = 0x0231,
             Dark_Gem = 0x0232,
             Steel_Gem = 0x0233,
+            Normal_Gem = 0x0234,
             Health_Wing = 0x0235,
             Muscle_Wing = 0x0236,
             Resist_Wing = 0x0237,
@@ -1836,14 +1838,14 @@ namespace PKMDS_CS
             TM94 = 0x026B,
             TM95 = 0x026C,
             Xtransceiver = 0x026D,
-            god_stone = 0x026E,
+            God_Stone = 0x026E,
             Gram_1 = 0x026F,
             Gram_2 = 0x0270,
             Gram_3 = 0x0271,
-            Dragon_Gem = 0x0231,
-            Normal_Gem = 0x0234,
+            xtransceiver2 = 0x0272,
             Medal_Box = 0x0273,
             DNA_Splicers = 0x0274,
+            dnasplicers2 = 0x0275,
             Permit = 0x0276,
             Oval_Charm = 0x0277,
             Shiny_Charm = 0x0278,
@@ -1851,6 +1853,7 @@ namespace PKMDS_CS
             Grubby_Hanky = 0x027A,
             Colress_MCHN = 0x027B,
             Dropped_Item = 0x027C,
+            droppeditem2 = 0x027d,
             Reveal_Glass = 0x027E
         }
         public enum Abilities
@@ -2181,7 +2184,22 @@ namespace PKMDS_CS
             }
             else
             {
-                string identifier = GetItemIdentifier(itemid);
+                string identifier = "";
+                switch ((Items)(itemid)) 
+                {
+                    case Items.xtransceiver2:
+                        identifier = GetItemIdentifier((UInt16)(Items.Xtransceiver)) + "_yellow";
+                        break;
+                    case Items.dnasplicers2:
+                        identifier = GetItemIdentifier((UInt16)(Items.DNA_Splicers));
+                        break;
+                    case Items.droppeditem2:
+                        identifier = GetItemIdentifier((UInt16)(Items.Dropped_Item)) + "_yellow";
+                        break;
+                    default:
+                        identifier = GetItemIdentifier(itemid);
+                        break;
+                }
                 if ((identifier != "") && identifier != null)
                 {
                     identifier = identifier.Replace('-', '_');

@@ -12725,6 +12725,348 @@
   <ItemGroup>
     <None Include="resources\special.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\ability-capsule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\abomasite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\absolite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\adventure-rules.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\aerodactylite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\aggronite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\alakazite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\amaze-mulch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\ampharosite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\assault-vest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\balm-mushroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\banettite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bicycle-turquoise.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bicycle-yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\black-apricorn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\black-glasses.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\blastoisinite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\blazikenite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\blue-apricorn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\boost-mulch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bridge-mail-d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bridge-mail-m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bridge-mail-s.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bridge-mail-t.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bridge-mail-v.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\bright-powder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\charizardite-x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\charizardite-y.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\colress-machine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\common-stone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\deep-sea-scale.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\deep-sea-tooth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\discount-coupon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\dowsing-machine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\dropped-item-red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\dropped-item-yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\elevator-key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\energy-powder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\fairy-gem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\garchompite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\gardevoirite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\gengarite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\green-apricorn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\gyaradosite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\heracronite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\holo-caster.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\holo-caster-green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\holo-caster-red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\honor-of-kalos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\houndoominite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\intriguing-stone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\jaw-fossil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\kangaskhanite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\kee-berry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\lens-case.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\looker-ticket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\lucarionite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\luminous-moss.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\lumiose-galette.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\manectite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\maranga-berry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\mawilite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\medichamite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\mega-ring.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\mewtwonite-x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\mewtwonite-y.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\never-melt-ice.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\paralyze-heal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\pink-apricorn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\pinsirite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\pixie-plate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\power-plant-pass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\profs-letter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\rage-candy-bar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\rich-mulch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\roller-skates.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\roseli-berry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\sachet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\safety-goggles.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\sail-fossil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\scizorite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\secret-potion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shalour-sable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\silver-powder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\slowpoke-tail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\snowball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\sprinklotad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\squirt-bottle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\strange-souvenir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\surprise-mulch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\thunder-stone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\tiny-mushroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\tm-fairy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\tmv-pass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\travel-trunk-gold.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\travel-trunk-silver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\twisted-spoon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\tyranitarite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\venusaurite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\weakness-policy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\whipped-dream.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\white-apricorn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-defense.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-defense-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-defense-3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-defense-6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-sp-atk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-sp-atk-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-sp-atk-3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\x-sp-atk-6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\xtransceiver-red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\xtransceiver-yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\yellow-apricorn.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
