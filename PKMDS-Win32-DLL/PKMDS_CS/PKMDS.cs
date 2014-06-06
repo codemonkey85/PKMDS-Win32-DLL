@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 namespace PKMDS_CS
 {
     public class PKMDS
@@ -2089,6 +2090,10 @@ namespace PKMDS_CS
         }
         public static System.Drawing.Image GetSprite(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false)
         {
+            if (Species == 0) 
+            {
+                return null;
+            }
             System.Drawing.Image ret = null;
             string sprite = "s";
             if (Female)
@@ -2153,6 +2158,10 @@ namespace PKMDS_CS
         }
         public static System.Drawing.Image GetIcon(UInt16 Species, byte Form = 0, bool Female = false)
         {
+            if (Species == 0) 
+            {
+                return null;
+            }
             System.Drawing.Image ret = null;
             string icon = "bi_" + Species.ToString();
             if (Female)
@@ -2333,19 +2342,33 @@ namespace PKMDS_CS
 
         private static unsafe string GetPKMOTName([In][Out]Pokemon pkm)
         {
-            IntPtr test = new IntPtr();
-            int length = new int();
-            PKMDS.GetPKMOTName_INTERNAL(pkm, &test, &length);
-            string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
-            return ret.Substring(0, length);
+            try
+            {
+                IntPtr test = new IntPtr();
+                int length = new int();
+                PKMDS.GetPKMOTName_INTERNAL(pkm, &test, &length);
+                string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
+                return ret.Substring(0, length);
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
         private static unsafe string GetPKMNickname([In][Out]Pokemon pkm)
         {
-            IntPtr test = new IntPtr();
-            int length = new int();
-            PKMDS.GetPKMNickName_INTERNAL(pkm, &test, &length);
-            string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
-            return ret.Substring(0, length);
+            try
+            {
+                IntPtr test = new IntPtr();
+                int length = new int();
+                PKMDS.GetPKMNickName_INTERNAL(pkm, &test, &length);
+                string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
+                return ret.Substring(0, length);
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
 
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
@@ -3573,6 +3596,7 @@ namespace PKMDS_CS
         public class Pokemon
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 136)]
+            [Browsable(false)]
             public byte[] Data;
             public void GetPTR(/*ref */IntPtr ptr)
             {
@@ -3586,6 +3610,7 @@ namespace PKMDS_CS
             {
                 Data = new byte[136];
             }
+            [Browsable(true)]
             public string SpeciesName
             {
                 get
@@ -3593,6 +3618,7 @@ namespace PKMDS_CS
                     return PKMDS.GetPKMName_FromObj(this);
                 }
             }
+            [Browsable(false)]
             public unsafe System.Drawing.Image Sprite
             {
                 get
@@ -3607,6 +3633,7 @@ namespace PKMDS_CS
                     }
                 }
             }
+            [Browsable(true)]
             public int[] GetStats
             {
                 get
@@ -3619,6 +3646,7 @@ namespace PKMDS_CS
                     return ret;
                 }
             }
+            [Browsable(true)]
             public int Level
             {
                 get
@@ -3630,6 +3658,7 @@ namespace PKMDS_CS
                     SetPKMLevel(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 SpeciesID
             {
                 get
@@ -3645,6 +3674,7 @@ namespace PKMDS_CS
             {
                 WritePokemonFile(this, FileName, encrypt);
             }
+            [Browsable(true)]
             public UInt32 PID
             {
                 get
@@ -3656,6 +3686,7 @@ namespace PKMDS_CS
                     SetPKMPID(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 ItemID
             {
                 get
@@ -3667,6 +3698,7 @@ namespace PKMDS_CS
                     SetPKMItemIndex(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 TID
             {
                 get
@@ -3678,6 +3710,7 @@ namespace PKMDS_CS
                     SetPKMTID(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 SID
             {
                 get
@@ -3689,6 +3722,7 @@ namespace PKMDS_CS
                     SetPKMSID(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt32 EXP
             {
                 get
@@ -3700,6 +3734,7 @@ namespace PKMDS_CS
                     SetPKMEXP(this, value);
                 }
             }
+            [Browsable(true)]
             public int Tameness
             {
                 get
@@ -3711,6 +3746,7 @@ namespace PKMDS_CS
                     SetPKMTameness(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 AbilityID
             {
                 get
@@ -3730,6 +3766,7 @@ namespace PKMDS_CS
             {
                 SetPKMMarking(this, marking, marked);
             }
+            [Browsable(true)]
             public Byte LanguageID
             {
                 get
@@ -3765,6 +3802,7 @@ namespace PKMDS_CS
             {
                 SetPKMContest(this, contestindex, contest);
             }
+            [Browsable(true)]
             public UInt16[] GetMoveIDs
             {
                 get
@@ -3797,6 +3835,7 @@ namespace PKMDS_CS
             {
                 SetPKMMovePPUp(this, move, ppup);
             }
+            [Browsable(true)]
             public bool MetAsEgg
             {
                 get
@@ -3804,6 +3843,7 @@ namespace PKMDS_CS
                     return GetPKMMetAsEgg(this);
                 }
             }
+            [Browsable(true)]
             public bool IsEgg
             {
                 get
@@ -3815,6 +3855,7 @@ namespace PKMDS_CS
                     SetPKMIsEgg(this, value);
                 }
             }
+            [Browsable(true)]
             public bool IsNicknamed
             {
                 get
@@ -3826,6 +3867,7 @@ namespace PKMDS_CS
                     SetPKMIsNicknamed(this, value);
                 }
             }
+            [Browsable(true)]
             public bool IsFateful
             {
                 get
@@ -3837,6 +3879,7 @@ namespace PKMDS_CS
                     SetPKMFateful(this, value);
                 }
             }
+            [Browsable(true)]
             public int GenderID
             {
                 get
@@ -3848,6 +3891,7 @@ namespace PKMDS_CS
                     SetPKMGender(this, value);
                 }
             }
+            [Browsable(true)]
             public Byte FormID
             {
                 get
@@ -3859,6 +3903,7 @@ namespace PKMDS_CS
                     SetPKMForm(this, value);
                 }
             }
+            [Browsable(true)]
             public Byte NatureID
             {
                 get
@@ -3870,6 +3915,7 @@ namespace PKMDS_CS
                     SetPKMNature(this, value);
                 }
             }
+            [Browsable(true)]
             public bool HasDWAbility
             {
                 get
@@ -3881,6 +3927,7 @@ namespace PKMDS_CS
                     SetPKMDWAbility(this, value);
                 }
             }
+            [Browsable(true)]
             public bool IsNsPokemon
             {
                 get
@@ -3892,6 +3939,7 @@ namespace PKMDS_CS
                     SetPKMNsPokemon(this, value);
                 }
             }
+            [Browsable(true)]
             public string Nickname
             {
                 get
@@ -3903,6 +3951,7 @@ namespace PKMDS_CS
                     SetPKMNickname(this, value, value.Length);
                 }
             }
+            [Browsable(true)]
             public Byte HometownID
             {
                 get
@@ -3914,6 +3963,7 @@ namespace PKMDS_CS
                     SetPKMHometown(this, value);
                 }
             }
+            [Browsable(true)]
             public string OTName
             {
                 get
@@ -3931,11 +3981,19 @@ namespace PKMDS_CS
                 this.Data[0x79] = 0;
                 this.Data[0x7A] = 0;
             }
+            [Browsable(true)]
             public DateTime EggDate
             {
                 get
                 {
-                    return new DateTime(GetPKMEggYear(this), GetPKMEggMonth(this), GetPKMEggDay(this));
+                    try
+                    {
+                        return new DateTime(GetPKMEggYear(this), GetPKMEggMonth(this), GetPKMEggDay(this));
+                    }
+                    catch (Exception)
+                    {
+                        return new DateTime();
+                    }
                 }
                 set
                 {
@@ -3944,11 +4002,19 @@ namespace PKMDS_CS
                     SetPKMEggDay(this, value.Day);
                 }
             }
+            [Browsable(true)]
             public DateTime MetDate
             {
                 get
                 {
-                    return new DateTime(GetPKMMetYear(this), GetPKMMetMonth(this), GetPKMMetDay(this));
+                    try
+                    {
+                        return new DateTime(GetPKMMetYear(this), GetPKMMetMonth(this), GetPKMMetDay(this));
+                    }
+                    catch (Exception)
+                    {
+                        return new DateTime();
+                    }
                 }
                 set
                 {
@@ -3957,6 +4023,7 @@ namespace PKMDS_CS
                     SetPKMMetDay(this, value.Day);
                 }
             }
+            [Browsable(true)]
             public UInt16 EggLocationID
             {
                 get
@@ -3968,6 +4035,7 @@ namespace PKMDS_CS
                     SetPKMEggLocation(this, value);
                 }
             }
+            [Browsable(true)]
             public UInt16 MetLocationID
             {
                 get
@@ -3979,6 +4047,7 @@ namespace PKMDS_CS
                     SetPKMMetLocation(this, value);
                 }
             }
+            [Browsable(true)]
             public int PokerusStrain
             {
                 get
@@ -3990,6 +4059,7 @@ namespace PKMDS_CS
                     SetPKMPokerusStrain(this, value);
                 }
             }
+            [Browsable(true)]
             public int PokerusDays
             {
                 get
@@ -4001,6 +4071,7 @@ namespace PKMDS_CS
                     SetPKMPokerusDays(this, value);
                 }
             }
+            [Browsable(true)]
             public Byte BallID
             {
                 get
@@ -4012,6 +4083,7 @@ namespace PKMDS_CS
                     SetPKMBall(this, value);
                 }
             }
+            [Browsable(true)]
             public Byte MetLevel
             {
                 get
@@ -4023,6 +4095,7 @@ namespace PKMDS_CS
                     SetPKMMetLevel(this, value);
                 }
             }
+            [Browsable(true)]
             public int OTGenderID
             {
                 get
@@ -4034,6 +4107,7 @@ namespace PKMDS_CS
                     SetPKMOTGender(this, value);
                 }
             }
+            [Browsable(true)]
             public int EncounterID
             {
                 get
@@ -4045,6 +4119,7 @@ namespace PKMDS_CS
                     SetPKMEncounter(this, value);
                 }
             }
+            [Browsable(true)]
             public bool IsModified
             {
                 get
@@ -4056,6 +4131,7 @@ namespace PKMDS_CS
             {
                 FixPokemonChecksum(this);
             }
+            [Browsable(true)]
             public System.Drawing.Image Icon
             {
                 get
@@ -4063,6 +4139,7 @@ namespace PKMDS_CS
                     return PKMDS.GetIcon(this.SpeciesID, this.FormID, PKMDS.HasFemaleIcon(this) == 1);
                 }
             }
+            [Browsable(true)]
             public bool IsShiny
             {
                 get
@@ -4085,6 +4162,7 @@ namespace PKMDS_CS
                     return null;
                 }
             }
+            [Browsable(true)]
             public UInt32 TNL
             {
                 get
@@ -4092,6 +4170,7 @@ namespace PKMDS_CS
                     return PKMDS.GetPKMTNL(this);
                 }
             }
+            [Browsable(true)]
             public UInt32 EXPAtCurLevel
             {
                 get
@@ -4103,6 +4182,7 @@ namespace PKMDS_CS
             {
                 return GetPKMEXPGivenLevel(this, Level);
             }
+            [Browsable(true)]
             public System.Drawing.Color Color
             {
                 get
@@ -4110,6 +4190,7 @@ namespace PKMDS_CS
                     return System.Drawing.ColorTranslator.FromHtml("#" + GetPKMColorValue(this).ToString("X6"));
                 }
             }
+            [Browsable(true)]
             public System.Drawing.Image ShinyIcon
             {
                 get
@@ -4117,6 +4198,7 @@ namespace PKMDS_CS
                     return GetShinyStar(this.IsShiny);
                 }
             }
+            [Browsable(true)]
             public System.Drawing.Image GenderIcon
             {
                 get
@@ -4124,6 +4206,7 @@ namespace PKMDS_CS
                     return PKMDS.GetGenderIcon(this.GenderID);
                 }
             }
+            [Browsable(true)]
             public System.Drawing.Image ItemPic
             {
                 get
@@ -4135,6 +4218,7 @@ namespace PKMDS_CS
             {
                 return PKMDS.GetMarkingImage(marking, this.GetMarking(marking));
             }
+            [Browsable(true)]
             public System.Drawing.Image BallPic
             {
                 get
@@ -4146,6 +4230,7 @@ namespace PKMDS_CS
             {
                 return PKMDS.GetMoveCategoryImage(move);
             }
+            [Browsable(true)]
             public System.Drawing.Image PokerusIcon
             {
                 get
@@ -4167,6 +4252,7 @@ namespace PKMDS_CS
                     }
                 }
             }
+            [Browsable(true)]
             public string Characteristic
             {
                 get
@@ -4174,6 +4260,7 @@ namespace PKMDS_CS
                     return GetCharacteristic(this);
                 }
             }
+            [Browsable(true)]
             public int NatureIncrease
             {
                 get
@@ -4181,6 +4268,7 @@ namespace PKMDS_CS
                     return GetNatureIncrease(this);
                 }
             }
+            [Browsable(true)]
             public int NatureDecrease
             {
                 get
