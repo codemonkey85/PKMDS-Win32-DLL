@@ -725,7 +725,7 @@ EXPORT void SetPKMTameness(pokemon_obj * pkm, int tameness)
 	{
 		decryptpkm(pkm);
 	}
-	pkm->tid = tameness;
+	pkm->tameness = tameness;
 }
 EXPORT uint16 GetPKMAbilityIndex(pokemon_obj * pkm)
 {
