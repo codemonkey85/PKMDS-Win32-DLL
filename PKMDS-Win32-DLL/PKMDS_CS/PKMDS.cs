@@ -17,7 +17,6 @@ namespace PKMDS_CS
         private const int NICKLENGTH = 11;
         private const int OTLENGTH = 8;
         #endregion
-
         #region Enums
         public enum PKMSpecies
         {
@@ -2060,7 +2059,6 @@ namespace PKMDS_CS
             ShinyShaded = 0xff7b9c00
         }
         #endregion
-
         #region DBAccess
         public static class SQL
         {
@@ -2075,7 +2073,6 @@ namespace PKMDS_CS
             public static extern int GetAnInt(string sql);
         }
         #endregion
-
         #region Resources
         public static System.Drawing.Image GetResourceByName(string name)
         {
@@ -2273,22 +2270,15 @@ namespace PKMDS_CS
             return GetResourceByName(GetMoveCategory(move));
         }
         #endregion
-
-        //[DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
-        //public static extern void /*IntPtr*/ /*byte **/ GetPKMDataPTR([In][Out] Pokemon pokemon, [In][Out] Save sav, int box, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetTypeName(int type);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveCategory(UInt16 move);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetItemIdentifier(UInt16 item);
-
         public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false)
         {
             if (Shiny)
@@ -2316,7 +2306,6 @@ namespace PKMDS_CS
                     return null;
             }
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern unsafe int ValidateSave_INTERNAL(/*[In][Out]*/ SaveData sav, [In][Out] IntPtr* nickname, [In][Out] int* length);
         private static unsafe bool ValidateSave(/*[In][Out]*/ SaveData sav, out string message)
@@ -2330,16 +2319,12 @@ namespace PKMDS_CS
         }
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static unsafe extern void GetPKMOTName_INTERNAL(/*[In][Out]*/ Pokemon pkm, [In][Out] IntPtr* otname, [In][Out] int* length);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static unsafe extern void GetPKMNickName_INTERNAL(/*[In][Out]*/ Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool DepositPKM([In][Out] SaveData sav, Pokemon pkm, int startbox, bool failiffull);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool WithdrawPKM([In][Out] SaveData sav, Pokemon pkm);
-
         private static unsafe string GetPKMOTName(/*[In][Out]*/Pokemon pkm)
         {
             try
@@ -2370,19 +2355,15 @@ namespace PKMDS_CS
                 return "";
             }
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMName(int speciesid, int langid = LANG_ID);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMFormNames_INTERNAL(UInt16 speciesid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetPKMFormName_INTERNAL(UInt16 speciesid, byte formid);
-
         public static string[] GetPKMFormNames(UInt16 speciesid)
         {
             string formnames = GetPKMFormNames_INTERNAL(speciesid);
@@ -2397,11 +2378,9 @@ namespace PKMDS_CS
             string[] formnamesarray = { "" };
             return formnamesarray;
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern unsafe void GetPKMName_FromObj_INTERNAL(/*[In][Out]*/ Pokemon pkm, [In][Out] IntPtr* nickname, [In][Out] int* length);
-
         private static unsafe string GetPKMName_FromObj(/*[In][Out]*/ Pokemon pkm)
         {
             IntPtr test = new IntPtr();
@@ -2410,11 +2389,9 @@ namespace PKMDS_CS
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern unsafe void GetTrainerName_FromSav_INTERNAL(/*[In][Out]*/ SaveData sav, [In][Out] IntPtr* name, [In][Out] int* length);
-
         private static unsafe string GetTrainerName_FromSav(/*[In][Out]*/ SaveData sav)
         {
             IntPtr test = new IntPtr();
@@ -2423,55 +2400,39 @@ namespace PKMDS_CS
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetCharacteristic(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void WritePokemonFile(/*[In][Out]*/ Pokemon pkm, string filename, bool encrypt = false);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void WriteSaveFile(/*[In][Out]*/ SaveData sav, string filename);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool IsPKMShiny(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool GetPKMMetAsEgg(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetTrainerName_FromSav_INTERNAL([In][Out] SaveData sav, string name, int namelength);
-
         private static void SetTrainerName_FromSav([In][Out] SaveData sav, string name)
         {
             SetTrainerName_FromSav_INTERNAL(sav, name, name.Length);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetTrainerTID_FromSav(/*[In][Out]*/ SaveData sav);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetTrainerSID_FromSav(/*[In][Out]*/ SaveData sav);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetTrainerTID_FromSav([In][Out] SaveData sav, UInt16 tid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetBoxWallpaper(/*[In][Out]*/ SaveData sav, int box);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMColorValue(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetBoxWallpaper([In][Out] SaveData sav, int box, int wallpaper);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetTrainerSID_FromSav([In][Out] SaveData sav, int sid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern unsafe void GetBoxName_INTERNAL(/*[In][Out]*/ SaveData sav, int box, [In][Out] IntPtr* nickname, [In][Out] int* length);
-
         private static unsafe string GetBoxName([In][Out]SaveData sav, int box)
         {
             IntPtr test = new IntPtr();
@@ -2480,161 +2441,109 @@ namespace PKMDS_CS
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetBoxName([In][Out] SaveData sav, int box, string name, int namelength);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetBoxCount(/*[In][Out]*/ SaveData sav, int box);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetMovePower(UInt16 moveid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetMoveAccuracy(UInt16 moveid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetMoveBasePP(UInt16 moveid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetNatureIncrease(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetNatureDecrease(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMStat(/*[In][Out]*/ SaveData sav, int box, int slot, int stat);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMStat_FromObj(/*[In][Out]*/ Pokemon pkm, int stat);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMLevel(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMLevel([In][Out] Pokemon pkm, int level);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMSpeciesID(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMSpeciesID([In][Out] Pokemon pkm, UInt16 speciesid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPartySize(/*[In][Out]*/ SaveData sav);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPartySize([In][Out] SaveData sav, int size);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetCurrentBox(/*[In][Out]*/ SaveData sav);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetCurrentBox([In][Out] SaveData sav, int box);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMMoveID(/*[In][Out]*/ Pokemon pokemon, int moveid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMoveID([In][Out] Pokemon pokemon, int moveid, UInt16 moveindex);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool IsPKMModified(/*[In][Out]*/ Pokemon pokemon);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FixPokemonChecksum([In][Out] Pokemon pokemon);
-
-
-
-
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SwapBoxParty([In][Out] SaveData sav, int box, int boxslot, int partyslot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SwapPartyBox([In][Out] SaveData sav, int partyslot, int box, int boxslot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SwapBoxBox([In][Out] SaveData sav, int boxa, int boxslota, int boxb, int boxslotb);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SwapPartyParty([In][Out] SaveData sav, int partyslota, int partyslotb);
-
-
-
-
-
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMTNL(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMEXPGivenLevel(/*[In][Out]*/ Pokemon pkm, int level);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMEXPCurLevel(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetItemName_INTERNAL(int itemid, int generation, int langid);
-
         public static string GetItemName(int itemid, int generation = GENERATION, int langid = LANG_ID)
         {
             return GetItemName_INTERNAL(itemid, generation, langid);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetItemFlavor_INTERNAL(int itemid, int generation, int langid, int versiongroup);
-
         public static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP)
         {
             return GetItemFlavor_INTERNAL(itemid, generation, langid, versiongroup);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetAbilityName_INTERNAL(int abilityid, int langid = LANG_ID);
-
         public static string GetAbilityName(int abilityid, int langid = LANG_ID)
         {
             return GetAbilityName_INTERNAL(abilityid, langid);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetAbilityFlavor_INTERNAL(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID);
-
         public static string GetAbilityFlavor(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID)
         {
             return GetAbilityFlavor_INTERNAL(abilityid, versiongroup, langid);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetNatureName(int natureid, int langid = LANG_ID);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetLocationName(int locationid, int generation = GENERATION, int langid = LANG_ID);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveName(int moveid, int langid = LANG_ID);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetMoveFlavor(int moveid, int langid = LANG_ID, int versiongroup = VERSION_GROUP);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.BStr)]
         private static extern string GetMoveTypeName(int moveid, int langid = LANG_ID);
-
         private static System.Drawing.Image GetWallpaperImage(int wallpaper)
         {
             return GetResourceByName("wc_" + wallpaper.ToString());
         }
-
         private static string[] GetPKMMoveNames(/*[In][Out]*/ Pokemon pkm, int langid = LANG_ID)
         {
             string[] moves = { "", "", "", "" };
@@ -2644,7 +2553,6 @@ namespace PKMDS_CS
             }
             return moves;
         }
-
         private static string[] GetPKMMoveTypeNames(/*[In][Out]*/ Pokemon pkm, int langid = LANG_ID)
         {
             string[] moves = { "", "", "", "" };
@@ -2654,262 +2562,177 @@ namespace PKMDS_CS
             }
             return moves;
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMPID(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMType_INTERNAL(/*[In][Out]*/ Pokemon pkm, int type, int generation);
-
         private static int GetPKMType(Pokemon pokemon, int slot, int generation = GENERATION)
         {
             return GetPKMType_INTERNAL(pokemon, slot, generation);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMPID([In][Out] Pokemon pkm, UInt32 pid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMItemIndex(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMItemIndex([In][Out] Pokemon pkm, UInt16 item);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMTID(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMTID([In][Out] Pokemon pkm, UInt16 tid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMSID(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMSID([In][Out] Pokemon pkm, UInt16 sid);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMEXP(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEXP([In][Out] Pokemon pkm, UInt32 exp);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMTameness(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMTameness([In][Out] Pokemon pkm, int tameness);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMAbilityIndex(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMAbilityIndex([In][Out] Pokemon pkm, int ability);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         /*private*/
         private static extern bool GetPKMMarking(/*[In][Out]*/ Pokemon pkm, int marking);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMarking([In][Out] Pokemon pkm, int marking, bool marked);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMLanguage(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMLanguage([In][Out] Pokemon pkm, Byte language);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEV(/*[In][Out]*/ Pokemon pkm, int evindex);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEV([In][Out] Pokemon pkm, int evindex, int ev);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMIV(/*[In][Out]*/ Pokemon pkm, int evindex);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMIV([In][Out] Pokemon pkm, int ivindex, int iv);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMContest(/*[In][Out]*/ Pokemon pkm, int contestindex);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMContest([In][Out] Pokemon pkm, int contestindex, int contest);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMMovePP(/*[In][Out]*/ Pokemon pkm, int move);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMovePP([In][Out] Pokemon pkm, int move, int pp);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMMovePPUp(/*[In][Out]*/ Pokemon pkm, int move);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMovePPUp([In][Out] Pokemon pkm, int move, int ppup);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMIsEgg(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMIsEgg([In][Out] Pokemon pkm, bool isegg);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMIsNicknamed(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMIsNicknamed([In][Out] Pokemon pkm, bool isnicknamed);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMFateful(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMFateful([In][Out] Pokemon pkm, bool isfateful);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMGender(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMGender([In][Out] Pokemon pkm, int gender);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMForm(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMForm([In][Out] Pokemon pkm, int form);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMNature(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMNature([In][Out] Pokemon pkm, Byte nature);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern bool GetPKMDWAbility(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMDWAbility([In][Out] Pokemon pkm, bool hasdwability);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMNsPokemon(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMNsPokemon([In][Out] Pokemon pkm, bool isnspokemon);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetPKMNickname([In][Out] Pokemon pkm, string nickname, int nicknamelength);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMHometown(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMHometown([In][Out] Pokemon pkm, Byte hometown);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void SetPKMOTName([In][Out] Pokemon pkm, string otname, int otnamelength);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEggYear(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEggYear([In][Out] Pokemon pkm, int year);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEggMonth(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEggMonth([In][Out] Pokemon pkm, int month);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEggDay(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEggDay([In][Out] Pokemon pkm, int day);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMMetYear(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMetYear([In][Out] Pokemon pkm, int year);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMMetMonth(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMetMonth([In][Out] Pokemon pkm, int month);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMMetDay(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMetDay([In][Out] Pokemon pkm, int day);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMEggLocation(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEggLocation([In][Out] Pokemon pkm, UInt16 location);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt16 GetPKMMetLocation(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMetLocation([In][Out] Pokemon pkm, UInt16 location);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMPokerusStrain(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMPokerusStrain([In][Out] Pokemon pkm, int strain);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMPokerusDays(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMPokerusDays([In][Out] Pokemon pkm, int days);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMBall(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMBall([In][Out] Pokemon pkm, int ball);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern Byte GetPKMMetLevel(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMMetLevel([In][Out] Pokemon pkm, Byte level);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMOTGender(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMOTGender([In][Out] Pokemon pkm, int gender);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMEncounter(/*[In][Out]*/ Pokemon pkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMEncounter([In][Out] Pokemon pkm, int encounter);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void DeletePartyPKM([In][Out] SaveData sav, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void DeleteStoredPKM([In][Out] SaveData sav, int box, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPKMData_INTERNAL([In][Out] Pokemon pokemon, /*[In][Out]*/ SaveData sav, int box, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void RecalcPartyPKM([In][Out] PartyPokemon ppkm);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, /*[In][Out]*/ SaveData sav, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void GetPKMDataFromFile_INTERNAL([In][Out] Pokemon pokemon, string filename, bool encrypted);
-
         private static void GetPKMData([In][Out] ref Pokemon pokemon, /*[In][Out]*/ SaveData sav, int box, int slot)
         {
             Pokemon pkm = new Pokemon();
@@ -2921,7 +2744,6 @@ namespace PKMDS_CS
             Marshal.FreeHGlobal(pkmptr);
             pkmptr = IntPtr.Zero;
         }
-
         private static void GetPartyPKMData([In][Out] ref PartyPokemon pokemon, /*[In][Out]*/ SaveData sav, int slot)
         {
             PartyPokemon pkm = new PartyPokemon();
@@ -2933,27 +2755,20 @@ namespace PKMDS_CS
             Marshal.FreeHGlobal(pkmptr);
             pkmptr = IntPtr.Zero;
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMData_INTERNAL([In][Out] Pokemon pokemon, [In][Out] SaveData sav, int box, int slot);
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] SaveData sav, int slot);
-
         private static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] SaveData sav, int box, int slot)
         {
             SetPKMData_INTERNAL(pokemon, sav, box, slot);
         }
-
         public static void SetPartyPKMData([In][Out] PartyPokemon pokemon, [In][Out] SaveData sav, int slot)
         {
             SetPartyPKMData_INTERNAL(pokemon, sav, slot);
         }
-
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void GetSAVData_INTERNAL([In][Out] SaveData save, string savefile);
-
-
         public static System.Drawing.Color GetSpindaColor(SpindaColorsBase spindacolor)
         {
             return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
@@ -2966,8 +2781,6 @@ namespace PKMDS_CS
         {
             return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
         }
-
-
         public static SaveData ReadSaveFile(string savefile)
         {
             SaveData sav = new SaveData();
@@ -2981,7 +2794,6 @@ namespace PKMDS_CS
             savptr = IntPtr.Zero;
             return save;
         }
-
         public static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false)
         {
             Pokemon pkm = new Pokemon();
@@ -2995,7 +2807,6 @@ namespace PKMDS_CS
             savptr = IntPtr.Zero;
             return pokemon;
         }
-
         public class Item
         {
             public Item()
@@ -3063,7 +2874,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Ability
         {
             private UInt16 abilityid;
@@ -3101,7 +2911,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Species
         {
             private UInt16 speciesid;
@@ -3132,7 +2941,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Ball
         {
             private Byte ballid;
@@ -3224,7 +3032,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Nature
         {
             private Byte natureid;
@@ -3255,7 +3062,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Location
         {
             private UInt16 locationid;
@@ -3306,7 +3112,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Move
         {
             private UInt16 moveid;
@@ -3395,7 +3200,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Hometown
         {
             private Byte hometownid;
@@ -3462,7 +3266,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public class Country
         {
             private Byte countryid;
@@ -3511,7 +3314,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
         public static unsafe System.Drawing.Image GetSpindaSprite(UInt32 PID, bool IsShiny = false)
         {
             System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
@@ -3590,52 +3392,6 @@ namespace PKMDS_CS
             return BaseSprite;
 
         }
-
-        public class PokemonNotifier : INotifyPropertyChanged
-        {
-            Pokemon InternalPokemon;
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected void OnPropertyChanged(string name)
-            {
-                //PropertyChangedEventHandler handler = PropertyChanged;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(name));
-                }
-            }
-            public PokemonNotifier(Pokemon pkm) 
-            {
-                this.InternalPokemon = pkm;
-            }
-            public PokemonNotifier() { }
-            public void Initialize(Pokemon pkm)
-            {
-                this.InternalPokemon = pkm;
-            }
-            public System.Drawing.Image Sprite 
-            {
-                get { return this.InternalPokemon.Sprite; }
-            }
-            public string SpeciesName 
-            {
-                get { return this.InternalPokemon.SpeciesName; }
-            }
-            public UInt16 SpeciesID 
-            {
-                get 
-                {
-                    return this.InternalPokemon.SpeciesID;
-                }
-                set
-                {
-                    this.InternalPokemon.SpeciesID = value;
-                    OnPropertyChanged("SpeciesID");
-                    OnPropertyChanged("SpeciesName");
-                    OnPropertyChanged("Sprite");
-                }
-            }
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
         public class Pokemon
@@ -3663,11 +3419,15 @@ namespace PKMDS_CS
                     return PKMDS.GetPKMName_FromObj(this);
                 }
             }
-            [Browsable(false)]
-            public unsafe System.Drawing.Image Sprite
+            [Browsable(true)]
+            public System.Drawing.Image Sprite
             {
                 get
                 {
+                    if (this.SpeciesID == 0) 
+                    {
+                        return null;
+                    }
                     if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda))
                     {
                         return PKMDS.GetSprite(this.SpeciesID, this.IsShiny, this.FormID, PKMDS.HasFemaleSprite(this) == 1);
@@ -3712,7 +3472,14 @@ namespace PKMDS_CS
                 }
                 set
                 {
-                    SetPKMSpeciesID(this, value);
+                    if ((value >= 0) & (value <= 649))
+                    {
+                        SetPKMSpeciesID(this, value);
+                    }
+                    //else 
+                    //{
+                    //    throw new Exception("Species ID is invalid!");
+                    //}
                 }
             }
             public void WriteToFile(string FileName, bool encrypt = false)
@@ -4181,6 +3948,10 @@ namespace PKMDS_CS
             {
                 get
                 {
+                    if (this.SpeciesID == 0)
+                    {
+                        return null;
+                    }
                     return PKMDS.GetIcon(this.SpeciesID, this.FormID, PKMDS.HasFemaleIcon(this) == 1);
                 }
             }
@@ -4328,7 +4099,6 @@ namespace PKMDS_CS
                 return new Pokemon { Data = ClonedData };
             }
         }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
         public class PartyPokemon
@@ -4346,7 +4116,6 @@ namespace PKMDS_CS
                 WritePokemonFile(this.PokemonData, FileName, encrypt);
             }
         }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
         public class Box
@@ -4599,39 +4368,35 @@ namespace PKMDS_CS
 
             }
         }
-
-        public class Box_Pub : System.Collections.ObjectModel.ObservableCollection<PokemonNotifier>
+        public class Box_Pub : System.Collections.ObjectModel.ObservableCollection<Pokemon>
         {
             public Box_Pub(Box box)
             {
                 for (int i = 0; i < 30; i++)
                 {
-                    PokemonNotifier pkmn = new PokemonNotifier();
-                    pkmn.Initialize(box.Pokemon(i));
+                    Pokemon pkmn = new Pokemon();
+                    pkmn = box.Pokemon(i);
                     this.Add(pkmn);
                 }
             }
-            public Box_Pub() { }
-            //public void InitializeBox(Box box)
+            public Box_Pub()
+            {
+                //for (int i = 0; i < 30; i++)
+                //{
+                //    this.Add(new Pokemon());
+                //}
+            }
         }
-
         public class PCStorage_Pub : System.Collections.ObjectModel.ObservableCollection<Box_Pub>
         {
-            //public PCStorage_Pub(PCStorage pcstorage)
-            //{
-            //    for (int i = 0; i < 24; i++)
-            //    {
-            //        this.Add(pcstorage.Box(i));
-            //    }
-            //}
             public PCStorage_Pub()
             {
-                for (int i = 0; i < 24; i++) 
+                for (int i = 0; i < 24; i++)
                 {
                     this.Add(new Box_Pub());
                 }
             }
-            public void Reset() 
+            public void Reset()
             {
                 this.Clear();
                 for (int i = 0; i < 24; i++)
@@ -4643,12 +4408,7 @@ namespace PKMDS_CS
         public class Save
         {
             private SaveData InternalSave;
-            public PCStorage_Pub PCStorage;// = new PCStorage_Pub();
-            //public PCStorage_Pub PCStorage 
-            //{
-            //    get { return mPCStorage; }
-            //    set { mPCStorage = value; }
-            //}
+            public PCStorage_Pub PCStorage;
             public Save(SaveData sav)
             {
                 this.InternalSave = sav;
@@ -4661,24 +4421,17 @@ namespace PKMDS_CS
             }
             private void InitializePCStorage()
             {
-                //PCStorage = new PCStorage_Pub();
-                //PCStorage.Clear();
                 PCStorage = new PCStorage_Pub();
                 PCStorage.Reset();
                 for (int box = 0; box < 24; box++)
                 {
-                    //Box_Pub boxpub = new Box_Pub(/*InternalSave.PCStorage.Box(i)*/);
-                    for (int slot = 0; slot < 30; slot++) 
+                    for (int slot = 0; slot < 30; slot++)
                     {
-                        //boxpub.Add(this.InternalSave.PCStorage.Box(box).Pokemon(slot));
-                        PokemonNotifier pkmn = new PokemonNotifier();
-                        pkmn.Initialize(this.InternalSave.PCStorage.Box(box).Pokemon(slot));
+                        Pokemon pkmn = new Pokemon();
+                        pkmn = this.InternalSave.PCStorage.Box(box).Pokemon(slot);
                         PCStorage[box].Add(pkmn);
                     }
-                        //PCStorage.Add(boxpub);
-                    //PCStorage.Add(new Box_Pub(this.InternalSave.PCStorage.Box(i)));
                 }
-                //mPCStorage[0][0].SpeciesID = 150;
             }
             public void WriteToFile(string filename)
             {
@@ -4696,8 +4449,6 @@ namespace PKMDS_CS
                 }
             }
         }
-
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
         public class SaveData
