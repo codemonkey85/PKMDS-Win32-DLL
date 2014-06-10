@@ -3412,6 +3412,29 @@ namespace PKMDS_CS
                 Data = new byte[136];
             }
             [Browsable(true)]
+            public System.Drawing.Image TypePic1
+            {
+                get
+                {
+                    return this.GetTypePic(1);
+                }
+            }
+            [Browsable(true)]
+            public System.Drawing.Image TypePic2
+            {
+                get
+                {
+                    if (this.GetType(1) == this.GetType(2))
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        return this.GetTypePic(2);
+                    }
+                }
+            }
+            [Browsable(true)]
             public string SpeciesName
             {
                 get
@@ -3424,7 +3447,7 @@ namespace PKMDS_CS
             {
                 get
                 {
-                    if (this.SpeciesID == 0) 
+                    if (this.SpeciesID == 0)
                     {
                         return null;
                     }
@@ -3508,6 +3531,30 @@ namespace PKMDS_CS
                 set
                 {
                     SetPKMItemIndex(this, value);
+                }
+            }
+            [Browsable(true)]
+            public string ItemName
+            {
+                get
+                {
+                    return GetItemName(ItemID);
+                }
+            }
+            [Browsable(true)]
+            public string ItemFlavor
+            {
+                get
+                {
+                    string flavor = GetItemFlavor(ItemID);
+                    if (String.IsNullOrEmpty(flavor))
+                    {
+                        return flavor;
+                    }
+                    else
+                    {
+                        return flavor.Replace("\n", " ");
+                    }
                 }
             }
             [Browsable(true)]
@@ -4027,6 +4074,10 @@ namespace PKMDS_CS
             {
                 get
                 {
+                    if (this.ItemID == 0)
+                    {
+                        return null;
+                    }
                     return PKMDS.GetItemImage(this.ItemID);
                 }
             }
