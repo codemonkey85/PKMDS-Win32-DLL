@@ -1223,7 +1223,14 @@ EXPORT byte GetPKMNature(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->nature_int;
+	if (pkm->nature_int == 0 && pkm->hometown != Hometowns::black && pkm->hometown != Hometowns::white && pkm->hometown != Hometowns::black2 && pkm->hometown != Hometowns::white2)
+	{
+		return pkm->pid % 25;
+	}
+	else
+	{
+		return pkm->nature_int;
+	}
 }
 EXPORT void SetPKMNature(pokemon_obj * pkm, int nature)
 {

@@ -18,7 +18,7 @@ namespace PKMDS_CS
         private const int OTLENGTH = 8;
         #endregion
         #region Enums
-        public enum PKMSpecies
+        public enum PKMSpecies : ushort
         {
             NOTHING,
             Bulbasaur,
@@ -671,7 +671,7 @@ namespace PKMDS_CS
             Meloetta,
             Genesect
         }
-        public enum Moves
+        public enum Moves : ushort
         {
             Pound,
             Karate_Chop,
@@ -1233,7 +1233,7 @@ namespace PKMDS_CS
             Fusion_Flare,
             Fusion_Bolt
         }
-        public enum Items
+        public enum Items : ushort
         {
             NOTHING = 0x0000,
             Master_Ball = 0x0001,
@@ -1856,7 +1856,7 @@ namespace PKMDS_CS
             droppeditem2 = 0x027d,
             Reveal_Glass = 0x027E
         }
-        public enum Abilities
+        public enum Abilities : byte
         {
             Stench,
             Drizzle,
@@ -2066,6 +2066,36 @@ namespace PKMDS_CS
             Heart,
             Star,
             Diamond
+        }
+        public enum Genders : int
+        {
+            Male,
+            Female,
+            Genderless
+        }
+        public enum NatureStats : int
+        {
+            HP = 1,
+            Attack,
+            Defense,
+            SpecialAttack,
+            SpecialDefense,
+            Speed
+        }
+        public enum Stats : int
+        {
+            HP,
+            Attack,
+            Defense,
+            SpecialAttack,
+            SpecialDefense,
+            Speed
+        }
+        public enum NatureEffect : int
+        {
+            Increase,
+            Decrease,
+            NoEffect
         }
         #endregion
         #region DBAccess
@@ -3661,6 +3691,13 @@ namespace PKMDS_CS
                     return GetNatureDecrease(this);
                 }
             }
+            public string NatureName
+            {
+                get
+                {
+                    return GetNatureName(NatureID);
+                }
+            }
             [Browsable(true)]
             public int TotalEVs
             {
@@ -3686,6 +3723,152 @@ namespace PKMDS_CS
             public bool Star { get { return GetMarking(Markings.Star); } set { SetMarking(Markings.Star, value); } }
             [Browsable(true)]
             public bool Square { get { return GetMarking(Markings.Square); } set { SetMarking(Markings.Square, value); } }
+            public bool OTIsMale
+            {
+                get
+                {
+                    return this.OTGenderID == 0;
+                }
+                set
+                {
+                    if (value)
+                    {
+                        this.OTGenderID = 0;
+                    }
+                    else
+                    {
+                        this.OTGenderID = 1;
+                    }
+                }
+            }
+            public bool OTIsFemale
+            {
+                get
+                {
+                    return this.OTGenderID == 1;
+                }
+                set
+                {
+                    if (value)
+                    {
+                        this.OTGenderID = 1;
+                    }
+                    else
+                    {
+                        this.OTGenderID = 0;
+                    }
+                }
+            }
+            public NatureEffect AttackEffect
+            {
+                get
+                {
+                    if (this.NatureIncrease == this.NatureDecrease)
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                    if (this.NatureIncrease == (int)(NatureStats.Attack))
+                    {
+                        return NatureEffect.Increase;
+                    }
+                    else if (this.NatureDecrease == (int)(NatureStats.Attack))
+                    {
+                        return NatureEffect.Decrease;
+                    }
+                    else
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                }
+            }
+            public NatureEffect DefenseEffect
+            {
+                get
+                {
+                    if (this.NatureIncrease == this.NatureDecrease)
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                    if (this.NatureIncrease == (int)(NatureStats.Defense))
+                    {
+                        return NatureEffect.Increase;
+                    }
+                    else if (this.NatureDecrease == (int)(NatureStats.Defense))
+                    {
+                        return NatureEffect.Decrease;
+                    }
+                    else
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                }
+            }
+            public NatureEffect SpecialAttackEffect
+            {
+                get
+                {
+                    if (this.NatureIncrease == this.NatureDecrease)
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                    if (this.NatureIncrease == (int)(NatureStats.SpecialAttack))
+                    {
+                        return NatureEffect.Increase;
+                    }
+                    else if (this.NatureDecrease == (int)(NatureStats.SpecialAttack))
+                    {
+                        return NatureEffect.Decrease;
+                    }
+                    else
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                }
+            }
+            public NatureEffect SpecialDefenseEffect
+            {
+                get
+                {
+                    if (this.NatureIncrease == this.NatureDecrease)
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                    if (this.NatureIncrease == (int)(NatureStats.SpecialDefense))
+                    {
+                        return NatureEffect.Increase;
+                    }
+                    else if (this.NatureDecrease == (int)(NatureStats.SpecialDefense))
+                    {
+                        return NatureEffect.Decrease;
+                    }
+                    else
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                }
+            }
+            public NatureEffect SpeedEffect
+            {
+                get
+                {
+                    if (this.NatureIncrease == this.NatureDecrease)
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                    if (this.NatureIncrease == (int)(NatureStats.Speed))
+                    {
+                        return NatureEffect.Increase;
+                    }
+                    else if (this.NatureDecrease == (int)(NatureStats.Speed))
+                    {
+                        return NatureEffect.Decrease;
+                    }
+                    else
+                    {
+                        return NatureEffect.NoEffect;
+                    }
+                }
+            }
             public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
