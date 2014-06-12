@@ -2149,10 +2149,17 @@ namespace PKMDS_CS
                             }
                             break;
                         default:
-                            formname = GetPKMFormName_INTERNAL(Species, Form).Split(' ')[0];
+                            string formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
+                            if ((formnameinternal != "") && (formnameinternal != null))
+                            {
+                                formname = formnameinternal.Split(' ')[0];
+                            }
                             break;
                     }
-                    sprite += "_" + formname.ToLower();
+                    if (formname != "")
+                    {
+                        sprite += "_" + formname.ToLower();
+                    }
                     ret = PKMDS.GetResourceByName(sprite.Replace('-', '_'));
                 }
             }
@@ -2179,11 +2186,18 @@ namespace PKMDS_CS
                 if (Form != 0)
                 {
                     string basestr = icon;
-                    icon += "_" + Form.ToString();
+                    string formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
+                    if ((formnameinternal != "") && (formnameinternal != null))
+                    {
+                        icon += "_" + Form.ToString();
+                    }
                     ret = PKMDS.GetResourceByName(icon);
                     if (ret == null)
                     {
-                        icon = basestr + "_" + PKMDS.GetPKMFormName_INTERNAL(Species, Form).Split(' ')[0].ToLower();
+                        if ((formnameinternal != "") && (formnameinternal != null))
+                        {
+                            icon = basestr + "_" + formnameinternal.Split(' ')[0].ToLower();
+                        }
                     }
                 }
                 ret = PKMDS.GetResourceByName(icon);
