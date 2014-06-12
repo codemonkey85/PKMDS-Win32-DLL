@@ -2058,6 +2058,15 @@ namespace PKMDS_CS
             ShinySpotLight = 0xffa5ce10,
             ShinyShaded = 0xff7b9c00
         }
+        public enum Markings : int
+        {
+            Circle,
+            Triangle,
+            Square,
+            Heart,
+            Star,
+            Diamond
+        }
         #endregion
         #region DBAccess
         public static class SQL
@@ -2237,14 +2246,14 @@ namespace PKMDS_CS
                 return GetResourceByName(type.ToLower());
             }
         }
-        public static System.Drawing.Image GetMarkingImage(int marking, bool marked)
+        public static System.Drawing.Image GetMarkingImage(Markings marking, bool marked)
         {
             int markedint = 0;
             if (marked)
             {
                 markedint = 1;
             }
-            return GetResourceByName("m_" + marking.ToString() + markedint.ToString());
+            return GetResourceByName("m_" + ((int)(marking)).ToString() + markedint.ToString());
         }
         public static System.Drawing.Image GetGenderIcon(int gender)
         {
@@ -3111,13 +3120,13 @@ namespace PKMDS_CS
                     SetPKMAbilityIndex(this, value);
                 }
             }
-            public bool GetMarking(int marking)
+            private bool GetMarking(Markings marking)
             {
-                return GetPKMMarking(this, marking);
+                return GetPKMMarking(this, (int)(marking));
             }
-            public void SetMarking(int marking, bool marked)
+            private void SetMarking(Markings marking, bool marked)
             {
-                SetPKMMarking(this, marking, marked);
+                SetPKMMarking(this, (int)(marking), marked);
             }
             [Browsable(true)]
             public Byte LanguageID
@@ -3576,7 +3585,7 @@ namespace PKMDS_CS
                     return PKMDS.GetItemImage(this.ItemID);
                 }
             }
-            public System.Drawing.Image GetMarkingImage(int marking)
+            private System.Drawing.Image GetMarkingImage(Markings marking)
             {
                 return PKMDS.GetMarkingImage(marking, this.GetMarking(marking));
             }
@@ -3638,6 +3647,31 @@ namespace PKMDS_CS
                     return GetNatureDecrease(this);
                 }
             }
+            [Browsable(true)]
+            public int TotalEVs
+            {
+                get
+                {
+                    int total = 0;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        total += this.GetEV(i);
+                    }
+                    return total;
+                }
+            }
+            [Browsable(true)]
+            public bool Diamond { get { return GetMarking(Markings.Diamond); } set { SetMarking(Markings.Diamond, value); } }
+            [Browsable(true)]
+            public bool Heart { get { return GetMarking(Markings.Heart); } set { SetMarking(Markings.Heart, value); } }
+            [Browsable(true)]
+            public bool Circle { get { return GetMarking(Markings.Circle); } set { SetMarking(Markings.Circle, value); } }
+            [Browsable(true)]
+            public bool Triangle { get { return GetMarking(Markings.Triangle); } set { SetMarking(Markings.Triangle, value); } }
+            [Browsable(true)]
+            public bool Star { get { return GetMarking(Markings.Star); } set { SetMarking(Markings.Star, value); } }
+            [Browsable(true)]
+            public bool Square { get { return GetMarking(Markings.Square); } set { SetMarking(Markings.Square, value); } }
             public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
