@@ -3164,6 +3164,13 @@ namespace PKMDS_CS
                     SetPKMAbilityIndex(this, value);
                 }
             }
+            public string AbilityFlavor
+            {
+                get
+                {
+                    return GetAbilityFlavor(this.AbilityID);
+                }
+            }
             private bool GetMarking(Markings marking)
             {
                 return GetPKMMarking(this, (int)(marking));
