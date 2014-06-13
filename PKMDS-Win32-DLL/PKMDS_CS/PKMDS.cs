@@ -3876,6 +3876,344 @@ namespace PKMDS_CS
                     }
                 }
             }
+            public UInt16 Move1ID
+            {
+                get
+                {
+                    return GetMoveIDs[0];
+                }
+                set
+                {
+                    SetMoveID(0, value);
+                }
+            }
+            public UInt16 Move2ID
+            {
+                get
+                {
+                    return GetMoveIDs[1];
+                }
+                set
+                {
+                    SetMoveID(1, value);
+                }
+            }
+            public UInt16 Move3ID
+            {
+                get
+                {
+                    return GetMoveIDs[2];
+                }
+                set
+                {
+                    SetMoveID(2, value);
+                }
+            }
+            public UInt16 Move4ID
+            {
+                get
+                {
+                    return GetMoveIDs[3];
+                }
+                set
+                {
+                    SetMoveID(3, value);
+                }
+            }
+            public int Move1PP
+            {
+                get
+                {
+                    return GetMovePP(0);
+                }
+                set
+                {
+                    SetMovePP(0, value);
+                }
+            }
+            public int Move1PPUps
+            {
+                get
+                {
+                    return GetMovePPUp(0);
+                }
+                set
+                {
+                    SetMovePPUp(0, value);
+                }
+            }
+            public int Move2PP
+            {
+                get
+                {
+                    return GetMovePP(1);
+                }
+                set
+                {
+                    SetMovePP(1, value);
+                }
+            }
+            public int Move2PPUps
+            {
+                get
+                {
+                    return GetMovePPUp(1);
+                }
+                set
+                {
+                    SetMovePPUp(1, value);
+                }
+            }
+            public int Move3PP
+            {
+                get
+                {
+                    return GetMovePP(2);
+                }
+                set
+                {
+                    SetMovePP(2, value);
+                }
+            }
+            public int Move3PPUps
+            {
+                get
+                {
+                    return GetMovePPUp(2);
+                }
+                set
+                {
+                    SetMovePPUp(2, value);
+                }
+            }
+            public int Move4PP
+            {
+                get
+                {
+                    return GetMovePP(3);
+                }
+                set
+                {
+                    SetMovePP(3, value);
+                }
+            }
+            public int Move4PPUps
+            {
+                get
+                {
+                    return GetMovePPUp(3);
+                }
+                set
+                {
+                    SetMovePPUp(3, value);
+                }
+            }
+            public double Move1MaxPP
+            {
+                get
+                {
+                    double basepp = GetMoveBasePP(Move1ID);
+                    return (basepp + (GetMovePPUp(0) * (basepp / 5)));
+                }
+            }
+            public double Move2MaxPP
+            {
+                get
+                {
+                    double basepp = GetMoveBasePP(Move2ID);
+                    return (basepp + (GetMovePPUp(1) * (basepp / 5)));
+                }
+            }
+            public double Move3MaxPP
+            {
+                get
+                {
+                    double basepp = GetMoveBasePP(Move3ID);
+                    return (basepp + (GetMovePPUp(2) * (basepp / 5)));
+                }
+            }
+            public double Move4MaxPP
+            {
+                get
+                {
+                    double basepp = GetMoveBasePP(Move4ID);
+                    return (basepp + (GetMovePPUp(3) * (basepp / 5)));
+                }
+            }
+            public int HPIV
+            {
+                get
+                {
+                    return GetIV(0);
+                }
+                set
+                {
+                    SetIV(0, value);
+                }
+            }
+            public int AttackIV
+            {
+                get
+                {
+                    return GetIV(1);
+                }
+                set
+                {
+                    SetIV(1, value);
+                }
+            }
+            public int DefenseIV
+            {
+                get
+                {
+                    return GetIV(2);
+                }
+                set
+                {
+                    SetIV(2, value);
+                }
+            }
+            public int SpecialAttackIV
+            {
+                get
+                {
+                    return GetIV(3);
+                }
+                set
+                {
+                    SetIV(3, value);
+                }
+            }
+            public int SpecialDefenseIV
+            {
+                get
+                {
+                    return GetIV(4);
+                }
+                set
+                {
+                    SetIV(4, value);
+                }
+            }
+            public int SpeedIV
+            {
+                get
+                {
+                    return GetIV(5);
+                }
+                set
+                {
+                    SetIV(5, value);
+                }
+            }
+            public int HPEV
+            {
+                get
+                {
+                    return GetEV(0);
+                }
+                set
+                {
+                    SetEV(0, value);
+                }
+            }
+            public int AttackEV
+            {
+                get
+                {
+                    return GetEV(1);
+                }
+                set
+                {
+                    SetEV(1, value);
+                }
+            }
+            public int DefenseEV
+            {
+                get
+                {
+                    return GetEV(2);
+                }
+                set
+                {
+                    SetEV(2, value);
+                }
+            }
+            public int SpecialAttackEV
+            {
+                get
+                {
+                    return GetEV(3);
+                }
+                set
+                {
+                    SetEV(3, value);
+                }
+            }
+            public int SpecialDefenseEV
+            {
+                get
+                {
+                    return GetEV(4);
+                }
+                set
+                {
+                    SetEV(4, value);
+                }
+            }
+            public int SpeedEV
+            {
+                get
+                {
+                    return GetEV(5);
+                }
+                set
+                {
+                    SetEV(5, value);
+                }
+            }
+            public int CalculatedHP
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 1);
+                }
+            }
+            public int CalculatedAttack
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 2);
+                }
+            }
+            public int CalculatedDefense
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 3);
+                }
+            }
+            public int CalculatedSpecialAttack
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 4);
+                }
+            }
+            public int CalculatedSpecialDefense
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 5);
+                }
+            }
+            public int CalculatedSpeed
+            {
+                get
+                {
+                    return PKMDS.GetPKMStat_FromObj(this, 6);
+                }
+            }
             public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
