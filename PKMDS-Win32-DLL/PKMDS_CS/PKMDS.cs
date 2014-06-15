@@ -2324,6 +2324,10 @@ namespace PKMDS_CS
         }
         public static System.Drawing.Image GetMoveCategoryImage(UInt16 move)
         {
+            if (move == 0)
+            {
+                return null;
+            }
             return GetResourceByName(GetMoveCategory(move));
         }
         public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false)
@@ -2950,6 +2954,10 @@ namespace PKMDS_CS
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 136)]
             [Browsable(false)]
             public byte[] Data;
+            internal void Decrypt()
+            {
+                DecryptPokemon(this);
+            }
             public void GetPTR(IntPtr ptr)
             {
                 System.Runtime.InteropServices.Marshal.StructureToPtr(this, ptr, false);
@@ -3255,6 +3263,19 @@ namespace PKMDS_CS
                 {
                     return GetPKMMetAsEgg(this);
                 }
+                set
+                {
+                    if (value)
+                    {
+                        EggDate = DateTime.Today;
+                        EggLocationID = 1;
+                    }
+                    else
+                    {
+                        SetNoEggDate();
+                        EggLocationID = 0;
+                    }
+                }
             }
             [Browsable(true)]
             public bool IsEgg
@@ -3361,6 +3382,10 @@ namespace PKMDS_CS
                 }
                 set
                 {
+                    if (value == null)
+                    {
+                        value = "";
+                    }
                     SetPKMNickname(this, value, value.Length);
                 }
             }
@@ -3385,6 +3410,10 @@ namespace PKMDS_CS
                 }
                 set
                 {
+                    if (value == null)
+                    {
+                        value = "";
+                    }
                     SetPKMOTName(this, value, value.Length);
                 }
             }
@@ -3497,15 +3526,15 @@ namespace PKMDS_CS
                 }
             }
             [Browsable(true)]
-            public Byte MetLevel
+            public int MetLevel
             {
                 get
                 {
-                    return GetPKMMetLevel(this);
+                    return Convert.ToInt32(GetPKMMetLevel(this));
                 }
                 set
                 {
-                    SetPKMMetLevel(this, value);
+                    SetPKMMetLevel(this, Convert.ToByte(value));
                 }
             }
             [Browsable(true)]
@@ -3586,6 +3615,31 @@ namespace PKMDS_CS
                 get
                 {
                     return PKMDS.GetPKMTNL(this);
+                }
+            }
+            public double TNLPercent
+            {
+                get
+                {
+                    if (TNL == 0)
+                    {
+                        return 0.0;
+                    }
+                    double min = EXP - EXPAtCurLevel;
+                    double max = EXPAtNextLevel - EXPAtCurLevel;
+                    double percent = (double)(min / max);
+                    return percent;
+                }
+            }
+            public UInt32 EXPAtNextLevel
+            {
+                get
+                {
+                    if (TNL == 0)
+                    {
+                        return EXP;
+                    }
+                    return EXPAtGivenLevel(Level + 1);
                 }
             }
             [Browsable(true)]
@@ -4214,6 +4268,173 @@ namespace PKMDS_CS
                     return PKMDS.GetPKMStat_FromObj(this, 6);
                 }
             }
+            public int MaxEXP
+            {
+                get
+                {
+                    return (int)(GetPKMEXPGivenLevel(this, 100));
+                }
+            }
+            public int Move1Power
+            {
+                get
+                {
+                    return PKMDS.GetMovePower(Move1ID);
+                }
+            }
+            public int Move1Accuracy
+            {
+                get
+                {
+                    return PKMDS.GetMoveAccuracy(Move1ID);
+                }
+            }
+            public int Move2Power
+            {
+                get
+                {
+                    return PKMDS.GetMovePower(Move2ID);
+                }
+            }
+            public int Move2Accuracy
+            {
+                get
+                {
+                    return PKMDS.GetMoveAccuracy(Move2ID);
+                }
+            }
+            public int Move3Power
+            {
+                get
+                {
+                    return PKMDS.GetMovePower(Move3ID);
+                }
+            }
+            public int Move3Accuracy
+            {
+                get
+                {
+                    return PKMDS.GetMoveAccuracy(Move3ID);
+                }
+            }
+            public int Move4Power
+            {
+                get
+                {
+                    return PKMDS.GetMovePower(Move4ID);
+                }
+            }
+            public int Move4Accuracy
+            {
+                get
+                {
+                    return PKMDS.GetMoveAccuracy(Move4ID);
+                }
+            }
+            public System.Drawing.Image Move1TypePic
+            {
+                get
+                {
+                    UInt16 moveid = Move1ID;
+                    if (moveid == 0)
+                    {
+                        return null;
+                    }
+                    return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
+                }
+            }
+            public System.Drawing.Image Move1CategoryPic
+            {
+                get
+                {
+                    return GetMoveCategoryImage(Move1ID);
+                }
+            }
+            public System.Drawing.Image Move2TypePic
+            {
+                get
+                {
+                    UInt16 moveid = Move2ID;
+                    if (moveid == 0)
+                    {
+                        return null;
+                    }
+                    return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
+                }
+            }
+            public System.Drawing.Image Move2CategoryPic
+            {
+                get
+                {
+                    return GetMoveCategoryImage(Move2ID);
+                }
+            }
+            public System.Drawing.Image Move3TypePic
+            {
+                get
+                {
+                    UInt16 moveid = Move3ID;
+                    if (moveid == 0)
+                    {
+                        return null;
+                    }
+                    return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
+                }
+            }
+            public System.Drawing.Image Move3CategoryPic
+            {
+                get
+                {
+                    return GetMoveCategoryImage(Move3ID);
+                }
+            }
+            public System.Drawing.Image Move4TypePic
+            {
+                get
+                {
+                    UInt16 moveid = Move4ID;
+                    if (moveid == 0)
+                    {
+                        return null;
+                    }
+                    return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
+                }
+            }
+            public System.Drawing.Image Move4CategoryPic
+            {
+                get
+                {
+                    return GetMoveCategoryImage(Move4ID);
+                }
+            }
+            public string Move1Flavor
+            {
+                get
+                {
+                    return GetMoveFlavor(Move1ID);
+                }
+            }
+            public string Move2Flavor
+            {
+                get
+                {
+                    return GetMoveFlavor(Move2ID);
+                }
+            }
+            public string Move3Flavor
+            {
+                get
+                {
+                    return GetMoveFlavor(Move3ID);
+                }
+            }
+            public string Move4Flavor
+            {
+                get
+                {
+                    return GetMoveFlavor(Move4ID);
+                }
+            }
             public Pokemon Clone()
             {
                 byte[] ClonedData = new byte[this.Data.Length];
@@ -4230,7 +4451,22 @@ namespace PKMDS_CS
                 this.PokemonData = new PKMDS.Pokemon();
                 this.PartyData = new byte[84];
             }
-            public Pokemon PokemonData;
+            internal void Decrypt()
+            {
+                DecryptPartyPokemon(this);
+            }
+            private Pokemon mPokemonData;
+            public Pokemon PokemonData 
+            {
+                get 
+                {
+                    return mPokemonData;
+                }
+                set 
+                {
+                    mPokemonData = value;
+                }
+            }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             private byte[] PartyData;
             public void WriteToFile(string FileName, bool encrypt = false)
@@ -4542,6 +4778,7 @@ namespace PKMDS_CS
 
             }
             [Browsable(true)]
+            [System.Runtime.Serialization.DataMember(Name = "Grid")]
             public System.Drawing.Image Grid
             {
                 get
@@ -4623,6 +4860,7 @@ namespace PKMDS_CS
                         Pokemon pkmn = new Pokemon();
                         pkmn = this.InternalSave.PCStorage.Box(box).Pokemon(slot);
                         PCStorage[box].Add(pkmn);
+                        pkmn.Decrypt();
                     }
                 }
             }
@@ -4632,6 +4870,7 @@ namespace PKMDS_CS
                 for (int slot = 0; slot < 6; slot++)
                 {
                     Party.Add(this.InternalSave.Party.Pokemon(slot));
+                    Party[slot].Decrypt();
                 }
             }
             public void RecalculateParty()
@@ -5308,6 +5547,10 @@ namespace PKMDS_CS
         private static extern int GetPKMStat_FromObj(Pokemon pkm, int stat);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetPKMLevel(Pokemon pkm);
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void DecryptPokemon([In][Out] Pokemon pkm);
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void DecryptPartyPokemon([In][Out] PartyPokemon ppkm);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern void SetPKMLevel([In][Out] Pokemon pkm, int level);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]

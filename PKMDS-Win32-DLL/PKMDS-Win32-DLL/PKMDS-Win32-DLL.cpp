@@ -1134,7 +1134,7 @@ EXPORT int GetPKMGender(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	if (pkm->genderless == true)
+	if ((pkm->genderless == true) && (getpkmgenderrate(pkm->species) == -1))
 	{
 		return 2;
 	}
@@ -1519,6 +1519,20 @@ EXPORT void SetPKMBall(pokemon_obj * pkm, int ball)
 		decryptpkm(pkm);
 	}
 	pkm->ball_int = ball;
+}
+EXPORT void DecryptPokemon(pokemon_obj * pkm)
+{
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+}
+EXPORT void DecryptPartyPokemon(party_pkm * ppkm)
+{
+	if (!(ppkm->isboxdatadecrypted))
+	{
+		decryptpkm(ppkm);
+	}
 }
 EXPORT byte GetPKMMetLevel(pokemon_obj * pkm)
 {
