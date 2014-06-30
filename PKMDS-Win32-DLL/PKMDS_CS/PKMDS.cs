@@ -4456,13 +4456,13 @@ namespace PKMDS_CS
                 DecryptPartyPokemon(this);
             }
             private Pokemon mPokemonData;
-            public Pokemon PokemonData 
+            public Pokemon PokemonData
             {
-                get 
+                get
                 {
                     return mPokemonData;
                 }
-                set 
+                set
                 {
                     mPokemonData = value;
                 }
@@ -4914,168 +4914,168 @@ namespace PKMDS_CS
                     this.InternalSave.SID = value;
                 }
             }
-            public System.Drawing.Image BoxWallpaper1
+            private System.Drawing.Image BoxWallpaper1
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(0);
                 }
             }
-            public System.Drawing.Image BoxWallpaper2
+            private System.Drawing.Image BoxWallpaper2
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(1);
                 }
             }
-            public System.Drawing.Image BoxWallpaper3
+            private System.Drawing.Image BoxWallpaper3
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(2);
                 }
             }
-            public System.Drawing.Image BoxWallpaper4
+            private System.Drawing.Image BoxWallpaper4
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(3);
                 }
             }
-            public System.Drawing.Image BoxWallpaper5
+            private System.Drawing.Image BoxWallpaper5
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(4);
                 }
             }
-            public System.Drawing.Image BoxWallpaper6
+            private System.Drawing.Image BoxWallpaper6
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(5);
                 }
             }
-            public System.Drawing.Image BoxWallpaper7
+            private System.Drawing.Image BoxWallpaper7
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(6);
                 }
             }
-            public System.Drawing.Image BoxWallpaper8
+            private System.Drawing.Image BoxWallpaper8
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(7);
                 }
             }
-            public System.Drawing.Image BoxWallpaper9
+            private System.Drawing.Image BoxWallpaper9
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(8);
                 }
             }
-            public System.Drawing.Image BoxWallpaper10
+            private System.Drawing.Image BoxWallpaper10
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(9);
                 }
             }
-            public System.Drawing.Image BoxWallpaper11
+            private System.Drawing.Image BoxWallpaper11
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(10);
                 }
             }
-            public System.Drawing.Image BoxWallpaper12
+            private System.Drawing.Image BoxWallpaper12
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(11);
                 }
             }
-            public System.Drawing.Image BoxWallpaper13
+            private System.Drawing.Image BoxWallpaper13
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(12);
                 }
             }
-            public System.Drawing.Image BoxWallpaper14
+            private System.Drawing.Image BoxWallpaper14
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(13);
                 }
             }
-            public System.Drawing.Image BoxWallpaper15
+            private System.Drawing.Image BoxWallpaper15
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(14);
                 }
             }
-            public System.Drawing.Image BoxWallpaper16
+            private System.Drawing.Image BoxWallpaper16
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(15);
                 }
             }
-            public System.Drawing.Image BoxWallpaper17
+            private System.Drawing.Image BoxWallpaper17
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(16);
                 }
             }
-            public System.Drawing.Image BoxWallpaper18
+            private System.Drawing.Image BoxWallpaper18
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(17);
                 }
             }
-            public System.Drawing.Image BoxWallpaper19
+            private System.Drawing.Image BoxWallpaper19
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(18);
                 }
             }
-            public System.Drawing.Image BoxWallpaper20
+            private System.Drawing.Image BoxWallpaper20
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(19);
                 }
             }
-            public System.Drawing.Image BoxWallpaper21
+            private System.Drawing.Image BoxWallpaper21
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(20);
                 }
             }
-            public System.Drawing.Image BoxWallpaper22
+            private System.Drawing.Image BoxWallpaper22
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(21);
                 }
             }
-            public System.Drawing.Image BoxWallpaper23
+            private System.Drawing.Image BoxWallpaper23
             {
                 get
                 {
                     return this.InternalSave.GetBoxWallpaper(22);
                 }
             }
-            public System.Drawing.Image BoxWallpaper24
+            private System.Drawing.Image BoxWallpaper24
             {
                 get
                 {
@@ -5092,6 +5092,21 @@ namespace PKMDS_CS
                 {
                     this.InternalSave.CurrentBox = value;
                 }
+            }
+            public int PartySize
+            {
+                get
+                {
+                    return this.InternalSave.PartySize;
+                }
+                set
+                {
+                    this.InternalSave.PartySize = value;
+                }
+            }
+            public int BoxCount(int box) 
+            {
+                return this.InternalSave.BoxCount(box);
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
