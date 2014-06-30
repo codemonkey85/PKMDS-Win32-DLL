@@ -267,7 +267,7 @@ EXPORT int ValidateSave_INTERNAL(bw2sav_obj * sav, wchar_t ** message, int * len
 		(getchecksum(sav->cur, (long)BW_OFFSETS::chkcalcloc, (long)BW_OFFSETS::chkcalclen)) == (getchkfromsav(sav->cur, false)))
 	{
 		result = 0;
-		wstr_message = L"Invalid save file!";
+		wstr_message = L"Checksum failed!";
 	}
 	*length = wstr_message.length();
 	*message = new wchar_t[wstr_message.length()];
