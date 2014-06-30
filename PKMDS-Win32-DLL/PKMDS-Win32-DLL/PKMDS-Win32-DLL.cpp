@@ -7,10 +7,20 @@ BSTR UTF8toBSTR(const char* input);
 #define EXPORT extern "C" __declspec(dllexport)
 EXPORT int HasFemaleSprite(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return (pkmhasgenddiff(pkm) && (calcpkmgender(pkm) == Genders::female)) & (pkm->species != Species::torchic) & (pkm->species != Species::buizel) & (pkm->species != Species::floatzel);
 }
 EXPORT int HasFemaleIcon(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return ((pkm->species == Species::unfezant) | (pkm->species == Species::frillish) | (pkm->species == Species::jellicent)) && (calcpkmgender(pkm) == Genders::female);
 }
 EXPORT void OpenDB(const char * dbfilename)
@@ -106,15 +116,30 @@ EXPORT void SetTrainerName_FromSav_INTERNAL(bw2sav_obj * sav, wchar_t * name, in
 }
 EXPORT BSTR GetCharacteristic(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	std::string characteristic = lookupcharacteristic(pkm);
 	return UTF8toBSTR(characteristic.c_str());
 }
 EXPORT int GetNatureIncrease(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return getnatureincrease(pkm);
 }
 EXPORT int GetNatureDecrease(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return getnaturedecrease(pkm);
 }
 EXPORT BSTR GetNatureName(int natureid, int langid)
@@ -149,6 +174,11 @@ EXPORT void SetTrainerSID_FromSav(bw2sav_obj * sav, int sid)
 }
 EXPORT uint32 GetPKMColorValue(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	if (pkm->isegg)
 	{
 		if (pkm->species == Species::manaphy)
@@ -168,14 +198,29 @@ EXPORT uint16 GetTrainerSID_FromSav(bw2sav_obj * sav)
 }
 EXPORT uint32 GetPKMTNL(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return getpkmexptonext(pkm);
 }
 EXPORT uint32 GetPKMEXPCurLevel(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return getpkmexpatcur(pkm);
 }
 EXPORT uint32 GetPKMEXPGivenLevel(pokemon_obj * pkm, int level)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return getpkmexpatlevel(pkm->species, level);
 }
 EXPORT void GetBoxName_INTERNAL(bw2sav_obj * sav, int box, wchar_t ** boxname, int* length)
@@ -330,6 +375,10 @@ EXPORT void GetItemImage_INTERNAL(int item, byte ** picdata, int * size)
 }
 EXPORT int GetPKMType_INTERNAL(pokemon_obj * pkm, int type, int generation)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
 	return lookuppkmtype(pkm, type, generation);
 }
 EXPORT void GetMarkingImage_INTERNAL(int marking, bool marked, byte ** picdata, int * size)
@@ -347,7 +396,7 @@ EXPORT void GetBallPic_INTERNAL(byte ball, byte ** picdata, int * size)
 EXPORT BSTR GetMoveCategory(uint16 move)
 {
 	string catname = "";
-	switch((MoveCategories::movecategories)getmovecategory(Moves::moves(move)))
+	switch ((MoveCategories::movecategories)getmovecategory(Moves::moves(move)))
 	{
 	case MoveCategories::physical:
 		catname = "physical";
@@ -422,6 +471,8 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 	calcpartychecksum(&(sav->cur), isbw2);
 	for (int box = 0; box < 24; box++)
 	{
+		wstring boxname = getboxname(&(sav->cur), box);
+		setsaveboxname(sav, box, boxname.c_str(), boxname.length());
 		for (int slot = 0; slot < 30; slot++)
 		{
 			pkm = &(sav->cur.boxes[box].pokemon[slot]);
@@ -439,9 +490,19 @@ EXPORT void FixSaveChecksums(bw2sav_obj * sav)
 		}
 		calcboxchecksum(&(sav->cur), box, isbw2);
 	}
-	sav->cur.block1checksum = getchecksum(&(sav->cur), 0x0, 0x3e0);
 	fixtrainerdatachecksum(&(sav->cur));
 	fixbagchecksum(&(sav->cur));
+	uint16 chk = getchecksum(&(sav->cur), 0x0, 0x3e0);
+	sav->cur.block1checksum = chk;
+	byte* data = reinterpret_cast<byte*>(&(sav->cur));
+	if (isbw2)
+	{
+		memcpy(data + (long)BW2_OFFSETS::chkcalcloc, &chk, 2);
+	}
+	else
+	{
+		memcpy(data + (long)BW_OFFSETS::chkcalcloc, &chk, 2);
+	}
 	fixsavchecksum(sav, isbw2);
 }
 EXPORT void WriteSaveFile(bw2sav_obj * sav, const wchar_t * filename)
@@ -1073,7 +1134,7 @@ EXPORT int GetPKMGender(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	if (pkm->genderless == true)
+	if ((pkm->genderless == true) && (getpkmgenderrate(pkm->species) == -1))
 	{
 		return 2;
 	}
@@ -1162,7 +1223,14 @@ EXPORT byte GetPKMNature(pokemon_obj * pkm)
 	{
 		decryptpkm(pkm);
 	}
-	return pkm->nature_int;
+	if (pkm->nature_int == 0 && pkm->hometown != Hometowns::black && pkm->hometown != Hometowns::white && pkm->hometown != Hometowns::black2 && pkm->hometown != Hometowns::white2)
+	{
+		return pkm->pid % 25;
+	}
+	else
+	{
+		return pkm->nature_int;
+	}
 }
 EXPORT void SetPKMNature(pokemon_obj * pkm, int nature)
 {
@@ -1452,6 +1520,20 @@ EXPORT void SetPKMBall(pokemon_obj * pkm, int ball)
 	}
 	pkm->ball_int = ball;
 }
+EXPORT void DecryptPokemon(pokemon_obj * pkm)
+{
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+}
+EXPORT void DecryptPartyPokemon(party_pkm * ppkm)
+{
+	if (!(ppkm->isboxdatadecrypted))
+	{
+		decryptpkm(ppkm);
+	}
+}
 EXPORT byte GetPKMMetLevel(pokemon_obj * pkm)
 {
 	if (!(pkm->isboxdatadecrypted))
@@ -1519,6 +1601,11 @@ EXPORT void FixPokemonChecksum(pokemon_obj * pkm)
 }
 EXPORT bool IsPKMShiny(pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	return (getpkmshiny(pkm) == true);
 }
 EXPORT int GetBoxCount(bw2sav_obj * sav, int box)
@@ -1541,6 +1628,11 @@ EXPORT int GetBoxCount(bw2sav_obj * sav, int box)
 }
 EXPORT bool DepositPKM(bw2sav_obj * sav, pokemon_obj * pkm, int startbox, bool failiffull)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	if (failiffull)
 	{
 		if (GetBoxCount(sav, startbox) == 30)
@@ -1553,6 +1645,11 @@ EXPORT bool DepositPKM(bw2sav_obj * sav, pokemon_obj * pkm, int startbox, bool f
 }
 EXPORT bool WithdrawPKM(bw2sav_obj * sav, pokemon_obj * pkm)
 {
+	if (!(pkm->isboxdatadecrypted))
+	{
+		decryptpkm(pkm);
+	}
+
 	if (sav->cur.party.size == 6)
 	{
 		return false;

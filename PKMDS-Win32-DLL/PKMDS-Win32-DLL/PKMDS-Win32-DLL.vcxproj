@@ -58,7 +58,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Debug"</Command>
+      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Debug"
+xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS Abstract Test\bin\Debug"</Command>
     </PostBuildEvent>
     <Bscmake>
       <PreserveSBR>true</PreserveSBR>
@@ -84,7 +85,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Release"</Command>
+      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS-Save-Editor\bin\Release"
+xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)\PKMDS Abstract Test\bin\Release"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
