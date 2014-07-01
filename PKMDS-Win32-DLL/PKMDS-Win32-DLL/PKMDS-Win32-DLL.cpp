@@ -1711,6 +1711,39 @@ EXPORT void RecalcPartyPKM(party_pkm * ppkm)
 {
 	pctoparty(ppkm, ppkm);
 }
+EXPORT void FixParty(bw2sav_obj * sav)
+{
+	std::vector<party_pkm> party(6);
+	std::copy(sav->cur.party.pokemon.begin(), sav->cur.party.pokemon.end(), party.begin());
+	party_pkm * blankpp = new party_pkm;
+	blankpp->isboxdatadecrypted = true;
+	std::fill(sav->cur.party.pokemon.begin(), sav->cur.party.pokemon.end(), (*blankpp));
+	for (int i = 0; i < party.size(); i++)
+	{
+		if (party[i].species == Species::NOTHING)
+		{
+			party.erase(party.begin() + i);
+		}
+	}
+	std::copy(party.begin(), party.end(), sav->cur.party.pokemon.begin());
+	int count = 0;
+	for (int i = 0; i < party.size(); i++)
+	{
+		if (party[i].species != Species::NOTHING)
+		{
+			count++;
+		}
+	}
+	sav->cur.party.size = count;
+}
+EXPORT void GetPCStorageAvailableSlot(bw2sav_obj * sav, int * box, int * slot, int startbox)
+{
+	int boxint = 0;
+	int slotint = 0;
+	getpcstorageavailableslot(sav, boxint, slotint, startbox);
+	*box = boxint;
+	*slot = slotint;
+}
 BSTR UTF8toBSTR(const char* input)
 {
 	BSTR result = NULL;

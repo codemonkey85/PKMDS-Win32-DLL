@@ -4476,7 +4476,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        private class Box_Private
+        internal class Box_Private
         {
             public Pokemon Pokemon(int slot)
             {
@@ -4615,7 +4615,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        private class PCStorage_Private
+        internal class PCStorage_Private
         {
             public Box_Private Box(int box)
             {
@@ -4728,7 +4728,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        private class Party_Private
+        internal class Party_Private
         {
             public PartyPokemon Pokemon(int slot)
             {
@@ -4834,7 +4834,7 @@ namespace PKMDS_CS
         }
         public class Save
         {
-            private SaveData InternalSave;
+            internal SaveData InternalSave;
             public Party Party;
             public PCStorage PCStorage;
             public BoxNames BoxNames;
@@ -4875,7 +4875,13 @@ namespace PKMDS_CS
             }
             public void RecalculateParty()
             {
-                this.InternalSave.RecalculateParty();
+                foreach (PartyPokemon ppkm in this.Party)
+                {
+                    if (ppkm.PokemonData.SpeciesID != 0)
+                    {
+                        PKMDS.RecalcPartyPKM(ppkm);
+                    }
+                }
             }
             public void WriteToFile(string filename)
             {
@@ -5104,9 +5110,64 @@ namespace PKMDS_CS
                     this.InternalSave.PartySize = value;
                 }
             }
-            public int BoxCount(int box) 
+            public int BoxCount(int box)
             {
                 return this.InternalSave.BoxCount(box);
+            }
+            public bool DepositPokemon(Pokemon pokemon, int box)
+            {
+                bool ret = false;
+                if (BoxCount(box) != 30)
+                {
+                    int boxint = 0;
+                    int slotint = 0;
+                    unsafe
+                    {
+                        int* boxptr = &boxint;
+                        int* slotptr = &slotint;
+                        PKMDS.GetPCStorageAvailableSlot(this, boxptr, slotptr, box);
+                    }
+                    this.PCStorage[boxint][slotint].Data = pokemon.Data;
+                    FixParty(this);
+                    ret = true;
+                }
+                return ret;
+            }
+            public bool WithdrawPokemon(Pokemon pokemon)
+            {
+                bool ret = false;
+                if (this.PartySize != 6)
+                {
+                    PartyPokemon ppkm;
+                    for (int slot = 0; slot < 6; slot++)
+                    {
+                        ppkm = this.Party[slot];
+                        if (ppkm.PokemonData.SpeciesID == 0)
+                        {
+                            ppkm.PokemonData.Data = pokemon.Data;
+                            RecalcPartyPKM(ppkm);
+                            FixParty(this);
+                            return true;
+                        }
+                    }
+                }
+                return ret;
+            }
+            public void RemovePartyPokemon(int slot)
+            {
+                if (this.PartySize > 1)
+                {
+                    PartyPokemon ppkm = new PartyPokemon();
+                    ppkm.PokemonData.SpeciesID = 0;
+                    this.Party[slot] = ppkm;
+                    FixParty(this);
+                }
+            }
+            public void RemoveStoredPokemon(int box, int slot)
+            {
+                Pokemon pkm = new Pokemon();
+                pkm.SpeciesID = 0;
+                this.PCStorage[box][slot] = pkm;
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
@@ -5131,7 +5192,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        private class BoxWallpapers_Private
+        internal class BoxWallpapers_Private
         {
             public BoxWallpaper Wallpapers(int slot)
             {
@@ -5216,7 +5277,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        private class BoxNames_Private
+        internal class BoxNames_Private
         {
             public BoxName Boxes(int slot)
             {
@@ -5333,7 +5394,7 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        private class SaveData
+        internal class SaveData
         {
             public byte CurrentBox;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x3)]
@@ -5598,6 +5659,47 @@ namespace PKMDS_CS
         private static extern void SwapPartyParty([In][Out] SaveData sav, int partyslota, int partyslotb);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMTNL(Pokemon pkm);
+        public static void SwapBoxParty(Save sav, int box, int boxslot, int partyslot)
+        {
+            Pokemon pkma = new Pokemon(); pkma.Data = sav.PCStorage[box][boxslot].Data;
+            PartyPokemon ppkm = new PartyPokemon(); ppkm.PokemonData.Data = sav.Party[partyslot].PokemonData.Data;
+            Pokemon pkmb = new Pokemon(); pkmb.Data = ppkm.PokemonData.Data;
+            ppkm.PokemonData.Data = pkma.Data;
+            pkma.Data = pkmb.Data;
+            sav.PCStorage[box][boxslot].Data = pkma.Data;
+            sav.Party[partyslot].PokemonData.Data = ppkm.PokemonData.Data;
+            RecalcPartyPKM(sav.Party[partyslot]);
+            FixParty(sav);
+        }
+        public static void SwapPartyBox(Save sav, int partyslot, int box, int boxslot)
+        {
+            SwapBoxParty(sav, box, boxslot, partyslot);
+        }
+        public static void SwapBoxBox(Save sav, int boxa, int boxslota, int boxb, int boxslotb)
+        {
+            Pokemon pkma = new Pokemon(), pkmb = new Pokemon(), pkmc = new Pokemon();
+            pkma.Data = sav.PCStorage[boxa][boxslota].Data;
+            pkmb.Data = sav.PCStorage[boxb][boxslotb].Data;
+            pkmc.Data = pkma.Data;
+            pkma.Data = pkmb.Data;
+            pkmb.Data = pkmc.Data;
+            sav.PCStorage[boxa][boxslota].Data = pkma.Data;
+            sav.PCStorage[boxb][boxslotb].Data = pkmb.Data;
+        }
+        public static void SwapPartyParty(Save sav, int partyslota, int partyslotb)
+        {
+            PartyPokemon ppkma = new PartyPokemon(), ppkmb = new PartyPokemon(), ppkmc = new PartyPokemon();
+            ppkma.PokemonData.Data = sav.Party[partyslota].PokemonData.Data;
+            ppkmb.PokemonData.Data = sav.Party[partyslotb].PokemonData.Data;
+            ppkmc.PokemonData.Data = ppkma.PokemonData.Data;
+            ppkma.PokemonData.Data = ppkmb.PokemonData.Data;
+            ppkmb.PokemonData.Data = ppkmc.PokemonData.Data;
+            sav.Party[partyslota].PokemonData.Data = ppkma.PokemonData.Data;
+            sav.Party[partyslotb].PokemonData.Data = ppkmb.PokemonData.Data;
+            RecalcPartyPKM(sav.Party[partyslota]);
+            RecalcPartyPKM(sav.Party[partyslotb]);
+            FixParty(sav);
+        }
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMEXPGivenLevel(Pokemon pkm, int level);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -5801,6 +5903,36 @@ namespace PKMDS_CS
         private static extern void SetPartyPKMData_INTERNAL([In][Out] PartyPokemon pokemon, [In][Out] SaveData sav, int slot);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern void GetSAVData_INTERNAL([In][Out] SaveData save, string savefile);
+        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
+        private static extern unsafe void GetPCStorageAvailableSlot([In][Out] SaveData save, int* box, int* slot, int startbox);
+        public static unsafe void GetPCStorageAvailableSlot([In][Out] Save sav, int* box, int* slot, int startbox = 0)
+        {
+            GetPCStorageAvailableSlot(sav.InternalSave, box, slot, startbox);
+        }
+        private static void FixParty(Save sav)
+        {
+            int size = 0;
+            List<int> indices = new List<int>();
+            for (int i = 0; i < 6; i++)
+            {
+                PartyPokemon ppkm = sav.Party[i];
+                if (ppkm.PokemonData.SpeciesID == 0)
+                {
+                    indices.Add(i);
+                    sav.Party.Add(new PartyPokemon());
+                    sav.Party[sav.Party.Count - 1].PokemonData.SpeciesID = 0;
+                }
+                else
+                {
+                    size++;
+                }
+            }
+            for (int i = indices.Count - 1; i >= 0; i--)
+            {
+                sav.Party.RemoveAt(indices[i]);
+            }
+            sav.PartySize = size;
+        }
         #endregion
         #region Functions
         private static unsafe bool ValidateSave(SaveData sav, out string message)
