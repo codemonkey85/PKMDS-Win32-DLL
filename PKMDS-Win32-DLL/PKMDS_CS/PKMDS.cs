@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-namespace PKMDS_CS
-{
-    public class PKMDS
-    {
+namespace PKMDS_CS {
+    public class PKMDS {
         #region Constants
         private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
         private const int LANG_ID = 9;
@@ -18,8 +16,7 @@ namespace PKMDS_CS
         private const int OTLENGTH = 8;
         #endregion
         #region Enums
-        public enum PKMSpecies : ushort
-        {
+        public enum PKMSpecies : ushort {
             NOTHING,
             Bulbasaur,
             Ivysaur,
@@ -671,8 +668,7 @@ namespace PKMDS_CS
             Meloetta,
             Genesect
         }
-        public enum Moves : ushort
-        {
+        public enum Moves : ushort {
             Pound,
             Karate_Chop,
             DoubleSlap,
@@ -1233,8 +1229,7 @@ namespace PKMDS_CS
             Fusion_Flare,
             Fusion_Bolt
         }
-        public enum Items : ushort
-        {
+        public enum Items : ushort {
             NOTHING = 0x0000,
             Master_Ball = 0x0001,
             Ultra_Ball = 0x0002,
@@ -1856,8 +1851,7 @@ namespace PKMDS_CS
             droppeditem2 = 0x027d,
             Reveal_Glass = 0x027E
         }
-        public enum Abilities : byte
-        {
+        public enum Abilities : byte {
             Stench,
             Drizzle,
             Speed_Boost,
@@ -2023,8 +2017,7 @@ namespace PKMDS_CS
             Turboblaze,
             Teravolt,
         }
-        public enum PokemonColors
-        {
+        public enum PokemonColors {
             Black = 0x5A5A5A,
             Blue = 0x318CF7,
             Brown = 0xB57331,
@@ -2036,30 +2029,25 @@ namespace PKMDS_CS
             White = 0xF7F7F7,
             Yellow = 0xF7D64A
         }
-        public enum SpindaSpots
-        {
+        public enum SpindaSpots {
             TopLeft,
             TopRight,
             BottomLeft,
             BottomRight
         }
-        public enum SpindaColorsBase : uint
-        {
+        public enum SpindaColorsBase : uint {
             BaseLight = 0xffe6d6a5,
             BaseShaded = 0xffcea573
         }
-        public enum SpindaColorsNormalSpot : uint
-        {
+        public enum SpindaColorsNormalSpot : uint {
             NormalSpotLight = 0xffef524a,
             NormalSpotShaded = 0xffbd4a31
         }
-        public enum SpindaColorsShinySpot : uint
-        {
+        public enum SpindaColorsShinySpot : uint {
             ShinySpotLight = 0xffa5ce10,
             ShinyShaded = 0xff7b9c00
         }
-        public enum Markings : int
-        {
+        public enum Markings : int {
             Circle,
             Triangle,
             Square,
@@ -2067,14 +2055,12 @@ namespace PKMDS_CS
             Star,
             Diamond
         }
-        public enum Genders : int
-        {
+        public enum Genders : int {
             Male,
             Female,
             Genderless
         }
-        public enum NatureStats : int
-        {
+        public enum NatureStats : int {
             HP = 1,
             Attack,
             Defense,
@@ -2082,8 +2068,7 @@ namespace PKMDS_CS
             SpecialDefense,
             Speed
         }
-        public enum Stats : int
-        {
+        public enum Stats : int {
             HP,
             Attack,
             Defense,
@@ -2091,16 +2076,14 @@ namespace PKMDS_CS
             SpecialDefense,
             Speed
         }
-        public enum NatureEffect : int
-        {
+        public enum NatureEffect : int {
             Increase,
             Decrease,
             NoEffect
         }
         #endregion
         #region DBAccess
-        public static class SQL
-        {
+        public static class SQL {
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
             public static extern void OpenDB(string dbfilename);
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
@@ -2113,48 +2096,37 @@ namespace PKMDS_CS
         }
         #endregion
         #region Resources
-        public static System.Drawing.Image GetResourceByName(string name)
-        {
-            if ((name == "") || (name == null))
-            {
+        public static System.Drawing.Image GetResourceByName(string name) {
+            if ((name == "") || (name == null)) {
                 return null;
             }
-            else
-            {
+            else {
                 return (System.Drawing.Image)Properties.Resources.ResourceManager.GetObject(name);
             }
         }
-        public static System.Drawing.Image GetSprite(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false)
-        {
-            if (Species == 0)
-            {
+        public static System.Drawing.Image GetSprite(UInt16 Species, bool Shiny = false, byte Form = 0, bool Female = false) {
+            if (Species == 0) {
                 return null;
             }
             System.Drawing.Image ret = null;
             string sprite = "s";
-            if (Female)
-            {
+            if (Female) {
                 sprite += "f";
             }
-            if (Shiny)
-            {
+            if (Shiny) {
                 sprite += "s";
             }
             sprite += "_" + Species.ToString();
-            if (Form != 0)
-            {
+            if (Form != 0) {
                 string basestr = sprite;
                 sprite += "_" + Form.ToString();
                 ret = PKMDS.GetResourceByName(sprite);
-                if (ret == null)
-                {
+                if (ret == null) {
                     sprite = basestr;
                     string formname = "";
-                    switch ((PKMSpecies)(Species))
-                    {
+                    switch ((PKMSpecies)(Species)) {
                         case PKMSpecies.Unown:
-                            switch (Form)
-                            {
+                            switch (Form) {
                                 case 26:
                                     formname = "exclamation";
                                     break;
@@ -2167,89 +2139,71 @@ namespace PKMDS_CS
                             }
                             break;
                         case PKMSpecies.Keldeo:
-                            if (Form == 1)
-                            {
+                            if (Form == 1) {
                                 formname = "resolute";
                             }
                             break;
                         case PKMSpecies.Meloetta:
-                            if (Form == 1)
-                            {
+                            if (Form == 1) {
                                 formname = "pirouette";
                             }
                             break;
                         default:
                             string formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                            if ((formnameinternal != "") && (formnameinternal != null))
-                            {
+                            if ((formnameinternal != "") && (formnameinternal != null)) {
                                 formname = formnameinternal.Split(' ')[0];
                             }
                             break;
                     }
-                    if (formname != "")
-                    {
+                    if (formname != "") {
                         sprite += "_" + formname.ToLower();
                     }
                     ret = PKMDS.GetResourceByName(sprite.Replace('-', '_'));
                 }
             }
-            else
-            {
+            else {
                 ret = PKMDS.GetResourceByName(sprite.Replace('-', '_'));
             }
             return ret;
         }
-        public static System.Drawing.Image GetIcon(UInt16 Species, byte Form = 0, bool Female = false)
-        {
-            if (Species == 0)
-            {
+        public static System.Drawing.Image GetIcon(UInt16 Species, byte Form = 0, bool Female = false) {
+            if (Species == 0) {
                 return null;
             }
             System.Drawing.Image ret = null;
-            try
-            {
+            try {
                 string icon = "bi_" + Species.ToString();
-                if (Female)
-                {
+                if (Female) {
                     icon = "f" + icon;
                 }
-                if (Form != 0)
-                {
+                if (Form != 0) {
                     string basestr = icon;
                     string formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                    if ((formnameinternal != "") && (formnameinternal != null))
-                    {
+                    if ((formnameinternal != "") && (formnameinternal != null)) {
                         icon += "_" + Form.ToString();
                     }
                     ret = PKMDS.GetResourceByName(icon);
-                    if (ret == null)
-                    {
-                        if ((formnameinternal != "") && (formnameinternal != null))
-                        {
+                    if (ret == null) {
+                        if ((formnameinternal != "") && (formnameinternal != null)) {
                             icon = basestr + "_" + formnameinternal.Split(' ')[0].ToLower();
                         }
                     }
                 }
                 ret = PKMDS.GetResourceByName(icon);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return null;
             }
             return ret;
         }
-        public static System.Drawing.Image GetItemImage(UInt16 itemid)
-        {
-            if (itemid == 0U)
-            {
+        public static System.Drawing.Image GetItemImage(UInt16 itemid) {
+            if (itemid == 0U) {
                 return null;
             }
-            else
-            {
+            else {
                 string identifier = "";
-                switch ((Items)(itemid))
-                {
+                switch ((Items)(itemid)) {
                     case Items.xtransceiver2:
                         identifier = GetItemIdentifier((UInt16)(Items.Xtransceiver)) + "_yellow";
                         break;
@@ -2263,46 +2217,36 @@ namespace PKMDS_CS
                         identifier = GetItemIdentifier(itemid);
                         break;
                 }
-                if ((identifier != "") && identifier != null)
-                {
+                if ((identifier != "") && identifier != null) {
                     identifier = identifier.Replace('-', '_');
                     return GetResourceByName(identifier);
                 }
-                else
-                {
+                else {
                     return null;
                 }
             }
         }
-        public static System.Drawing.Image GetBallImage(byte ballid)
-        {
+        public static System.Drawing.Image GetBallImage(byte ballid) {
             return GetResourceByName("b_" + ballid.ToString());
         }
-        public static System.Drawing.Image GetTypeImage(int typeid)
-        {
+        public static System.Drawing.Image GetTypeImage(int typeid) {
             string type = GetTypeName(typeid);
-            if ((type == "") || (type == null))
-            {
+            if ((type == "") || (type == null)) {
                 return null;
             }
-            else
-            {
+            else {
                 return GetResourceByName(type.ToLower());
             }
         }
-        public static System.Drawing.Image GetMarkingImage(Markings marking, bool marked)
-        {
+        public static System.Drawing.Image GetMarkingImage(Markings marking, bool marked) {
             int markedint = 0;
-            if (marked)
-            {
+            if (marked) {
                 markedint = 1;
             }
             return GetResourceByName("m_" + ((int)(marking)).ToString() + markedint.ToString());
         }
-        public static System.Drawing.Image GetGenderIcon(int gender)
-        {
-            switch (gender)
-            {
+        public static System.Drawing.Image GetGenderIcon(int gender) {
+            switch (gender) {
                 case 0:
                     return GetResourceByName("male");
                 case 1:
@@ -2311,40 +2255,30 @@ namespace PKMDS_CS
                     return null;
             }
         }
-        public static System.Drawing.Image GetShinyStar(bool shiny)
-        {
-            if (shiny)
-            {
+        public static System.Drawing.Image GetShinyStar(bool shiny) {
+            if (shiny) {
                 return GetResourceByName("shiny");
             }
-            else
-            {
+            else {
                 return null;
             }
         }
-        public static System.Drawing.Image GetMoveCategoryImage(UInt16 move)
-        {
-            if (move == 0)
-            {
+        public static System.Drawing.Image GetMoveCategoryImage(UInt16 move) {
+            if (move == 0) {
                 return null;
             }
             return GetResourceByName(GetMoveCategory(move));
         }
-        public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false)
-        {
-            if (Shiny)
-            {
+        public static System.Drawing.Bitmap GetSpindaBaseSprite(bool Shiny = false) {
+            if (Shiny) {
                 return PKMDS_CS.Properties.Resources.spindashiny;
             }
-            else
-            {
+            else {
                 return PKMDS_CS.Properties.Resources.spinda;
             }
         }
-        public static System.Drawing.Bitmap GetSpindaSpot(SpindaSpots spot)
-        {
-            switch (spot)
-            {
+        public static System.Drawing.Bitmap GetSpindaSpot(SpindaSpots spot) {
+            switch (spot) {
                 case SpindaSpots.TopLeft:
                     return PKMDS_CS.Properties.Resources.spot_1;
                 case SpindaSpots.TopRight:
@@ -2357,8 +2291,7 @@ namespace PKMDS_CS
                     return null;
             }
         }
-        public static unsafe System.Drawing.Image GetSpindaSprite(UInt32 PID, bool IsShiny = false)
-        {
+        public static unsafe System.Drawing.Image GetSpindaSprite(UInt32 PID, bool IsShiny = false) {
             System.Drawing.Point TopLeftOrigin = new System.Drawing.Point(23, 15);
             System.Drawing.Point TopRightOrigin = new System.Drawing.Point(47, 17);
             System.Drawing.Point BottomLeftOrigin = new System.Drawing.Point(26, 33);
@@ -2380,46 +2313,34 @@ namespace PKMDS_CS
             uint color;
             int startx;
             int starty;
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 startx = SpotOrigins[i].X + SpotOffsets[i].X;
                 starty = SpotOrigins[i].Y + SpotOffsets[i].Y;
-                for (int x = 0; x < 96; x++)
-                {
-                    for (int y = 0; y < 96; y++)
-                    {
+                for (int x = 0; x < 96; x++) {
+                    for (int y = 0; y < 96; y++) {
                         color = 0;
-                        if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1))
-                        {
+                        if (((x >= startx) && (y >= starty) && (x < startx + Spots[i].Width) && (y < starty + Spots[i].Height)) && (Spots[i].GetPixel(x - startx, y - starty).ToArgb() != -1)) {
                             byte* data = scan0 + y * bData.Stride + x * 4;
-                            if (data[0] != 0)
-                            {
+                            if (data[0] != 0) {
                                 byte[] datab = { data[0], data[1], data[2], data[3] };
                                 uint SpriteColor = BitConverter.ToUInt32(datab, 0);
-                                if (SpriteColor == (uint)(SpindaColorsBase.BaseLight))
-                                {
-                                    if (IsShiny)
-                                    {
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseLight)) {
+                                    if (IsShiny) {
                                         color = (uint)(SpindaColorsShinySpot.ShinySpotLight);
                                     }
-                                    else
-                                    {
+                                    else {
                                         color = (uint)(SpindaColorsNormalSpot.NormalSpotLight);
                                     }
                                 }
-                                if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded))
-                                {
-                                    if (IsShiny)
-                                    {
+                                if (SpriteColor == (uint)(SpindaColorsBase.BaseShaded)) {
+                                    if (IsShiny) {
                                         color = (uint)(SpindaColorsShinySpot.ShinyShaded);
                                     }
-                                    else
-                                    {
+                                    else {
                                         color = (uint)(SpindaColorsNormalSpot.NormalSpotShaded);
                                     }
                                 }
-                                if (color != 0)
-                                {
+                                if (color != 0) {
                                     byte[] colordata = BitConverter.GetBytes(color);
                                     data[0] = colordata[0];
                                     data[1] = colordata[1];
@@ -2434,174 +2355,128 @@ namespace PKMDS_CS
             BaseSprite.UnlockBits(bData);
             return BaseSprite;
         }
-        private static System.Drawing.Image GetWallpaperImage(int wallpaper)
-        {
+        private static System.Drawing.Image GetWallpaperImage(int wallpaper) {
             return GetResourceByName("wc_" + wallpaper.ToString());
         }
         #endregion
         #region Classes
-        public class Item
-        {
-            public Item()
-            {
+        public class Item {
+            public Item() {
                 this.itemid = 0;
             }
-            public Item(UInt16 itemid)
-            {
+            public Item(UInt16 itemid) {
                 this.itemid = itemid;
             }
             private UInt16 itemid;
-            public UInt16 ItemID
-            {
-                get
-                {
+            public UInt16 ItemID {
+                get {
                     return itemid;
                 }
-                set
-                {
+                set {
                     itemid = value;
                 }
             }
-            public string ItemName
-            {
-                get
-                {
+            public string ItemName {
+                get {
                     string name = PKMDS.GetItemName(this.itemid);
-                    if (name == null)
-                    {
+                    if (name == null) {
                         return "";
                     }
-                    else
-                    {
+                    else {
                         return name;
                     }
                 }
             }
-            public string ItemFlavor
-            {
-                get
-                {
+            public string ItemFlavor {
+                get {
                     string flavor = PKMDS.GetItemFlavor(this.itemid);
-                    if (flavor == null)
-                    {
+                    if (flavor == null) {
                         return "";
                     }
-                    else
-                    {
+                    else {
                         return flavor.Replace("\n", " ");
                     }
                 }
             }
-            public System.Drawing.Image ItemImage
-            {
-                get
-                {
-                    if (itemid == 0)
-                    {
+            public System.Drawing.Image ItemImage {
+                get {
+                    if (itemid == 0) {
                         return null;
                     }
-                    else
-                    {
+                    else {
                         return PKMDS.GetItemImage(this.itemid);
                     }
                 }
             }
         }
-        public class Ability
-        {
+        public class Ability {
             private UInt16 abilityid;
-            public Ability(UInt16 abilityid)
-            {
+            public Ability(UInt16 abilityid) {
                 this.abilityid = abilityid;
             }
-            public Ability()
-            {
+            public Ability() {
                 this.abilityid = 0;
             }
-            public UInt16 AbilityID
-            {
-                get
-                {
+            public UInt16 AbilityID {
+                get {
                     return abilityid;
                 }
-                set
-                {
+                set {
                     abilityid = value;
                 }
             }
-            public string AbilityName
-            {
-                get
-                {
+            public string AbilityName {
+                get {
                     return PKMDS.GetAbilityName(this.AbilityID);
                 }
             }
-            public string AbilityFlavor
-            {
-                get
-                {
+            public string AbilityFlavor {
+                get {
                     return PKMDS.GetAbilityFlavor(this.AbilityID);
                 }
             }
         }
-        public class Species
-        {
+        public class Species {
             private UInt16 speciesid;
-            public Species(UInt16 speciesid)
-            {
+            public Species(UInt16 speciesid) {
                 this.speciesid = speciesid;
             }
-            public Species()
-            {
+            public Species() {
                 this.speciesid = 0;
             }
-            public UInt16 SpeciesID
-            {
-                get
-                {
+            public UInt16 SpeciesID {
+                get {
                     return speciesid;
                 }
-                set
-                {
+                set {
                     speciesid = value;
                 }
             }
-            public string SpeciesName
-            {
-                get
-                {
+            public string SpeciesName {
+                get {
                     return PKMDS.GetPKMName(SpeciesID);
                 }
             }
         }
-        public class Ball
-        {
+        public class Ball {
             private Byte ballid;
-            public Ball(Byte ballid)
-            {
+            public Ball(Byte ballid) {
                 this.ballid = ballid;
             }
-            public Ball()
-            {
+            public Ball() {
                 this.ballid = 0;
             }
-            public Byte BallID
-            {
-                get
-                {
+            public Byte BallID {
+                get {
                     return ballid;
                 }
-                set
-                {
+                set {
                     ballid = value;
                 }
             }
-            public string BallName
-            {
-                get
-                {
-                    switch (BallID)
-                    {
+            public string BallName {
+                get {
+                    switch (BallID) {
                         case 0:
                             return "Poké Ball";
                         case 1:
@@ -2657,72 +2532,53 @@ namespace PKMDS_CS
                     }
                 }
             }
-            public System.Drawing.Image BallImage
-            {
-                get
-                {
+            public System.Drawing.Image BallImage {
+                get {
                     return GetBallImage(ballid);
                 }
             }
         }
-        public class Nature
-        {
+        public class Nature {
             private Byte natureid;
-            public Nature(Byte natureid)
-            {
+            public Nature(Byte natureid) {
                 this.natureid = natureid;
             }
-            public Nature()
-            {
+            public Nature() {
                 this.natureid = 0;
             }
-            public Byte NatureID
-            {
-                get
-                {
+            public Byte NatureID {
+                get {
                     return natureid;
                 }
-                set
-                {
+                set {
                     natureid = value;
                 }
             }
-            public string NatureName
-            {
-                get
-                {
+            public string NatureName {
+                get {
                     return PKMDS.GetNatureName(NatureID);
                 }
             }
         }
-        public class Location
-        {
+        public class Location {
             private UInt16 locationid;
-            public Location(UInt16 locationid)
-            {
+            public Location(UInt16 locationid) {
                 this.locationid = locationid;
             }
-            public Location()
-            {
+            public Location() {
                 this.locationid = 0;
             }
-            public UInt16 LocationID
-            {
-                get
-                {
+            public UInt16 LocationID {
+                get {
                     return locationid;
                 }
-                set
-                {
+                set {
                     locationid = value;
                 }
             }
-            public string LocationName
-            {
-                get
-                {
-                    switch (LocationID)
-                    {
+            public string LocationName {
+                get {
+                    switch (LocationID) {
                         case 2000:
                             return "Day-Care Couple (Gen IV)";
                         case 30001:
@@ -2745,122 +2601,89 @@ namespace PKMDS_CS
                 }
             }
         }
-        public class Move
-        {
+        public class Move {
             private UInt16 moveid;
-            public Move(UInt16 moveid)
-            {
+            public Move(UInt16 moveid) {
                 this.moveid = moveid;
             }
-            public Move()
-            {
+            public Move() {
                 this.moveid = 0;
             }
-            public UInt16 MoveID
-            {
-                get
-                {
+            public UInt16 MoveID {
+                get {
                     return moveid;
                 }
-                set
-                {
+                set {
                     moveid = value;
                 }
             }
-            public string MoveName
-            {
-                get
-                {
+            public string MoveName {
+                get {
                     string ret = PKMDS.GetMoveName(MoveID);
-                    if (ret == null)
-                    {
+                    if (ret == null) {
                         return "";
                     }
-                    else
-                    {
+                    else {
                         return ret;
                     }
                 }
             }
-            public string MoveFlavor
-            {
-                get
-                {
+            public string MoveFlavor {
+                get {
                     string ret = PKMDS.GetMoveFlavor(MoveID);
-                    if (ret == null)
-                    {
+                    if (ret == null) {
                         return "";
                     }
-                    else
-                    {
+                    else {
                         return ret;
                     }
                 }
             }
-            public System.Drawing.Image MoveTypeImage
-            {
-                get
-                {
+            public System.Drawing.Image MoveTypeImage {
+                get {
                     return PKMDS.GetResourceByName(PKMDS.GetMoveTypeName(MoveID).ToLower());
                 }
             }
-            public System.Drawing.Image MoveCategoryImage
-            {
-                get
-                {
+            public System.Drawing.Image MoveCategoryImage {
+                get {
                     return GetMoveCategoryImage(this.MoveID);
                 }
             }
-            public int MovePower
-            {
-                get
-                {
+            public int MovePower {
+                get {
                     return GetMovePower(MoveID);
                 }
             }
-            public decimal MoveAccuracy
-            {
-                get
-                {
+            public decimal MoveAccuracy {
+                get {
                     return GetMoveAccuracy(MoveID);
                 }
             }
-            public int MoveBasePP
-            {
-                get
-                {
+            public int MoveBasePP {
+                get {
                     return GetMoveBasePP(MoveID);
                 }
             }
         }
-        public class Hometown
-        {
+        public class Hometown {
             private Byte hometownid;
-            public Hometown(Byte hometownid)
-            {
+            public Hometown(Byte hometownid) {
                 this.hometownid = hometownid;
             }
-            public Hometown()
-            {
+            public Hometown() {
                 this.hometownid = 0;
             }
-            public Byte HometownID
-            {
-                get
-                {
+            public Byte HometownID {
+                get {
                     return hometownid;
                 }
-                set
-                {
+                set {
                     hometownid = value;
                 }
             }
-            public string HometownName
-            {
-                get
-                {
-                    switch (HometownID)
-                    {
+            public string HometownName {
+                get {
+                    switch (HometownID) {
                         case 0:
                             return "Colosseum Bonus";
                         case 1:
@@ -2899,34 +2722,25 @@ namespace PKMDS_CS
                 }
             }
         }
-        public class Country
-        {
+        public class Country {
             private Byte countryid;
-            public Country(Byte countryid)
-            {
+            public Country(Byte countryid) {
                 this.countryid = countryid;
             }
-            public Country()
-            {
+            public Country() {
                 this.countryid = 0;
             }
-            public Byte CountryID
-            {
-                get
-                {
+            public Byte CountryID {
+                get {
                     return countryid;
                 }
-                set
-                {
+                set {
                     countryid = value;
                 }
             }
-            public string CountryName
-            {
-                get
-                {
-                    switch (CountryID)
-                    {
+            public string CountryName {
+                get {
+                    switch (CountryID) {
                         case 1:
                             return "JA";
                         case 2:
@@ -2949,680 +2763,511 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        public class Pokemon
-        {
+        public class Pokemon {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 136)]
             [Browsable(false)]
             public byte[] Data;
-            internal void Decrypt()
-            {
+            internal void Decrypt() {
                 DecryptPokemon(this);
             }
-            public void GetPTR(IntPtr ptr)
-            {
+            public void GetPTR(IntPtr ptr) {
                 System.Runtime.InteropServices.Marshal.StructureToPtr(this, ptr, false);
             }
-            public Pokemon(IntPtr ptr)
-            {
+            public Pokemon(IntPtr ptr) {
                 Data = ((Pokemon)(System.Runtime.InteropServices.Marshal.PtrToStructure(ptr, typeof(Pokemon)))).Data;
             }
-            public Pokemon()
-            {
+            public Pokemon() {
                 Data = new byte[136];
             }
             [Browsable(true)]
-            public System.Drawing.Image TypePic1
-            {
-                get
-                {
+            public System.Drawing.Image TypePic1 {
+                get {
                     return this.GetTypePic(1);
                 }
             }
             [Browsable(true)]
-            public System.Drawing.Image TypePic2
-            {
-                get
-                {
-                    if (this.GetType(1) == this.GetType(2))
-                    {
+            public System.Drawing.Image TypePic2 {
+                get {
+                    if (this.GetType(1) == this.GetType(2)) {
                         return null;
                     }
-                    else
-                    {
+                    else {
                         return this.GetTypePic(2);
                     }
                 }
             }
             [Browsable(true)]
-            public string SpeciesName
-            {
-                get
-                {
+            public string SpeciesName {
+                get {
                     return PKMDS.GetPKMName_FromObj(this);
                 }
             }
             [Browsable(true)]
-            public System.Drawing.Image Sprite
-            {
-                get
-                {
-                    if (this.SpeciesID == 0)
-                    {
+            public System.Drawing.Image Sprite {
+                get {
+                    if (this.SpeciesID == 0) {
                         return null;
                     }
-                    if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda))
-                    {
+                    if (this.SpeciesID != (UInt16)(PKMDS.PKMSpecies.Spinda)) {
                         return PKMDS.GetSprite(this.SpeciesID, this.IsShiny, this.FormID, PKMDS.HasFemaleSprite(this) == 1);
                     }
-                    else
-                    {
+                    else {
                         return GetSpindaSprite(this.PID, this.IsShiny);
                     }
                 }
             }
             [Browsable(true)]
-            public int[] GetStats
-            {
-                get
-                {
+            public int[] GetStats {
+                get {
                     int[] ret = new int[6];
-                    for (int stat = 0; stat < ret.Length; stat++)
-                    {
+                    for (int stat = 0; stat < ret.Length; stat++) {
                         ret[stat] = GetPKMStat_FromObj(this, stat + 1);
                     }
                     return ret;
                 }
             }
             [Browsable(true)]
-            public int Level
-            {
-                get
-                {
+            public int Level {
+                get {
                     return GetPKMLevel(this);
                 }
-                set
-                {
+                set {
                     SetPKMLevel(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt16 SpeciesID
-            {
-                get
-                {
+            public UInt16 SpeciesID {
+                get {
                     return GetPKMSpeciesID(this);
                 }
-                set
-                {
-                    if ((value >= 0) & (value <= 649))
-                    {
+                set {
+                    if ((value >= 0) & (value <= 649)) {
                         SetPKMSpeciesID(this, value);
                     }
                 }
             }
-            public void WriteToFile(string FileName, bool encrypt = false)
-            {
+            public void WriteToFile(string FileName, bool encrypt = false) {
                 WritePokemonFile(this, FileName, encrypt);
             }
             [Browsable(true)]
-            public UInt32 PID
-            {
-                get
-                {
+            public UInt32 PID {
+                get {
                     return GetPKMPID(this);
                 }
-                set
-                {
+                set {
                     SetPKMPID(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt16 ItemID
-            {
-                get
-                {
+            public UInt16 ItemID {
+                get {
                     return GetPKMItemIndex(this);
                 }
-                set
-                {
+                set {
                     SetPKMItemIndex(this, value);
                 }
             }
             [Browsable(true)]
-            public string ItemName
-            {
-                get
-                {
+            public string ItemName {
+                get {
                     return GetItemName(ItemID);
                 }
             }
             [Browsable(true)]
-            public string ItemFlavor
-            {
-                get
-                {
+            public string ItemFlavor {
+                get {
                     string flavor = GetItemFlavor(ItemID);
-                    if (String.IsNullOrEmpty(flavor))
-                    {
+                    if (String.IsNullOrEmpty(flavor)) {
                         return flavor;
                     }
-                    else
-                    {
+                    else {
                         return flavor.Replace("\n", " ");
                     }
                 }
             }
             [Browsable(true)]
-            public UInt16 TID
-            {
-                get
-                {
+            public UInt16 TID {
+                get {
                     return GetPKMTID(this);
                 }
-                set
-                {
+                set {
                     SetPKMTID(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt16 SID
-            {
-                get
-                {
+            public UInt16 SID {
+                get {
                     return GetPKMSID(this);
                 }
-                set
-                {
+                set {
                     SetPKMSID(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt32 EXP
-            {
-                get
-                {
+            public UInt32 EXP {
+                get {
                     return GetPKMEXP(this);
                 }
-                set
-                {
+                set {
                     SetPKMEXP(this, value);
                 }
             }
             [Browsable(true)]
-            public int Tameness
-            {
-                get
-                {
+            public int Tameness {
+                get {
                     return GetPKMTameness(this);
                 }
-                set
-                {
+                set {
                     SetPKMTameness(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt16 AbilityID
-            {
-                get
-                {
+            public UInt16 AbilityID {
+                get {
                     return GetPKMAbilityIndex(this);
                 }
-                set
-                {
+                set {
                     SetPKMAbilityIndex(this, value);
                 }
             }
-            public string AbilityFlavor
-            {
-                get
-                {
+            public string AbilityFlavor {
+                get {
                     return GetAbilityFlavor(this.AbilityID);
                 }
             }
-            private bool GetMarking(Markings marking)
-            {
+            private bool GetMarking(Markings marking) {
                 return GetPKMMarking(this, (int)(marking));
             }
-            private void SetMarking(Markings marking, bool marked)
-            {
+            private void SetMarking(Markings marking, bool marked) {
                 SetPKMMarking(this, (int)(marking), marked);
             }
             [Browsable(true)]
-            public Byte LanguageID
-            {
-                get
-                {
+            public Byte LanguageID {
+                get {
                     return GetPKMLanguage(this);
                 }
-                set
-                {
+                set {
                     SetPKMLanguage(this, value);
                 }
             }
-            public int GetEV(int evindex)
-            {
+            public int GetEV(int evindex) {
                 return GetPKMEV(this, evindex);
             }
-            public void SetEV(int evindex, int ev)
-            {
+            public void SetEV(int evindex, int ev) {
                 SetPKMEV(this, evindex, ev);
             }
-            public int GetIV(int ivindex)
-            {
+            public int GetIV(int ivindex) {
                 return GetPKMIV(this, ivindex);
             }
-            public void SetIV(int ivindex, int iv)
-            {
+            public void SetIV(int ivindex, int iv) {
                 SetPKMIV(this, ivindex, iv);
             }
-            public int GetContest(int contestindex)
-            {
+            public int GetContest(int contestindex) {
                 return GetPKMContest(this, contestindex);
             }
-            public void SetContest(int contestindex, int contest)
-            {
+            public void SetContest(int contestindex, int contest) {
                 SetPKMContest(this, contestindex, contest);
             }
             [Browsable(true)]
-            public UInt16[] GetMoveIDs
-            {
-                get
-                {
+            public UInt16[] GetMoveIDs {
+                get {
                     UInt16[] moveids = { 0, 0, 0, 0 };
-                    for (int movenum = 0; movenum < 4; movenum++)
-                    {
+                    for (int movenum = 0; movenum < 4; movenum++) {
                         moveids[movenum] = GetPKMMoveID(this, movenum);
                     }
                     return moveids;
                 }
             }
-            public void SetMoveID(int moveid, UInt16 movenum)
-            {
+            public void SetMoveID(int moveid, UInt16 movenum) {
                 SetPKMMoveID(this, moveid, movenum);
             }
-            public int GetMovePP(int move)
-            {
+            public int GetMovePP(int move) {
                 return GetPKMMovePP(this, move);
             }
-            public void SetMovePP(int move, int pp)
-            {
+            public void SetMovePP(int move, int pp) {
                 SetPKMMovePP(this, move, pp);
             }
-            public int GetMovePPUp(int move)
-            {
+            public int GetMovePPUp(int move) {
                 return GetPKMMovePPUp(this, move);
             }
-            public void SetMovePPUp(int move, int ppup)
-            {
+            public void SetMovePPUp(int move, int ppup) {
                 SetPKMMovePPUp(this, move, ppup);
             }
             [Browsable(true)]
-            public bool MetAsEgg
-            {
-                get
-                {
+            public bool MetAsEgg {
+                get {
                     return GetPKMMetAsEgg(this);
                 }
-                set
-                {
-                    if (value)
-                    {
+                set {
+                    if (value) {
                         EggDate = DateTime.Today;
                         EggLocationID = 1;
                     }
-                    else
-                    {
+                    else {
                         SetNoEggDate();
                         EggLocationID = 0;
                     }
                 }
             }
             [Browsable(true)]
-            public bool IsEgg
-            {
-                get
-                {
+            public bool IsEgg {
+                get {
                     return GetPKMIsEgg(this) == 1;
                 }
-                set
-                {
+                set {
                     SetPKMIsEgg(this, value);
                 }
             }
             [Browsable(true)]
-            public bool IsNicknamed
-            {
-                get
-                {
+            public bool IsNicknamed {
+                get {
                     return GetPKMIsNicknamed(this) == 1;
                 }
-                set
-                {
+                set {
                     SetPKMIsNicknamed(this, value);
                 }
             }
             [Browsable(true)]
-            public bool IsFateful
-            {
-                get
-                {
+            public bool IsFateful {
+                get {
                     return GetPKMFateful(this) == 1;
                 }
-                set
-                {
+                set {
                     SetPKMFateful(this, value);
                 }
             }
             [Browsable(true)]
-            public int GenderID
-            {
-                get
-                {
+            public int GenderID {
+                get {
                     return GetPKMGender(this);
                 }
-                set
-                {
+                set {
                     SetPKMGender(this, value);
                 }
             }
             [Browsable(true)]
-            public Byte FormID
-            {
-                get
-                {
+            public Byte FormID {
+                get {
                     return GetPKMForm(this);
                 }
-                set
-                {
+                set {
                     SetPKMForm(this, value);
                 }
             }
             [Browsable(true)]
-            public Byte NatureID
-            {
-                get
-                {
+            public Byte NatureID {
+                get {
                     return GetPKMNature(this);
                 }
-                set
-                {
+                set {
                     SetPKMNature(this, value);
                 }
             }
             [Browsable(true)]
-            public bool HasDWAbility
-            {
-                get
-                {
+            public bool HasDWAbility {
+                get {
                     return GetPKMDWAbility(this);
                 }
-                set
-                {
+                set {
                     SetPKMDWAbility(this, value);
                 }
             }
             [Browsable(true)]
-            public bool IsNsPokemon
-            {
-                get
-                {
+            public bool IsNsPokemon {
+                get {
                     return GetPKMNsPokemon(this) == 1;
                 }
-                set
-                {
+                set {
                     SetPKMNsPokemon(this, value);
                 }
             }
             [Browsable(true)]
-            public string Nickname
-            {
-                get
-                {
+            public string Nickname {
+                get {
                     return GetPKMNickname(this);
                 }
-                set
-                {
-                    if (value == null)
-                    {
+                set {
+                    if (value == null) {
                         value = "";
                     }
                     SetPKMNickname(this, value, value.Length);
                 }
             }
             [Browsable(true)]
-            public Byte HometownID
-            {
-                get
-                {
+            public Byte HometownID {
+                get {
                     return GetPKMHometown(this);
                 }
-                set
-                {
+                set {
                     SetPKMHometown(this, value);
                 }
             }
             [Browsable(true)]
-            public string OTName
-            {
-                get
-                {
+            public string OTName {
+                get {
                     return GetPKMOTName(this);
                 }
-                set
-                {
-                    if (value == null)
-                    {
+                set {
+                    if (value == null) {
                         value = "";
                     }
                     SetPKMOTName(this, value, value.Length);
                 }
             }
-            public void SetNoEggDate()
-            {
+            public void SetNoEggDate() {
                 this.Data[0x78] = 0;
                 this.Data[0x79] = 0;
                 this.Data[0x7A] = 0;
             }
             [Browsable(true)]
-            public DateTime EggDate
-            {
-                get
-                {
-                    try
-                    {
+            public DateTime EggDate {
+                get {
+                    try {
                         return new DateTime(GetPKMEggYear(this), GetPKMEggMonth(this), GetPKMEggDay(this));
                     }
-                    catch (Exception)
-                    {
+                    catch (Exception) {
                         return new DateTime();
                     }
                 }
-                set
-                {
+                set {
                     SetPKMEggYear(this, value.Year);
                     SetPKMEggMonth(this, value.Month);
                     SetPKMEggDay(this, value.Day);
                 }
             }
             [Browsable(true)]
-            public DateTime MetDate
-            {
-                get
-                {
-                    try
-                    {
+            public DateTime MetDate {
+                get {
+                    try {
                         return new DateTime(GetPKMMetYear(this), GetPKMMetMonth(this), GetPKMMetDay(this));
                     }
-                    catch (Exception)
-                    {
+                    catch (Exception) {
                         return new DateTime();
                     }
                 }
-                set
-                {
+                set {
                     SetPKMMetYear(this, value.Year);
                     SetPKMMetMonth(this, value.Month);
                     SetPKMMetDay(this, value.Day);
                 }
             }
             [Browsable(true)]
-            public UInt16 EggLocationID
-            {
-                get
-                {
+            public UInt16 EggLocationID {
+                get {
                     return GetPKMEggLocation(this);
                 }
-                set
-                {
+                set {
                     SetPKMEggLocation(this, value);
                 }
             }
             [Browsable(true)]
-            public UInt16 MetLocationID
-            {
-                get
-                {
+            public UInt16 MetLocationID {
+                get {
                     return GetPKMMetLocation(this);
                 }
-                set
-                {
+                set {
                     SetPKMMetLocation(this, value);
                 }
             }
             [Browsable(true)]
-            public int PokerusStrain
-            {
-                get
-                {
+            public int PokerusStrain {
+                get {
                     return GetPKMPokerusStrain(this);
                 }
-                set
-                {
+                set {
                     SetPKMPokerusStrain(this, value);
                 }
             }
             [Browsable(true)]
-            public int PokerusDays
-            {
-                get
-                {
+            public int PokerusDays {
+                get {
                     return GetPKMPokerusDays(this);
                 }
-                set
-                {
+                set {
                     SetPKMPokerusDays(this, value);
                 }
             }
             [Browsable(true)]
-            public Byte BallID
-            {
-                get
-                {
+            public Byte BallID {
+                get {
                     return GetPKMBall(this);
                 }
-                set
-                {
+                set {
                     SetPKMBall(this, value);
                 }
             }
             [Browsable(true)]
-            public int MetLevel
-            {
-                get
-                {
+            public int MetLevel {
+                get {
                     return Convert.ToInt32(GetPKMMetLevel(this));
                 }
-                set
-                {
+                set {
                     SetPKMMetLevel(this, Convert.ToByte(value));
                 }
             }
             [Browsable(true)]
-            public int OTGenderID
-            {
-                get
-                {
+            public int OTGenderID {
+                get {
                     return GetPKMOTGender(this);
                 }
-                set
-                {
+                set {
                     SetPKMOTGender(this, value);
                 }
             }
             [Browsable(true)]
-            public int EncounterID
-            {
-                get
-                {
+            public int EncounterID {
+                get {
                     return GetPKMEncounter(this);
                 }
-                set
-                {
+                set {
                     SetPKMEncounter(this, value);
                 }
             }
             [Browsable(true)]
-            public bool IsModified
-            {
-                get
-                {
+            public bool IsModified {
+                get {
                     return IsPKMModified(this);
                 }
             }
-            public void FixChecksum()
-            {
+            public void FixChecksum() {
                 FixPokemonChecksum(this);
             }
             [Browsable(true)]
-            public System.Drawing.Image Icon
-            {
-                get
-                {
-                    if (this.SpeciesID == 0)
-                    {
+            public System.Drawing.Image Icon {
+                get {
+                    if (this.SpeciesID == 0) {
                         return null;
                     }
                     return PKMDS.GetIcon(this.SpeciesID, this.FormID, PKMDS.HasFemaleIcon(this) == 1);
                 }
             }
             [Browsable(true)]
-            public bool IsShiny
-            {
-                get
-                {
+            public bool IsShiny {
+                get {
                     return IsPKMShiny(this);
                 }
             }
-            public int GetType(int Slot)
-            {
+            public int GetType(int Slot) {
                 return GetPKMType(this, Slot);
             }
-            public System.Drawing.Image GetTypePic(int Slot)
-            {
-                if ((Slot == 1) | (Slot == 2))
-                {
+            public System.Drawing.Image GetTypePic(int Slot) {
+                if ((Slot == 1) | (Slot == 2)) {
                     int type = this.GetType(Slot);
                     return PKMDS.GetTypeImage(type);
                 }
-                else
-                {
+                else {
                     return null;
                 }
             }
             [Browsable(true)]
-            public UInt32 TNL
-            {
-                get
-                {
+            public UInt32 TNL {
+                get {
                     return PKMDS.GetPKMTNL(this);
                 }
             }
-            public double TNLPercent
-            {
-                get
-                {
-                    if (TNL == 0)
-                    {
+            public double TNLPercent {
+                get {
+                    if (TNL == 0) {
                         return 0.0;
                     }
                     double min = EXP - EXPAtCurLevel;
@@ -3631,142 +3276,106 @@ namespace PKMDS_CS
                     return percent;
                 }
             }
-            public UInt32 EXPAtNextLevel
-            {
-                get
-                {
-                    if (TNL == 0)
-                    {
+            public UInt32 EXPAtNextLevel {
+                get {
+                    if (TNL == 0) {
                         return EXP;
                     }
                     return EXPAtGivenLevel(Level + 1);
                 }
             }
             [Browsable(true)]
-            public UInt32 EXPAtCurLevel
-            {
-                get
-                {
+            public UInt32 EXPAtCurLevel {
+                get {
                     return PKMDS.GetPKMEXPCurLevel(this);
                 }
             }
-            public UInt32 EXPAtGivenLevel(int Level)
-            {
+            public UInt32 EXPAtGivenLevel(int Level) {
                 return GetPKMEXPGivenLevel(this, Level);
             }
             [Browsable(true)]
-            public System.Drawing.Color Color
-            {
-                get
-                {
+            public System.Drawing.Color Color {
+                get {
                     return System.Drawing.ColorTranslator.FromHtml("#" + GetPKMColorValue(this).ToString("X6"));
                 }
             }
             [Browsable(true)]
-            public System.Drawing.Image ShinyIcon
-            {
-                get
-                {
+            public System.Drawing.Image ShinyIcon {
+                get {
                     return GetShinyStar(this.IsShiny);
                 }
             }
             [Browsable(true)]
-            public System.Drawing.Image GenderIcon
-            {
-                get
-                {
+            public System.Drawing.Image GenderIcon {
+                get {
                     return PKMDS.GetGenderIcon(this.GenderID);
                 }
             }
             [Browsable(true)]
-            public System.Drawing.Image ItemPic
-            {
-                get
-                {
-                    if (this.ItemID == 0)
-                    {
+            public System.Drawing.Image ItemPic {
+                get {
+                    if (this.ItemID == 0) {
                         return null;
                     }
                     return PKMDS.GetItemImage(this.ItemID);
                 }
             }
-            private System.Drawing.Image GetMarkingImage(Markings marking)
-            {
+            private System.Drawing.Image GetMarkingImage(Markings marking) {
                 return PKMDS.GetMarkingImage(marking, this.GetMarking(marking));
             }
             [Browsable(true)]
-            public System.Drawing.Image BallPic
-            {
-                get
-                {
+            public System.Drawing.Image BallPic {
+                get {
                     return PKMDS.GetBallImage(this.BallID);
                 }
             }
-            public System.Drawing.Image MoveCategoryPic(UInt16 move)
-            {
+            public System.Drawing.Image MoveCategoryPic(UInt16 move) {
                 return PKMDS.GetMoveCategoryImage(move);
             }
             [Browsable(true)]
-            public System.Drawing.Image PokerusIcon
-            {
-                get
-                {
-                    if (this.PokerusStrain > 0)
-                    {
-                        if (this.PokerusDays > 0)
-                        {
+            public System.Drawing.Image PokerusIcon {
+                get {
+                    if (this.PokerusStrain > 0) {
+                        if (this.PokerusDays > 0) {
                             return GetResourceByName("pokerus_infected");
                         }
-                        else
-                        {
+                        else {
                             return GetResourceByName("pokerus_cured");
                         }
                     }
-                    else
-                    {
+                    else {
                         return null;
                     }
                 }
             }
             [Browsable(true)]
-            public string Characteristic
-            {
-                get
-                {
+            public string Characteristic {
+                get {
                     return GetCharacteristic(this);
                 }
             }
             [Browsable(true)]
-            public int NatureIncrease
-            {
-                get
-                {
+            public int NatureIncrease {
+                get {
                     return GetNatureIncrease(this);
                 }
             }
             [Browsable(true)]
-            public int NatureDecrease
-            {
-                get
-                {
+            public int NatureDecrease {
+                get {
                     return GetNatureDecrease(this);
                 }
             }
-            public string NatureName
-            {
-                get
-                {
+            public string NatureName {
+                get {
                     return GetNatureName(NatureID);
                 }
             }
             [Browsable(true)]
-            public int TotalEVs
-            {
-                get
-                {
+            public int TotalEVs {
+                get {
                     int total = 0;
-                    for (int i = 0; i < 6; i++)
-                    {
+                    for (int i = 0; i < 6; i++) {
                         total += this.GetEV(i);
                     }
                     return total;
@@ -3784,659 +3393,480 @@ namespace PKMDS_CS
             public bool Star { get { return GetMarking(Markings.Star); } set { SetMarking(Markings.Star, value); } }
             [Browsable(true)]
             public bool Square { get { return GetMarking(Markings.Square); } set { SetMarking(Markings.Square, value); } }
-            public bool OTIsMale
-            {
-                get
-                {
+            public bool OTIsMale {
+                get {
                     return this.OTGenderID == 0;
                 }
-                set
-                {
-                    if (value)
-                    {
+                set {
+                    if (value) {
                         this.OTGenderID = 0;
                     }
-                    else
-                    {
+                    else {
                         this.OTGenderID = 1;
                     }
                 }
             }
-            public bool OTIsFemale
-            {
-                get
-                {
+            public bool OTIsFemale {
+                get {
                     return this.OTGenderID == 1;
                 }
-                set
-                {
-                    if (value)
-                    {
+                set {
+                    if (value) {
                         this.OTGenderID = 1;
                     }
-                    else
-                    {
+                    else {
                         this.OTGenderID = 0;
                     }
                 }
             }
-            public NatureEffect AttackEffect
-            {
-                get
-                {
-                    if (this.NatureIncrease == this.NatureDecrease)
-                    {
+            public NatureEffect AttackEffect {
+                get {
+                    if (this.NatureIncrease == this.NatureDecrease) {
                         return NatureEffect.NoEffect;
                     }
-                    if (this.NatureIncrease == (int)(NatureStats.Attack))
-                    {
+                    if (this.NatureIncrease == (int)(NatureStats.Attack)) {
                         return NatureEffect.Increase;
                     }
-                    else if (this.NatureDecrease == (int)(NatureStats.Attack))
-                    {
+                    else if (this.NatureDecrease == (int)(NatureStats.Attack)) {
                         return NatureEffect.Decrease;
                     }
-                    else
-                    {
+                    else {
                         return NatureEffect.NoEffect;
                     }
                 }
             }
-            public NatureEffect DefenseEffect
-            {
-                get
-                {
-                    if (this.NatureIncrease == this.NatureDecrease)
-                    {
+            public NatureEffect DefenseEffect {
+                get {
+                    if (this.NatureIncrease == this.NatureDecrease) {
                         return NatureEffect.NoEffect;
                     }
-                    if (this.NatureIncrease == (int)(NatureStats.Defense))
-                    {
+                    if (this.NatureIncrease == (int)(NatureStats.Defense)) {
                         return NatureEffect.Increase;
                     }
-                    else if (this.NatureDecrease == (int)(NatureStats.Defense))
-                    {
+                    else if (this.NatureDecrease == (int)(NatureStats.Defense)) {
                         return NatureEffect.Decrease;
                     }
-                    else
-                    {
+                    else {
                         return NatureEffect.NoEffect;
                     }
                 }
             }
-            public NatureEffect SpecialAttackEffect
-            {
-                get
-                {
-                    if (this.NatureIncrease == this.NatureDecrease)
-                    {
+            public NatureEffect SpecialAttackEffect {
+                get {
+                    if (this.NatureIncrease == this.NatureDecrease) {
                         return NatureEffect.NoEffect;
                     }
-                    if (this.NatureIncrease == (int)(NatureStats.SpecialAttack))
-                    {
+                    if (this.NatureIncrease == (int)(NatureStats.SpecialAttack)) {
                         return NatureEffect.Increase;
                     }
-                    else if (this.NatureDecrease == (int)(NatureStats.SpecialAttack))
-                    {
+                    else if (this.NatureDecrease == (int)(NatureStats.SpecialAttack)) {
                         return NatureEffect.Decrease;
                     }
-                    else
-                    {
+                    else {
                         return NatureEffect.NoEffect;
                     }
                 }
             }
-            public NatureEffect SpecialDefenseEffect
-            {
-                get
-                {
-                    if (this.NatureIncrease == this.NatureDecrease)
-                    {
+            public NatureEffect SpecialDefenseEffect {
+                get {
+                    if (this.NatureIncrease == this.NatureDecrease) {
                         return NatureEffect.NoEffect;
                     }
-                    if (this.NatureIncrease == (int)(NatureStats.SpecialDefense))
-                    {
+                    if (this.NatureIncrease == (int)(NatureStats.SpecialDefense)) {
                         return NatureEffect.Increase;
                     }
-                    else if (this.NatureDecrease == (int)(NatureStats.SpecialDefense))
-                    {
+                    else if (this.NatureDecrease == (int)(NatureStats.SpecialDefense)) {
                         return NatureEffect.Decrease;
                     }
-                    else
-                    {
+                    else {
                         return NatureEffect.NoEffect;
                     }
                 }
             }
-            public NatureEffect SpeedEffect
-            {
-                get
-                {
-                    if (this.NatureIncrease == this.NatureDecrease)
-                    {
+            public NatureEffect SpeedEffect {
+                get {
+                    if (this.NatureIncrease == this.NatureDecrease) {
                         return NatureEffect.NoEffect;
                     }
-                    if (this.NatureIncrease == (int)(NatureStats.Speed))
-                    {
+                    if (this.NatureIncrease == (int)(NatureStats.Speed)) {
                         return NatureEffect.Increase;
                     }
-                    else if (this.NatureDecrease == (int)(NatureStats.Speed))
-                    {
+                    else if (this.NatureDecrease == (int)(NatureStats.Speed)) {
                         return NatureEffect.Decrease;
                     }
-                    else
-                    {
+                    else {
                         return NatureEffect.NoEffect;
                     }
                 }
             }
-            public UInt16 Move1ID
-            {
-                get
-                {
+            public UInt16 Move1ID {
+                get {
                     return GetMoveIDs[0];
                 }
-                set
-                {
+                set {
                     SetMoveID(0, value);
                 }
             }
-            public UInt16 Move2ID
-            {
-                get
-                {
+            public UInt16 Move2ID {
+                get {
                     return GetMoveIDs[1];
                 }
-                set
-                {
+                set {
                     SetMoveID(1, value);
                 }
             }
-            public UInt16 Move3ID
-            {
-                get
-                {
+            public UInt16 Move3ID {
+                get {
                     return GetMoveIDs[2];
                 }
-                set
-                {
+                set {
                     SetMoveID(2, value);
                 }
             }
-            public UInt16 Move4ID
-            {
-                get
-                {
+            public UInt16 Move4ID {
+                get {
                     return GetMoveIDs[3];
                 }
-                set
-                {
+                set {
                     SetMoveID(3, value);
                 }
             }
-            public int Move1PP
-            {
-                get
-                {
+            public int Move1PP {
+                get {
                     return GetMovePP(0);
                 }
-                set
-                {
+                set {
                     SetMovePP(0, value);
                 }
             }
-            public int Move1PPUps
-            {
-                get
-                {
+            public int Move1PPUps {
+                get {
                     return GetMovePPUp(0);
                 }
-                set
-                {
+                set {
                     SetMovePPUp(0, value);
                 }
             }
-            public int Move2PP
-            {
-                get
-                {
+            public int Move2PP {
+                get {
                     return GetMovePP(1);
                 }
-                set
-                {
+                set {
                     SetMovePP(1, value);
                 }
             }
-            public int Move2PPUps
-            {
-                get
-                {
+            public int Move2PPUps {
+                get {
                     return GetMovePPUp(1);
                 }
-                set
-                {
+                set {
                     SetMovePPUp(1, value);
                 }
             }
-            public int Move3PP
-            {
-                get
-                {
+            public int Move3PP {
+                get {
                     return GetMovePP(2);
                 }
-                set
-                {
+                set {
                     SetMovePP(2, value);
                 }
             }
-            public int Move3PPUps
-            {
-                get
-                {
+            public int Move3PPUps {
+                get {
                     return GetMovePPUp(2);
                 }
-                set
-                {
+                set {
                     SetMovePPUp(2, value);
                 }
             }
-            public int Move4PP
-            {
-                get
-                {
+            public int Move4PP {
+                get {
                     return GetMovePP(3);
                 }
-                set
-                {
+                set {
                     SetMovePP(3, value);
                 }
             }
-            public int Move4PPUps
-            {
-                get
-                {
+            public int Move4PPUps {
+                get {
                     return GetMovePPUp(3);
                 }
-                set
-                {
+                set {
                     SetMovePPUp(3, value);
                 }
             }
-            public double Move1MaxPP
-            {
-                get
-                {
+            public double Move1MaxPP {
+                get {
                     double basepp = GetMoveBasePP(Move1ID);
                     return (basepp + (GetMovePPUp(0) * (basepp / 5)));
                 }
             }
-            public double Move2MaxPP
-            {
-                get
-                {
+            public double Move2MaxPP {
+                get {
                     double basepp = GetMoveBasePP(Move2ID);
                     return (basepp + (GetMovePPUp(1) * (basepp / 5)));
                 }
             }
-            public double Move3MaxPP
-            {
-                get
-                {
+            public double Move3MaxPP {
+                get {
                     double basepp = GetMoveBasePP(Move3ID);
                     return (basepp + (GetMovePPUp(2) * (basepp / 5)));
                 }
             }
-            public double Move4MaxPP
-            {
-                get
-                {
+            public double Move4MaxPP {
+                get {
                     double basepp = GetMoveBasePP(Move4ID);
                     return (basepp + (GetMovePPUp(3) * (basepp / 5)));
                 }
             }
-            public int HPIV
-            {
-                get
-                {
+            public int HPIV {
+                get {
                     return GetIV(0);
                 }
-                set
-                {
+                set {
                     SetIV(0, value);
                 }
             }
-            public int AttackIV
-            {
-                get
-                {
+            public int AttackIV {
+                get {
                     return GetIV(1);
                 }
-                set
-                {
+                set {
                     SetIV(1, value);
                 }
             }
-            public int DefenseIV
-            {
-                get
-                {
+            public int DefenseIV {
+                get {
                     return GetIV(2);
                 }
-                set
-                {
+                set {
                     SetIV(2, value);
                 }
             }
-            public int SpecialAttackIV
-            {
-                get
-                {
+            public int SpecialAttackIV {
+                get {
                     return GetIV(3);
                 }
-                set
-                {
+                set {
                     SetIV(3, value);
                 }
             }
-            public int SpecialDefenseIV
-            {
-                get
-                {
+            public int SpecialDefenseIV {
+                get {
                     return GetIV(4);
                 }
-                set
-                {
+                set {
                     SetIV(4, value);
                 }
             }
-            public int SpeedIV
-            {
-                get
-                {
+            public int SpeedIV {
+                get {
                     return GetIV(5);
                 }
-                set
-                {
+                set {
                     SetIV(5, value);
                 }
             }
-            public int HPEV
-            {
-                get
-                {
+            public int HPEV {
+                get {
                     return GetEV(0);
                 }
-                set
-                {
+                set {
                     SetEV(0, value);
                 }
             }
-            public int AttackEV
-            {
-                get
-                {
+            public int AttackEV {
+                get {
                     return GetEV(1);
                 }
-                set
-                {
+                set {
                     SetEV(1, value);
                 }
             }
-            public int DefenseEV
-            {
-                get
-                {
+            public int DefenseEV {
+                get {
                     return GetEV(2);
                 }
-                set
-                {
+                set {
                     SetEV(2, value);
                 }
             }
-            public int SpecialAttackEV
-            {
-                get
-                {
+            public int SpecialAttackEV {
+                get {
                     return GetEV(3);
                 }
-                set
-                {
+                set {
                     SetEV(3, value);
                 }
             }
-            public int SpecialDefenseEV
-            {
-                get
-                {
+            public int SpecialDefenseEV {
+                get {
                     return GetEV(4);
                 }
-                set
-                {
+                set {
                     SetEV(4, value);
                 }
             }
-            public int SpeedEV
-            {
-                get
-                {
+            public int SpeedEV {
+                get {
                     return GetEV(5);
                 }
-                set
-                {
+                set {
                     SetEV(5, value);
                 }
             }
-            public int CalculatedHP
-            {
-                get
-                {
+            public int CalculatedHP {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 1);
                 }
             }
-            public int CalculatedAttack
-            {
-                get
-                {
+            public int CalculatedAttack {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 2);
                 }
             }
-            public int CalculatedDefense
-            {
-                get
-                {
+            public int CalculatedDefense {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 3);
                 }
             }
-            public int CalculatedSpecialAttack
-            {
-                get
-                {
+            public int CalculatedSpecialAttack {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 4);
                 }
             }
-            public int CalculatedSpecialDefense
-            {
-                get
-                {
+            public int CalculatedSpecialDefense {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 5);
                 }
             }
-            public int CalculatedSpeed
-            {
-                get
-                {
+            public int CalculatedSpeed {
+                get {
                     return PKMDS.GetPKMStat_FromObj(this, 6);
                 }
             }
-            public int MaxEXP
-            {
-                get
-                {
+            public int MaxEXP {
+                get {
                     return (int)(GetPKMEXPGivenLevel(this, 100));
                 }
             }
-            public int Move1Power
-            {
-                get
-                {
+            public int Move1Power {
+                get {
                     return PKMDS.GetMovePower(Move1ID);
                 }
             }
-            public int Move1Accuracy
-            {
-                get
-                {
+            public int Move1Accuracy {
+                get {
                     return PKMDS.GetMoveAccuracy(Move1ID);
                 }
             }
-            public int Move2Power
-            {
-                get
-                {
+            public int Move2Power {
+                get {
                     return PKMDS.GetMovePower(Move2ID);
                 }
             }
-            public int Move2Accuracy
-            {
-                get
-                {
+            public int Move2Accuracy {
+                get {
                     return PKMDS.GetMoveAccuracy(Move2ID);
                 }
             }
-            public int Move3Power
-            {
-                get
-                {
+            public int Move3Power {
+                get {
                     return PKMDS.GetMovePower(Move3ID);
                 }
             }
-            public int Move3Accuracy
-            {
-                get
-                {
+            public int Move3Accuracy {
+                get {
                     return PKMDS.GetMoveAccuracy(Move3ID);
                 }
             }
-            public int Move4Power
-            {
-                get
-                {
+            public int Move4Power {
+                get {
                     return PKMDS.GetMovePower(Move4ID);
                 }
             }
-            public int Move4Accuracy
-            {
-                get
-                {
+            public int Move4Accuracy {
+                get {
                     return PKMDS.GetMoveAccuracy(Move4ID);
                 }
             }
-            public System.Drawing.Image Move1TypePic
-            {
-                get
-                {
+            public System.Drawing.Image Move1TypePic {
+                get {
                     UInt16 moveid = Move1ID;
-                    if (moveid == 0)
-                    {
+                    if (moveid == 0) {
                         return null;
                     }
                     return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
                 }
             }
-            public System.Drawing.Image Move1CategoryPic
-            {
-                get
-                {
+            public System.Drawing.Image Move1CategoryPic {
+                get {
                     return GetMoveCategoryImage(Move1ID);
                 }
             }
-            public System.Drawing.Image Move2TypePic
-            {
-                get
-                {
+            public System.Drawing.Image Move2TypePic {
+                get {
                     UInt16 moveid = Move2ID;
-                    if (moveid == 0)
-                    {
+                    if (moveid == 0) {
                         return null;
                     }
                     return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
                 }
             }
-            public System.Drawing.Image Move2CategoryPic
-            {
-                get
-                {
+            public System.Drawing.Image Move2CategoryPic {
+                get {
                     return GetMoveCategoryImage(Move2ID);
                 }
             }
-            public System.Drawing.Image Move3TypePic
-            {
-                get
-                {
+            public System.Drawing.Image Move3TypePic {
+                get {
                     UInt16 moveid = Move3ID;
-                    if (moveid == 0)
-                    {
+                    if (moveid == 0) {
                         return null;
                     }
                     return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
                 }
             }
-            public System.Drawing.Image Move3CategoryPic
-            {
-                get
-                {
+            public System.Drawing.Image Move3CategoryPic {
+                get {
                     return GetMoveCategoryImage(Move3ID);
                 }
             }
-            public System.Drawing.Image Move4TypePic
-            {
-                get
-                {
+            public System.Drawing.Image Move4TypePic {
+                get {
                     UInt16 moveid = Move4ID;
-                    if (moveid == 0)
-                    {
+                    if (moveid == 0) {
                         return null;
                     }
                     return GetResourceByName(PKMDS.GetMoveTypeName(moveid).ToLower());
                 }
             }
-            public System.Drawing.Image Move4CategoryPic
-            {
-                get
-                {
+            public System.Drawing.Image Move4CategoryPic {
+                get {
                     return GetMoveCategoryImage(Move4ID);
                 }
             }
-            public string Move1Flavor
-            {
-                get
-                {
+            public string Move1Flavor {
+                get {
                     return GetMoveFlavor(Move1ID);
                 }
             }
-            public string Move2Flavor
-            {
-                get
-                {
+            public string Move2Flavor {
+                get {
                     return GetMoveFlavor(Move2ID);
                 }
             }
-            public string Move3Flavor
-            {
-                get
-                {
+            public string Move3Flavor {
+                get {
                     return GetMoveFlavor(Move3ID);
                 }
             }
-            public string Move4Flavor
-            {
-                get
-                {
+            public string Move4Flavor {
+                get {
                     return GetMoveFlavor(Move4ID);
                 }
             }
-            public Pokemon Clone()
-            {
+            public Pokemon Clone() {
                 byte[] ClonedData = new byte[this.Data.Length];
                 Data.CopyTo(ClonedData, 0);
                 return new Pokemon { Data = ClonedData };
@@ -4444,44 +3874,34 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        public class PartyPokemon
-        {
-            public PartyPokemon()
-            {
+        public class PartyPokemon {
+            public PartyPokemon() {
                 this.PokemonData = new PKMDS.Pokemon();
                 this.PartyData = new byte[84];
             }
-            internal void Decrypt()
-            {
+            internal void Decrypt() {
                 DecryptPartyPokemon(this);
             }
             private Pokemon mPokemonData;
-            public Pokemon PokemonData
-            {
-                get
-                {
+            public Pokemon PokemonData {
+                get {
                     return mPokemonData;
                 }
-                set
-                {
+                set {
                     mPokemonData = value;
                 }
             }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             private byte[] PartyData;
-            public void WriteToFile(string FileName, bool encrypt = false)
-            {
+            public void WriteToFile(string FileName, bool encrypt = false) {
                 WritePokemonFile(this.PokemonData, FileName, encrypt);
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        internal class Box_Private
-        {
-            public Pokemon Pokemon(int slot)
-            {
-                switch (slot)
-                {
+        internal class Box_Private {
+            public Pokemon Pokemon(int slot) {
+                switch (slot) {
                     case 0:
                         return Pokemon01;
                     case 1:
@@ -4608,19 +4028,15 @@ namespace PKMDS_CS
             private Pokemon Pokemon30 = new Pokemon();
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
             private byte[] Data;
-            public Box_Private()
-            {
+            public Box_Private() {
 
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        internal class PCStorage_Private
-        {
-            public Box_Private Box(int box)
-            {
-                switch (box)
-                {
+        internal class PCStorage_Private {
+            public Box_Private Box(int box) {
+                switch (box) {
                     case 0:
                         return Box01;
                     case 1:
@@ -4721,19 +4137,15 @@ namespace PKMDS_CS
             private Box_Private Box23 = new Box_Private();
             [NonSerialized()]
             private Box_Private Box24 = new Box_Private();
-            public PCStorage_Private()
-            {
+            public PCStorage_Private() {
 
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        internal class Party_Private
-        {
-            public PartyPokemon Pokemon(int slot)
-            {
-                switch (slot)
-                {
+        internal class Party_Private {
+            public PartyPokemon Pokemon(int slot) {
+                switch (slot) {
                     case 0:
                         return PPKM01;
                     case 1:
@@ -4766,97 +4178,75 @@ namespace PKMDS_CS
             private PartyPokemon PPKM06 = new PartyPokemon();
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
             private byte[] Data;
-            public Party_Private()
-            {
+            public Party_Private() {
 
             }
         }
-        public class Box : System.Collections.ObjectModel.ObservableCollection<Pokemon>
-        {
-            public Box()
-            {
+        public class Box : System.Collections.ObjectModel.ObservableCollection<Pokemon> {
+            public Box() {
 
             }
             [Browsable(true)]
             [System.Runtime.Serialization.DataMember(Name = "Grid")]
-            public System.Drawing.Image Grid
-            {
-                get
-                {
+            public System.Drawing.Image Grid {
+                get {
                     return GetBoxGrid(this);
                 }
             }
         }
-        public class Party : System.Collections.ObjectModel.ObservableCollection<PartyPokemon>
-        {
-            public Party()
-            {
+        public class Party : System.Collections.ObjectModel.ObservableCollection<PartyPokemon> {
+            public Party() {
 
             }
-            public void RecalculateParty()
-            {
-                if (this.Count > 0)
-                {
-                    foreach (PartyPokemon ppkm in this)
-                    {
-                        try
-                        {
+            public void RecalculateParty() {
+                if (this.Count > 0) {
+                    foreach (PartyPokemon ppkm in this) {
+                        try {
                             PKMDS.PartyPokemon appkm = new PartyPokemon();
                             appkm.PokemonData.Data = ppkm.PokemonData.Data;
                             PKMDS.RecalcPartyPKM(appkm);
                             ppkm.PokemonData.Data = appkm.PokemonData.Data;
                         }
-                        catch (Exception ex)
-                        {
+                        catch (Exception ex) {
                             System.Diagnostics.Debug.WriteLine(ex.Message);
                         }
                     }
                 }
             }
         }
-        public class PCStorage : System.Collections.ObjectModel.ObservableCollection<Box>
-        {
-            public PCStorage()
-            {
-                for (int i = 0; i < 24; i++)
-                {
+        public class PCStorage : System.Collections.ObjectModel.ObservableCollection<Box> {
+            public PCStorage() {
+                for (int i = 0; i < 24; i++) {
                     this.Add(new Box());
                 }
             }
-            public void Reset()
-            {
+            public void Reset() {
                 this.Clear();
-                for (int i = 0; i < 24; i++)
-                {
+                for (int i = 0; i < 24; i++) {
                     this.Add(new Box());
                 }
             }
         }
-        public class Save
-        {
+        public class Save {
             internal SaveData InternalSave;
             public Party Party;
             public PCStorage PCStorage;
             public BoxNames BoxNames;
             public BoxWallpapers BoxWallpapers;
-            public Save(string filename)
-            {
+            public Save(string filename) {
                 this.InternalSave = ReadSaveFile(filename);
                 InitializeParty();
                 InitializePCStorage();
             }
-            private void InitializePCStorage()
-            {
+            private void InitializePCStorage() {
                 PCStorage = new PCStorage();
                 BoxNames = new BoxNames();
                 BoxWallpapers = new BoxWallpapers();
                 PCStorage.Reset();
-                for (int box = 0; box < 24; box++)
-                {
+                for (int box = 0; box < 24; box++) {
                     BoxNames.Add(this.InternalSave.BoxNames.Boxes(box));
                     BoxWallpapers.Add(this.InternalSave.BoxWallpapers.Wallpapers(box));
-                    for (int slot = 0; slot < 30; slot++)
-                    {
+                    for (int slot = 0; slot < 30; slot++) {
                         Pokemon pkmn = new Pokemon();
                         pkmn = this.InternalSave.PCStorage.Box(box).Pokemon(slot);
                         PCStorage[box].Add(pkmn);
@@ -4864,265 +4254,192 @@ namespace PKMDS_CS
                     }
                 }
             }
-            private void InitializeParty()
-            {
+            private void InitializeParty() {
                 Party = new Party();
-                for (int slot = 0; slot < 6; slot++)
-                {
+                for (int slot = 0; slot < 6; slot++) {
                     Party.Add(this.InternalSave.Party.Pokemon(slot));
                     Party[slot].Decrypt();
                 }
             }
-            public void RecalculateParty()
-            {
-                foreach (PartyPokemon ppkm in this.Party)
-                {
-                    if (ppkm.PokemonData.SpeciesID != 0)
-                    {
+            public void RecalculateParty() {
+                foreach (PartyPokemon ppkm in this.Party) {
+                    if (ppkm.PokemonData.SpeciesID != 0) {
                         PKMDS.RecalcPartyPKM(ppkm);
                     }
                 }
             }
-            public void WriteToFile(string filename)
-            {
+            public void WriteToFile(string filename) {
                 this.InternalSave.WriteToFile(filename);
             }
-            public String TrainerName
-            {
-                get
-                {
+            public String TrainerName {
+                get {
                     return this.InternalSave.TrainerName;
                 }
-                set
-                {
+                set {
                     this.InternalSave.TrainerName = value;
                 }
             }
-            public UInt16 TID
-            {
-                get
-                {
+            public UInt16 TID {
+                get {
                     return this.InternalSave.TID;
                 }
-                set
-                {
+                set {
                     this.InternalSave.TID = value;
                 }
             }
-            public UInt16 SID
-            {
-                get
-                {
+            public UInt16 SID {
+                get {
                     return this.InternalSave.SID;
                 }
-                set
-                {
+                set {
                     this.InternalSave.SID = value;
                 }
             }
-            private System.Drawing.Image BoxWallpaper1
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper1 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(0);
                 }
             }
-            private System.Drawing.Image BoxWallpaper2
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper2 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(1);
                 }
             }
-            private System.Drawing.Image BoxWallpaper3
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper3 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(2);
                 }
             }
-            private System.Drawing.Image BoxWallpaper4
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper4 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(3);
                 }
             }
-            private System.Drawing.Image BoxWallpaper5
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper5 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(4);
                 }
             }
-            private System.Drawing.Image BoxWallpaper6
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper6 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(5);
                 }
             }
-            private System.Drawing.Image BoxWallpaper7
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper7 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(6);
                 }
             }
-            private System.Drawing.Image BoxWallpaper8
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper8 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(7);
                 }
             }
-            private System.Drawing.Image BoxWallpaper9
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper9 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(8);
                 }
             }
-            private System.Drawing.Image BoxWallpaper10
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper10 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(9);
                 }
             }
-            private System.Drawing.Image BoxWallpaper11
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper11 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(10);
                 }
             }
-            private System.Drawing.Image BoxWallpaper12
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper12 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(11);
                 }
             }
-            private System.Drawing.Image BoxWallpaper13
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper13 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(12);
                 }
             }
-            private System.Drawing.Image BoxWallpaper14
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper14 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(13);
                 }
             }
-            private System.Drawing.Image BoxWallpaper15
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper15 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(14);
                 }
             }
-            private System.Drawing.Image BoxWallpaper16
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper16 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(15);
                 }
             }
-            private System.Drawing.Image BoxWallpaper17
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper17 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(16);
                 }
             }
-            private System.Drawing.Image BoxWallpaper18
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper18 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(17);
                 }
             }
-            private System.Drawing.Image BoxWallpaper19
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper19 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(18);
                 }
             }
-            private System.Drawing.Image BoxWallpaper20
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper20 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(19);
                 }
             }
-            private System.Drawing.Image BoxWallpaper21
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper21 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(20);
                 }
             }
-            private System.Drawing.Image BoxWallpaper22
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper22 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(21);
                 }
             }
-            private System.Drawing.Image BoxWallpaper23
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper23 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(22);
                 }
             }
-            private System.Drawing.Image BoxWallpaper24
-            {
-                get
-                {
+            private System.Drawing.Image BoxWallpaper24 {
+                get {
                     return this.InternalSave.GetBoxWallpaper(23);
                 }
             }
-            public byte CurrentBox
-            {
-                get
-                {
+            public byte CurrentBox {
+                get {
                     return this.InternalSave.CurrentBox;
                 }
-                set
-                {
+                set {
                     this.InternalSave.CurrentBox = value;
                 }
             }
-            public int PartySize
-            {
-                get
-                {
+            public int PartySize {
+                get {
                     return this.InternalSave.PartySize;
                 }
-                set
-                {
+                set {
                     this.InternalSave.PartySize = value;
                 }
             }
-            public int BoxCount(int box)
-            {
+            public int BoxCount(int box) {
                 return this.InternalSave.BoxCount(box);
             }
-            public bool DepositPokemon(Pokemon pokemon, int box)
-            {
+            public bool DepositPokemon(Pokemon pokemon, int box) {
                 bool ret = false;
-                if (BoxCount(box) != 30)
-                {
+                if (BoxCount(box) != 30) {
                     int boxint = 0;
                     int slotint = 0;
-                    unsafe
-                    {
+                    unsafe {
                         int* boxptr = &boxint;
                         int* slotptr = &slotint;
                         PKMDS.GetPCStorageAvailableSlot(this, boxptr, slotptr, box);
@@ -5133,17 +4450,13 @@ namespace PKMDS_CS
                 }
                 return ret;
             }
-            public bool WithdrawPokemon(Pokemon pokemon)
-            {
+            public bool WithdrawPokemon(Pokemon pokemon) {
                 bool ret = false;
-                if (this.PartySize != 6)
-                {
+                if (this.PartySize != 6) {
                     PartyPokemon ppkm;
-                    for (int slot = 0; slot < 6; slot++)
-                    {
+                    for (int slot = 0; slot < 6; slot++) {
                         ppkm = this.Party[slot];
-                        if (ppkm.PokemonData.SpeciesID == 0)
-                        {
+                        if (ppkm.PokemonData.SpeciesID == 0) {
                             ppkm.PokemonData.Data = pokemon.Data;
                             RecalcPartyPKM(ppkm);
                             FixParty(this);
@@ -5153,18 +4466,15 @@ namespace PKMDS_CS
                 }
                 return ret;
             }
-            public void RemovePartyPokemon(int slot)
-            {
-                if (this.PartySize > 1)
-                {
+            public void RemovePartyPokemon(int slot) {
+                if (this.PartySize > 1) {
                     PartyPokemon ppkm = new PartyPokemon();
                     ppkm.PokemonData.SpeciesID = 0;
                     this.Party[slot] = ppkm;
                     FixParty(this);
                 }
             }
-            public void RemoveStoredPokemon(int box, int slot)
-            {
+            public void RemoveStoredPokemon(int box, int slot) {
                 Pokemon pkm = new Pokemon();
                 pkm.SpeciesID = 0;
                 this.PCStorage[box][slot] = pkm;
@@ -5172,32 +4482,25 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        public class BoxName
-        {
+        public class BoxName {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
 
             private string mName;
             [Browsable(true)]
-            public string Name
-            {
-                get
-                {
+            public string Name {
+                get {
                     return mName;
                 }
-                set
-                {
+                set {
                     mName = value;
                 }
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        internal class BoxWallpapers_Private
-        {
-            public BoxWallpaper Wallpapers(int slot)
-            {
-                switch (slot)
-                {
+        internal class BoxWallpapers_Private {
+            public BoxWallpaper Wallpapers(int slot) {
+                switch (slot) {
                     case 0:
                         return BoxName01;
                     case 1:
@@ -5277,12 +4580,9 @@ namespace PKMDS_CS
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        internal class BoxNames_Private
-        {
-            public BoxName Boxes(int slot)
-            {
-                switch (slot)
-                {
+        internal class BoxNames_Private {
+            public BoxName Boxes(int slot) {
+                switch (slot) {
                     case 0:
                         return BoxName01;
                     case 1:
@@ -5360,42 +4660,33 @@ namespace PKMDS_CS
             public BoxName BoxName23;
             public BoxName BoxName24;
         }
-        public class BoxNames : System.Collections.ObjectModel.ObservableCollection<BoxName>
-        {
+        public class BoxNames : System.Collections.ObjectModel.ObservableCollection<BoxName> {
 
         }
-        public class BoxWallpapers : System.Collections.ObjectModel.ObservableCollection<BoxWallpaper>
-        {
+        public class BoxWallpapers : System.Collections.ObjectModel.ObservableCollection<BoxWallpaper> {
 
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
         [Serializable]
-        public class BoxWallpaper
-        {
+        public class BoxWallpaper {
             private byte mWallpaper;
-            public byte WallpaperIndex
-            {
-                get
-                {
+            public byte WallpaperIndex {
+                get {
                     return mWallpaper;
                 }
-                set
-                {
+                set {
                     mWallpaper = value;
                 }
             }
-            public System.Drawing.Image Wallpaper
-            {
-                get
-                {
+            public System.Drawing.Image Wallpaper {
+                get {
                     return GetWallpaperImage(WallpaperIndex);
                 }
             }
         }
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
         [Serializable]
-        internal class SaveData
-        {
+        internal class SaveData {
             public byte CurrentBox;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x3)]
             private byte[] FirstBuff;
@@ -5409,128 +4700,97 @@ namespace PKMDS_CS
             public Party_Private Party;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x66CC4)]
             private byte[] ThirdBuff;
-            public string TrainerName
-            {
-                get
-                {
+            public string TrainerName {
+                get {
                     return GetTrainerName_FromSav(this);
                 }
-                set
-                {
+                set {
                     SetTrainerName_FromSav(this, value);
                 }
             }
-            public UInt16 TID
-            {
-                get
-                {
+            public UInt16 TID {
+                get {
                     return GetTrainerTID_FromSav(this);
                 }
-                set
-                {
+                set {
                     SetTrainerTID_FromSav(this, value);
                 }
             }
-            public UInt16 SID
-            {
-                get
-                {
+            public UInt16 SID {
+                get {
                     return GetTrainerSID_FromSav(this);
                 }
-                set
-                {
+                set {
                     SetTrainerSID_FromSav(this, value);
                 }
             }
-            public string GetBoxName(int Box)
-            {
+            public string GetBoxName(int Box) {
                 return PKMDS.GetBoxName(this, Box);
             }
-            public void SetBoxName(int Box, string Name)
-            {
+            public void SetBoxName(int Box, string Name) {
                 PKMDS.SetBoxName(this, Box, Name, Name.Length);
             }
-            public int GetBoxWallpaperIndex(int Box)
-            {
+            public int GetBoxWallpaperIndex(int Box) {
                 return PKMDS.GetBoxWallpaper(this, Box);
             }
-            public void SetBoxWallpaperIndex(int Box, int Wallpaper)
-            {
+            public void SetBoxWallpaperIndex(int Box, int Wallpaper) {
                 PKMDS.SetBoxWallpaper(this, Box, Wallpaper);
             }
-            public System.Drawing.Image GetBoxWallpaper(int box)
-            {
+            public System.Drawing.Image GetBoxWallpaper(int box) {
                 return GetWallpaperImage(GetBoxWallpaperIndex(box));
             }
-            public void WriteToFile(string FileName)
-            {
+            public void WriteToFile(string FileName) {
                 WriteSaveFile(this, FileName);
             }
-            private Pokemon GetStoredPokemon(int Box, int Slot)
-            {
+            private Pokemon GetStoredPokemon(int Box, int Slot) {
                 Pokemon pkm = new Pokemon();
                 GetPKMData(ref pkm, this, Box, Slot);
                 return pkm;
             }
-            private void SetStoredPokemon(Pokemon pokemon, int Box, int Slot)
-            {
+            private void SetStoredPokemon(Pokemon pokemon, int Box, int Slot) {
                 SetPKMData(pokemon, this, Box, Slot);
             }
-            private PartyPokemon GetPartyPokemon(int Slot)
-            {
+            private PartyPokemon GetPartyPokemon(int Slot) {
                 PartyPokemon pkm = new PartyPokemon();
                 GetPartyPKMData(ref pkm, this, Slot);
                 return pkm;
             }
-            private void SetPartyPokemon(PartyPokemon pokemon, int Slot)
-            {
+            private void SetPartyPokemon(PartyPokemon pokemon, int Slot) {
                 SetPartyPKMData(pokemon, this, Slot);
             }
-            public int PartySize
-            {
-                get
-                {
+            public int PartySize {
+                get {
                     return GetPartySize(this);
                 }
-                set
-                {
+                set {
                     SetPartySize(this, value);
                 }
             }
-            public int BoxCount(int box)
-            {
+            public int BoxCount(int box) {
                 return PKMDS.GetBoxCount(this, box);
             }
-            public bool DepositPokemon(Pokemon pokemon, int box)
-            {
+            public bool DepositPokemon(Pokemon pokemon, int box) {
                 return PKMDS.DepositPKM(this, pokemon, box, true);
             }
-            public bool WithdrawPokemon(Pokemon pokemon)
-            {
+            public bool WithdrawPokemon(Pokemon pokemon) {
                 return PKMDS.WithdrawPKM(this, pokemon);
             }
-            public void RemovePartyPokemon(int slot)
-            {
+            public void RemovePartyPokemon(int slot) {
                 PKMDS.DeletePartyPKM(this, slot);
             }
-            public void RecalculateParty()
-            {
-                for (int slot = 0; slot < this.PartySize; slot++)
-                {
+            public void RecalculateParty() {
+                for (int slot = 0; slot < this.PartySize; slot++) {
                     PartyPokemon ppkm = this.GetPartyPokemon(slot);
-                    if (ppkm.PokemonData.SpeciesID != 0)
-                    {
+                    if (ppkm.PokemonData.SpeciesID != 0) {
                         PKMDS.RecalcPartyPKM(ppkm);
                         this.SetPartyPokemon(ppkm, slot);
                     }
                 }
             }
-            public void RemoveStoredPokemon(int box, int slot)
-            {
+            public void RemoveStoredPokemon(int box, int slot) {
                 PKMDS.DeleteStoredPKM(this, box, slot);
             }
-            public bool Validate(out string message)
-            {
+            public bool Validate(out string message) {
                 return ValidateSave(this, out message);
             }
         }
@@ -5659,8 +4919,7 @@ namespace PKMDS_CS
         private static extern void SwapPartyParty([In][Out] SaveData sav, int partyslota, int partyslotb);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         private static extern UInt32 GetPKMTNL(Pokemon pkm);
-        public static void SwapBoxParty(Save sav, int box, int boxslot, int partyslot)
-        {
+        public static void SwapBoxParty(Save sav, int box, int boxslot, int partyslot) {
             Pokemon pkma = new Pokemon(); pkma.Data = sav.PCStorage[box][boxslot].Data;
             PartyPokemon ppkm = new PartyPokemon(); ppkm.PokemonData.Data = sav.Party[partyslot].PokemonData.Data;
             Pokemon pkmb = new Pokemon(); pkmb.Data = ppkm.PokemonData.Data;
@@ -5671,12 +4930,10 @@ namespace PKMDS_CS
             RecalcPartyPKM(sav.Party[partyslot]);
             FixParty(sav);
         }
-        public static void SwapPartyBox(Save sav, int partyslot, int box, int boxslot)
-        {
+        public static void SwapPartyBox(Save sav, int partyslot, int box, int boxslot) {
             SwapBoxParty(sav, box, boxslot, partyslot);
         }
-        public static void SwapBoxBox(Save sav, int boxa, int boxslota, int boxb, int boxslotb)
-        {
+        public static void SwapBoxBox(Save sav, int boxa, int boxslota, int boxb, int boxslotb) {
             Pokemon pkma = new Pokemon(), pkmb = new Pokemon(), pkmc = new Pokemon();
             pkma.Data = sav.PCStorage[boxa][boxslota].Data;
             pkmb.Data = sav.PCStorage[boxb][boxslotb].Data;
@@ -5686,8 +4943,7 @@ namespace PKMDS_CS
             sav.PCStorage[boxa][boxslota].Data = pkma.Data;
             sav.PCStorage[boxb][boxslotb].Data = pkmb.Data;
         }
-        public static void SwapPartyParty(Save sav, int partyslota, int partyslotb)
-        {
+        public static void SwapPartyParty(Save sav, int partyslota, int partyslotb) {
             PartyPokemon ppkma = new PartyPokemon(), ppkmb = new PartyPokemon(), ppkmc = new PartyPokemon();
             ppkma.PokemonData.Data = sav.Party[partyslota].PokemonData.Data;
             ppkmb.PokemonData.Data = sav.Party[partyslotb].PokemonData.Data;
@@ -5905,38 +5161,93 @@ namespace PKMDS_CS
         private static extern void GetSAVData_INTERNAL([In][Out] SaveData save, string savefile);
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Auto)]
         private static extern unsafe void GetPCStorageAvailableSlot([In][Out] SaveData save, int* box, int* slot, int startbox);
-        public static unsafe void GetPCStorageAvailableSlot([In][Out] Save sav, int* box, int* slot, int startbox = 0)
+        public static unsafe void GetPCStorageAvailableSlot(/*[In][Out]*/ Save sav, int* box, int* slot, int startbox = 0) {
+            //GetPCStorageAvailableSlot(sav.InternalSave, box, slot, startbox);
+
+            int boxfound = -1;
+            int slotfound = -1;
+
+            int boxcount = 0;
+            for (int boxc = startbox; boxcount < 24; boxc++) {
+                if (boxc == 24) {
+                    boxc = 0;
+                }
+                for (int slotc = 0; slotc < 30; slotc++) {
+                    if (sav.PCStorage[boxc][slotc].SpeciesID == 0) {
+                        boxfound = boxc;
+                        slotfound = slotc;
+                        unsafe {
+                            *box = boxfound;
+                            *slot = slotfound;
+                        }
+                        return;
+                    }
+                }
+                boxcount++;
+            }
+
+            /*
+             pokemon_obj * getpcstorageavailableslot(bw2sav_obj * sav, int & box, int & slot, int startbox)
+{
+    box = -1;
+    slot = -1;
+    pokemon_obj * pkm = new pokemon_obj();
+    Species::species speciestest = Species::NOTHING;
+    int boxcount = 0;
+    for (int boxc = startbox; boxcount < 24; boxc++)
+    {
+        if (boxc == 24)
         {
-            GetPCStorageAvailableSlot(sav.InternalSave, box, slot, startbox);
+            boxc = 0;
         }
-        private static void FixParty(Save sav)
+        for (int slotc = 0; slotc < 30; slotc++)
         {
+            pkm = &(sav->cur.boxes[boxc].pokemon[slotc]);
+            if (pkm->isboxdatadecrypted == false)
+            {
+                decryptpkm(pkm);
+                speciestest = pkm->species;
+                encryptpkm(pkm);
+            }
+            else
+            {
+                speciestest = pkm->species;
+            }
+            if (speciestest == Species::NOTHING)
+            {
+                box = boxc;
+                slot = slotc;
+                return pkm;
+            }
+        }
+        boxcount++;
+    }
+    return pkm;
+}
+             */
+        }
+        private static void FixParty(Save sav) {
             int size = 0;
             List<int> indices = new List<int>();
-            for (int i = 0; i < 6; i++)
-            {
+            for (int i = 0; i < 6; i++) {
                 PartyPokemon ppkm = sav.Party[i];
-                if (ppkm.PokemonData.SpeciesID == 0)
-                {
+                if (ppkm.PokemonData.SpeciesID == 0) {
                     indices.Add(i);
                     sav.Party.Add(new PartyPokemon());
                     sav.Party[sav.Party.Count - 1].PokemonData.SpeciesID = 0;
                 }
-                else
-                {
+                else {
                     size++;
                 }
             }
-            for (int i = indices.Count - 1; i >= 0; i--)
-            {
+            for (int i = indices.Count - 1; i >= 0; i--) {
                 sav.Party.RemoveAt(indices[i]);
             }
             sav.PartySize = size;
         }
         #endregion
         #region Functions
-        private static unsafe bool ValidateSave(SaveData sav, out string message)
-        {
+        private static unsafe bool ValidateSave(SaveData sav, out string message) {
             IntPtr test = new IntPtr();
             int length = new int();
             int ret = PKMDS.ValidateSave_INTERNAL(sav, &test, &length);
@@ -5944,118 +5255,95 @@ namespace PKMDS_CS
             message = msg.Substring(0, length);
             return ret == 1;
         }
-        private static unsafe string GetPKMOTName(Pokemon pkm)
-        {
-            try
-            {
+        private static unsafe string GetPKMOTName(Pokemon pkm) {
+            try {
                 IntPtr test = new IntPtr();
                 int length = new int();
                 PKMDS.GetPKMOTName_INTERNAL(pkm, &test, &length);
                 string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
                 return ret.Substring(0, length);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 return "";
             }
         }
-        private static unsafe string GetPKMNickname(Pokemon pkm)
-        {
-            try
-            {
+        private static unsafe string GetPKMNickname(Pokemon pkm) {
+            try {
                 IntPtr test = new IntPtr();
                 int length = new int();
                 PKMDS.GetPKMNickName_INTERNAL(pkm, &test, &length);
                 string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
                 return ret.Substring(0, length);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 return "";
             }
         }
-        public static string[] GetPKMFormNames(UInt16 speciesid)
-        {
+        public static string[] GetPKMFormNames(UInt16 speciesid) {
             string formnames = GetPKMFormNames_INTERNAL(speciesid);
-            if (formnames != null)
-            {
+            if (formnames != null) {
                 formnames = formnames.Remove(formnames.Length - 1, 1);
-                if ((formnames != null) && (formnames != ""))
-                {
+                if ((formnames != null) && (formnames != "")) {
                     return formnames.Split(',');
                 }
             }
             string[] formnamesarray = { "" };
             return formnamesarray;
         }
-        private static unsafe string GetPKMName_FromObj(Pokemon pkm)
-        {
+        private static unsafe string GetPKMName_FromObj(Pokemon pkm) {
             IntPtr test = new IntPtr();
             int length = new int();
             PKMDS.GetPKMName_FromObj_INTERNAL(pkm, &test, &length);
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-        private static unsafe string GetTrainerName_FromSav(SaveData sav)
-        {
+        private static unsafe string GetTrainerName_FromSav(SaveData sav) {
             IntPtr test = new IntPtr();
             int length = new int();
             PKMDS.GetTrainerName_FromSav_INTERNAL(sav, &test, &length);
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-        private static void SetTrainerName_FromSav([In][Out] SaveData sav, string name)
-        {
+        private static void SetTrainerName_FromSav([In][Out] SaveData sav, string name) {
             SetTrainerName_FromSav_INTERNAL(sav, name, name.Length);
         }
-        private static unsafe string GetBoxName([In][Out]SaveData sav, int box)
-        {
+        private static unsafe string GetBoxName([In][Out]SaveData sav, int box) {
             IntPtr test = new IntPtr();
             int length = new int();
             PKMDS.GetBoxName_INTERNAL(sav, box, &test, &length);
             string ret = System.Runtime.InteropServices.Marshal.PtrToStringAuto(test);
             return ret.Substring(0, length);
         }
-        public static string GetItemName(int itemid, int generation = GENERATION, int langid = LANG_ID)
-        {
+        public static string GetItemName(int itemid, int generation = GENERATION, int langid = LANG_ID) {
             return GetItemName_INTERNAL(itemid, generation, langid);
         }
-        public static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP)
-        {
+        public static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP) {
             return GetItemFlavor_INTERNAL(itemid, generation, langid, versiongroup);
         }
-        public static string GetAbilityName(int abilityid, int langid = LANG_ID)
-        {
+        public static string GetAbilityName(int abilityid, int langid = LANG_ID) {
             return GetAbilityName_INTERNAL(abilityid, langid);
         }
-        public static string GetAbilityFlavor(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID)
-        {
+        public static string GetAbilityFlavor(int abilityid, int versiongroup = VERSION_GROUP, int langid = LANG_ID) {
             return GetAbilityFlavor_INTERNAL(abilityid, versiongroup, langid);
         }
-        private static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
-        {
+        private static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID) {
             string[] moves = { "", "", "", "" };
-            for (int move = 0; move < 4; move++)
-            {
+            for (int move = 0; move < 4; move++) {
                 moves[move] = GetMoveName(GetPKMMoveID(pkm, move), langid);
             }
             return moves;
         }
-        private static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID)
-        {
+        private static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID) {
             string[] moves = { "", "", "", "" };
-            for (int move = 0; move < 4; move++)
-            {
+            for (int move = 0; move < 4; move++) {
                 moves[move] = GetMoveTypeName(GetPKMMoveID(pkm, move), langid);
             }
             return moves;
         }
-        private static int GetPKMType(Pokemon pokemon, int slot, int generation = GENERATION)
-        {
+        private static int GetPKMType(Pokemon pokemon, int slot, int generation = GENERATION) {
             return GetPKMType_INTERNAL(pokemon, slot, generation);
         }
-        private static void GetPKMData([In][Out] ref Pokemon pokemon, SaveData sav, int box, int slot)
-        {
+        private static void GetPKMData([In][Out] ref Pokemon pokemon, SaveData sav, int box, int slot) {
             Pokemon pkm = new Pokemon();
             int size = Marshal.SizeOf(typeof(Pokemon));
             IntPtr pkmptr = Marshal.AllocHGlobal(size);
@@ -6065,8 +5353,7 @@ namespace PKMDS_CS
             Marshal.FreeHGlobal(pkmptr);
             pkmptr = IntPtr.Zero;
         }
-        private static void GetPartyPKMData([In][Out] ref PartyPokemon pokemon, SaveData sav, int slot)
-        {
+        private static void GetPartyPKMData([In][Out] ref PartyPokemon pokemon, SaveData sav, int slot) {
             PartyPokemon pkm = new PartyPokemon();
             int size = Marshal.SizeOf(typeof(PartyPokemon));
             IntPtr pkmptr = Marshal.AllocHGlobal(size);
@@ -6076,28 +5363,22 @@ namespace PKMDS_CS
             Marshal.FreeHGlobal(pkmptr);
             pkmptr = IntPtr.Zero;
         }
-        private static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] SaveData sav, int box, int slot)
-        {
+        private static void SetPKMData([In][Out] Pokemon pokemon, [In][Out] SaveData sav, int box, int slot) {
             SetPKMData_INTERNAL(pokemon, sav, box, slot);
         }
-        private static void SetPartyPKMData([In][Out] PartyPokemon pokemon, [In][Out] SaveData sav, int slot)
-        {
+        private static void SetPartyPKMData([In][Out] PartyPokemon pokemon, [In][Out] SaveData sav, int slot) {
             SetPartyPKMData_INTERNAL(pokemon, sav, slot);
         }
-        public static System.Drawing.Color GetSpindaColor(SpindaColorsBase spindacolor)
-        {
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsBase spindacolor) {
             return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
         }
-        public static System.Drawing.Color GetSpindaColor(SpindaColorsNormalSpot spindacolor)
-        {
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsNormalSpot spindacolor) {
             return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
         }
-        public static System.Drawing.Color GetSpindaColor(SpindaColorsShinySpot spindacolor)
-        {
+        public static System.Drawing.Color GetSpindaColor(SpindaColorsShinySpot spindacolor) {
             return System.Drawing.ColorTranslator.FromHtml("#" + ((int)(spindacolor)).ToString("X6"));
         }
-        private static SaveData ReadSaveFile(string savefile)
-        {
+        private static SaveData ReadSaveFile(string savefile) {
             SaveData sav = new SaveData();
             SaveData save = new SaveData();
             int size = Marshal.SizeOf(typeof(SaveData));
@@ -6109,8 +5390,7 @@ namespace PKMDS_CS
             savptr = IntPtr.Zero;
             return save;
         }
-        public static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false)
-        {
+        public static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false) {
             Pokemon pkm = new Pokemon();
             Pokemon pokemon = new Pokemon();
             int size = Marshal.SizeOf(typeof(Pokemon));
@@ -6122,23 +5402,17 @@ namespace PKMDS_CS
             savptr = IntPtr.Zero;
             return pokemon;
         }
-        private static unsafe System.Drawing.Bitmap GetBoxGrid(Box box)
-        {
+        private static unsafe System.Drawing.Bitmap GetBoxGrid(Box box) {
             System.Drawing.Bitmap b = new System.Drawing.Bitmap(60, 50);
             System.Drawing.Imaging.BitmapData bData = b.LockBits(new System.Drawing.Rectangle(0, 0, 60, 50), System.Drawing.Imaging.ImageLockMode.ReadWrite, b.PixelFormat);
             byte* scan0 = (byte*)bData.Scan0.ToPointer();
-            for (int sloty = 0; sloty < 5; sloty++)
-            {
-                for (int slotx = 0; slotx < 6; slotx++)
-                {
+            for (int sloty = 0; sloty < 5; sloty++) {
+                for (int slotx = 0; slotx < 6; slotx++) {
                     Pokemon pkm = box[sloty * 6 + slotx];
-                    if (pkm.SpeciesID != 0)
-                    {
+                    if (pkm.SpeciesID != 0) {
                         int color = pkm.Color.ToArgb();
-                        for (int x = 0; x < 10; x++)
-                        {
-                            for (int y = 0; y < 10; y++)
-                            {
+                        for (int x = 0; x < 10; x++) {
+                            for (int y = 0; y < 10; y++) {
                                 int yabs = (sloty * 10) + y;
                                 int xabs = (slotx * 10) + x;
                                 byte* data = scan0 + yabs * bData.Stride + xabs * 4;
