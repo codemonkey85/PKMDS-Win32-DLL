@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PKMDS_CS</RootNamespace>
     <AssemblyName>PKMDS_CS</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -25,6 +25,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x86</PlatformTarget>
     <RegisterForComInterop>false</RegisterForComInterop>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,7 +45,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability.cs" />
+    <Compile Include="Ball.cs" />
+    <Compile Include="Box.cs" />
+    <Compile Include="BoxName.cs" />
+    <Compile Include="BoxNames.cs" />
+    <Compile Include="BoxNames_Private.cs" />
+    <Compile Include="BoxWallpaper.cs" />
+    <Compile Include="BoxWallpapers.cs" />
+    <Compile Include="BoxWallpapers_Private.cs" />
+    <Compile Include="Box_Private.cs" />
+    <Compile Include="Country.cs" />
+    <Compile Include="Hometown.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="Nature.cs" />
+    <Compile Include="Party.cs" />
+    <Compile Include="PartyPokemon.cs" />
+    <Compile Include="Party_Private.cs" />
+    <Compile Include="PCStorage.cs" />
+    <Compile Include="PCStorage_Private.cs" />
     <Compile Include="PKMDS.cs" />
+    <Compile Include="Pokemon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -55,6 +79,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Save.cs" />
+    <Compile Include="SaveData.cs" />
+    <Compile Include="Species.cs" />
+    <Compile Include="SQL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
