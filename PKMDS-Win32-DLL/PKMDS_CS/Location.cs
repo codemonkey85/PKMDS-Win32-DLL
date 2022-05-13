@@ -4,14 +4,9 @@ namespace PKMDS_CS
 {
     public class Location
     {
-        private ushort locationid;
-        public Location(ushort locationid) => this.locationid = locationid;
-        public Location() => locationid = 0;
-        public ushort LocationID
-        {
-            get => locationid;
-            set => locationid = value;
-        }
+        public Location(ushort locationid) => LocationID = locationid;
+        public Location() => LocationID = 0;
+        public ushort LocationID { get; set; }
         public string LocationName
         {
             get

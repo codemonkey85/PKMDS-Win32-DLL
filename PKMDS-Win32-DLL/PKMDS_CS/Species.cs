@@ -4,14 +4,9 @@ namespace PKMDS_CS
 {
     public class Species
     {
-        private ushort speciesid;
-        public Species(ushort speciesid) => this.speciesid = speciesid;
-        public Species() => speciesid = 0;
-        public ushort SpeciesID
-        {
-            get => speciesid;
-            set => speciesid = value;
-        }
+        public Species(ushort speciesid) => SpeciesID = speciesid;
+        public Species() => SpeciesID = 0;
+        public ushort SpeciesID { get; set; }
         public string SpeciesName => GetPKMName(SpeciesID);
     }
 }

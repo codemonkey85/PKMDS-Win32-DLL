@@ -2,14 +2,9 @@
 {
     public class Hometown
     {
-        private byte hometownid;
-        public Hometown(byte hometownid) => this.hometownid = hometownid;
-        public Hometown() => hometownid = 0;
-        public byte HometownID
-        {
-            get => hometownid;
-            set => hometownid = value;
-        }
+        public Hometown(byte hometownid) => HometownID = hometownid;
+        public Hometown() => HometownID = 0;
+        public byte HometownID { get; set; }
         public string HometownName
         {
             get

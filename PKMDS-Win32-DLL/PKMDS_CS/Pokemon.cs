@@ -34,8 +34,8 @@ namespace PKMDS_CS
         {
             get
             {
-                int[] ret = new int[6];
-                for (int stat = 0; stat < ret.Length; stat++)
+                var ret = new int[6];
+                for (var stat = 0; stat < ret.Length; stat++)
                 {
                     ret[stat] = GetPKMStat_FromObj(this, stat + 1);
                 }
@@ -80,7 +80,7 @@ namespace PKMDS_CS
         {
             get
             {
-                string flavor = GetItemFlavor(ItemID);
+                var flavor = GetItemFlavor(ItemID);
                 return string.IsNullOrEmpty(flavor) ? flavor : flavor.Replace("\n", " ");
             }
         }
@@ -135,7 +135,7 @@ namespace PKMDS_CS
             get
             {
                 ushort[] moveids = { 0, 0, 0, 0 };
-                for (int movenum = 0; movenum < 4; movenum++)
+                for (var movenum = 0; movenum < 4; movenum++)
                 {
                     moveids[movenum] = GetPKMMoveID(this, movenum);
                 }
@@ -349,7 +349,7 @@ namespace PKMDS_CS
         [Browsable(true)]
         public bool IsShiny => IsPKMShiny(this);
         public int GetType(int Slot) => GetPKMType(this, Slot);
-        public Image GetTypePic(int Slot) => (Slot == 1) || (Slot == 2) ? GetTypeImage(GetType(Slot)) : null;
+        public Image GetTypePic(int Slot) => Slot == 1 || Slot == 2 ? GetTypeImage(GetType(Slot)) : null;
         [Browsable(true)]
         public uint TNL => GetPKMTNL(this);
         public double TNLPercent
@@ -362,7 +362,7 @@ namespace PKMDS_CS
                 }
                 double min = EXP - EXPAtCurLevel;
                 double max = EXPAtNextLevel - EXPAtCurLevel;
-                double percent = (double)(min / max);
+                var percent = (double)(min / max);
                 return percent;
             }
         }
@@ -396,8 +396,8 @@ namespace PKMDS_CS
         {
             get
             {
-                int total = 0;
-                for (int i = 0; i < 6; i++)
+                var total = 0;
+                for (var i = 0; i < 6; i++)
                 {
                     total += GetEV(i);
                 }
@@ -516,7 +516,7 @@ namespace PKMDS_CS
             get
             {
                 double basepp = GetMoveBasePP(Move1ID);
-                return basepp + (GetMovePPUp(0) * (basepp / 5));
+                return basepp + GetMovePPUp(0) * (basepp / 5);
             }
         }
         public double Move2MaxPP
@@ -524,7 +524,7 @@ namespace PKMDS_CS
             get
             {
                 double basepp = GetMoveBasePP(Move2ID);
-                return basepp + (GetMovePPUp(1) * (basepp / 5));
+                return basepp + GetMovePPUp(1) * (basepp / 5);
             }
         }
         public double Move3MaxPP
@@ -532,7 +532,7 @@ namespace PKMDS_CS
             get
             {
                 double basepp = GetMoveBasePP(Move3ID);
-                return basepp + (GetMovePPUp(2) * (basepp / 5));
+                return basepp + GetMovePPUp(2) * (basepp / 5);
             }
         }
         public double Move4MaxPP
@@ -540,7 +540,7 @@ namespace PKMDS_CS
             get
             {
                 double basepp = GetMoveBasePP(Move4ID);
-                return basepp + (GetMovePPUp(3) * (basepp / 5));
+                return basepp + GetMovePPUp(3) * (basepp / 5);
             }
         }
         public int HPIV
@@ -632,7 +632,7 @@ namespace PKMDS_CS
         public string Move4Flavor => GetMoveFlavor(Move4ID);
         public Pokemon Clone()
         {
-            byte[] ClonedData = new byte[Data.Length];
+            var ClonedData = new byte[Data.Length];
             Data.CopyTo(ClonedData, 0);
             return new Pokemon { Data = ClonedData };
         }

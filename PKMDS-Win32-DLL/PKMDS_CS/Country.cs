@@ -2,14 +2,9 @@
 {
     public class Country
     {
-        private byte countryid;
-        public Country(byte countryid) => this.countryid = countryid;
-        public Country() => countryid = 0;
-        public byte CountryID
-        {
-            get => countryid;
-            set => countryid = value;
-        }
+        public Country(byte countryid) => CountryID = countryid;
+        public Country() => CountryID = 0;
+        public byte CountryID { get; set; }
         public string CountryName
         {
             get

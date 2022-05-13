@@ -4,14 +4,9 @@ namespace PKMDS_CS
 {
     public class Nature
     {
-        private byte natureid;
-        public Nature(byte natureid) => this.natureid = natureid;
-        public Nature() => natureid = 0;
-        public byte NatureID
-        {
-            get => natureid;
-            set => natureid = value;
-        }
+        public Nature(byte natureid) => NatureID = natureid;
+        public Nature() => NatureID = 0;
+        public byte NatureID { get; set; }
         public string NatureName => GetNatureName(NatureID);
     }
 }

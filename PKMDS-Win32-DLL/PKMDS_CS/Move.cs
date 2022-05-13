@@ -5,14 +5,9 @@ namespace PKMDS_CS
 {
     public class Move
     {
-        private ushort moveid;
-        public Move(ushort moveid) => this.moveid = moveid;
-        public Move() => moveid = 0;
-        public ushort MoveID
-        {
-            get => moveid;
-            set => moveid = value;
-        }
+        public Move(ushort moveid) => MoveID = moveid;
+        public Move() => MoveID = 0;
+        public ushort MoveID { get; set; }
         public string MoveName
         {
             get

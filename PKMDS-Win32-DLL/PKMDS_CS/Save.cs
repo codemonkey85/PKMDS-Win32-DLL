@@ -17,13 +17,13 @@ namespace PKMDS_CS
             BoxNames = new BoxNames();
             BoxWallpapers = new BoxWallpapers();
             PCStorage.Reset();
-            for (int box = 0; box < 24; box++)
+            for (var box = 0; box < 24; box++)
             {
                 BoxNames.Add(InternalSave.BoxNames.Boxes(box));
                 BoxWallpapers.Add(InternalSave.BoxWallpapers.Wallpapers(box));
-                for (int slot = 0; slot < 30; slot++)
+                for (var slot = 0; slot < 30; slot++)
                 {
-                    Pokemon pkmn = new Pokemon();
+                    var pkmn = new Pokemon();
                     pkmn = InternalSave.PCStorage.Box(box).Pokemon(slot);
                     PCStorage[box].Add(pkmn);
                     pkmn.Decrypt();
@@ -33,7 +33,7 @@ namespace PKMDS_CS
         private void InitializeParty()
         {
             Party = new Party();
-            for (int slot = 0; slot < 6; slot++)
+            for (var slot = 0; slot < 6; slot++)
             {
                 Party.Add(InternalSave.Party.Pokemon(slot));
                 Party[slot].Decrypt();
@@ -41,7 +41,7 @@ namespace PKMDS_CS
         }
         public void RecalculateParty()
         {
-            foreach (PartyPokemon ppkm in Party)
+            foreach (var ppkm in Party)
             {
                 if (ppkm.PokemonData.SpeciesID != 0)
                 {
@@ -49,10 +49,7 @@ namespace PKMDS_CS
                 }
             }
         }
-        public void WriteToFile(string filename)
-        {
-            InternalSave.WriteToFile(filename);
-        }
+        public void WriteToFile(string filename) => InternalSave.WriteToFile(filename);
         public string TrainerName
         {
             get => InternalSave.TrainerName;
@@ -105,15 +102,15 @@ namespace PKMDS_CS
         public int BoxCount(int box) => InternalSave.BoxCount(box);
         public bool DepositPokemon(Pokemon pokemon, int box)
         {
-            bool ret = false;
+            var ret = false;
             if (BoxCount(box) != 30)
             {
-                int boxint = 0;
-                int slotint = 0;
+                var boxint = 0;
+                var slotint = 0;
                 unsafe
                 {
-                    int* boxptr = &boxint;
-                    int* slotptr = &slotint;
+                    var boxptr = &boxint;
+                    var slotptr = &slotint;
                     GetPCStorageAvailableSlot(this, boxptr, slotptr, box);
                 }
                 PCStorage[boxint][slotint].Data = pokemon.Data;
@@ -124,11 +121,11 @@ namespace PKMDS_CS
         }
         public bool WithdrawPokemon(Pokemon pokemon)
         {
-            bool ret = false;
+            var ret = false;
             if (PartySize != 6)
             {
                 PartyPokemon ppkm;
-                for (int slot = 0; slot < 6; slot++)
+                for (var slot = 0; slot < 6; slot++)
                 {
                     ppkm = Party[slot];
                     if (ppkm.PokemonData.SpeciesID == 0)
@@ -146,7 +143,7 @@ namespace PKMDS_CS
         {
             if (PartySize > 1)
             {
-                PartyPokemon ppkm = new PartyPokemon();
+                var ppkm = new PartyPokemon();
                 ppkm.PokemonData.SpeciesID = 0;
                 Party[slot] = ppkm;
                 FixParty(this);
@@ -154,7 +151,7 @@ namespace PKMDS_CS
         }
         public void RemoveStoredPokemon(int box, int slot)
         {
-            Pokemon pkm = new Pokemon
+            var pkm = new Pokemon
             {
                 SpeciesID = 0
             };

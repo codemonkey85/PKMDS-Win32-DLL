@@ -5,14 +5,9 @@ namespace PKMDS_CS
 {
     public class Ball
     {
-        private byte ballid;
-        public Ball(byte ballid) => this.ballid = ballid;
-        public Ball() => ballid = 0;
-        public byte BallID
-        {
-            get => ballid;
-            set => ballid = value;
-        }
+        public Ball(byte ballid) => BallID = ballid;
+        public Ball() => BallID = 0;
+        public byte BallID { get; set; }
         public string BallName
         {
             get
@@ -74,6 +69,6 @@ namespace PKMDS_CS
                 }
             }
         }
-        public Image BallImage => GetBallImage(ballid);
+        public Image BallImage => GetBallImage(BallID);
     }
 }
