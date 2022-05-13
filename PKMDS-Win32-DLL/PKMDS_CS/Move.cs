@@ -17,7 +17,7 @@ namespace PKMDS_CS
         {
             get
             {
-                string ret = GetMoveName(MoveID);
+                var ret = GetMoveName(MoveID);
                 return ret ?? string.Empty;
             }
         }
@@ -25,7 +25,7 @@ namespace PKMDS_CS
         {
             get
             {
-                string ret = GetMoveFlavor(MoveID);
+                var ret = GetMoveFlavor(MoveID);
                 return ret ?? string.Empty;
             }
         }

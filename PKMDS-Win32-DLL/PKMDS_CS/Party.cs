@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using static PKMDS_CS.PKMDS;
 
 namespace PKMDS_CS
 {
@@ -14,11 +15,11 @@ namespace PKMDS_CS
         {
             if (Count > 0)
             {
-                foreach (PartyPokemon ppkm in this)
+                foreach (var ppkm in this)
                 {
                     try
                     {
-                        PartyPokemon appkm = new PartyPokemon();
+                        var appkm = new PartyPokemon();
                         appkm.PokemonData.Data = ppkm.PokemonData.Data;
                         RecalcPartyPKM(appkm);
                         ppkm.PokemonData.Data = appkm.PokemonData.Data;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static PKMDS_CS.PKMDS;
 
 namespace PKMDS_CS
 {
@@ -44,14 +45,14 @@ namespace PKMDS_CS
         public void WriteToFile(string FileName) => WriteSaveFile(this, FileName);
         private Pokemon GetStoredPokemon(int Box, int Slot)
         {
-            Pokemon pkm = new Pokemon();
+            var pkm = new Pokemon();
             GetPKMData(ref pkm, this, Box, Slot);
             return pkm;
         }
         private void SetStoredPokemon(Pokemon pokemon, int Box, int Slot) => SetPKMData(pokemon, this, Box, Slot);
         private PartyPokemon GetPartyPokemon(int Slot)
         {
-            PartyPokemon pkm = new PartyPokemon();
+            var pkm = new PartyPokemon();
             GetPartyPKMData(ref pkm, this, Slot);
             return pkm;
         }
@@ -67,9 +68,9 @@ namespace PKMDS_CS
         public void RemovePartyPokemon(int slot) => DeletePartyPKM(this, slot);
         public void RecalculateParty()
         {
-            for (int slot = 0; slot < PartySize; slot++)
+            for (var slot = 0; slot < PartySize; slot++)
             {
-                PartyPokemon ppkm = GetPartyPokemon(slot);
+                var ppkm = GetPartyPokemon(slot);
                 if (ppkm.PokemonData.SpeciesID != 0)
                 {
                     RecalcPartyPKM(ppkm);

@@ -6,7 +6,7 @@ namespace PKMDS_CS
     {
         public PCStorage()
         {
-            for (int i = 0; i < 24; i++)
+            for (var i = 0; i < 24; i++)
             {
                 Add(new Box());
             }
@@ -14,7 +14,7 @@ namespace PKMDS_CS
         public void Reset()
         {
             Clear();
-            for (int i = 0; i < 24; i++)
+            for (var i = 0; i < 24; i++)
             {
                 Add(new Box());
             }
