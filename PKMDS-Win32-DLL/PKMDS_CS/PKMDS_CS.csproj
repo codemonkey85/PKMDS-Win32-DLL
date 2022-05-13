@@ -45,7 +45,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability.cs" />
+    <Compile Include="Ball.cs" />
+    <Compile Include="Box.cs" />
+    <Compile Include="BoxName.cs" />
+    <Compile Include="BoxNames.cs" />
+    <Compile Include="BoxNames_Private.cs" />
+    <Compile Include="BoxWallpaper.cs" />
+    <Compile Include="BoxWallpapers.cs" />
+    <Compile Include="BoxWallpapers_Private.cs" />
+    <Compile Include="Box_Private.cs" />
+    <Compile Include="Country.cs" />
+    <Compile Include="Hometown.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="Nature.cs" />
+    <Compile Include="Party.cs" />
+    <Compile Include="PartyPokemon.cs" />
+    <Compile Include="Party_Private.cs" />
+    <Compile Include="PCStorage.cs" />
+    <Compile Include="PCStorage_Private.cs" />
     <Compile Include="PKMDS.cs" />
+    <Compile Include="Pokemon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -57,6 +79,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Save.cs" />
+    <Compile Include="SaveData.cs" />
+    <Compile Include="Species.cs" />
+    <Compile Include="SQL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
