@@ -2119,13 +2119,13 @@ namespace PKMDS_CS
 
         #region DBAccess
 
-        internal static class SQL
+        public static class SQL
         {
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void OpenDB(string dbfilename);
+            public static extern void OpenDB(string dbfilename);
 
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-            internal static extern void CloseDB();
+            public static extern void CloseDB();
 
             [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
             [return: MarshalAs(UnmanagedType.BStr)]
@@ -3052,7 +3052,7 @@ namespace PKMDS_CS
             return ret.Substring(0, length);
         }
 
-        internal static unsafe string GetTrainerName_FromSav(SaveData sav)
+        public static unsafe string GetTrainerName_FromSav(SaveData sav)
         {
             var test = new IntPtr();
             var length = new int();
@@ -3063,7 +3063,7 @@ namespace PKMDS_CS
 
         internal static void SetTrainerName_FromSav([In][Out] SaveData sav, string name) => SetTrainerName_FromSav_INTERNAL(sav, name, name.Length);
 
-        internal static unsafe string GetBoxName([In][Out] SaveData sav, int box)
+        public static unsafe string GetBoxName([In][Out] SaveData sav, int box)
         {
             var test = new IntPtr();
             var length = new int();

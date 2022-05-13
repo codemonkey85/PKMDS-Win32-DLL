@@ -7,19 +7,19 @@ namespace PKMDS_CS
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     [Serializable]
-    internal class SaveData
+    public class SaveData
     {
         public byte CurrentBox;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x3)]
         private readonly byte[] FirstBuff;
-        public BoxNames_Private BoxNames;
-        public BoxWallpapers_Private BoxWallpapers;
+        internal BoxNames_Private BoxNames;
+        internal BoxWallpapers_Private BoxWallpapers;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x24)]
         private readonly byte[] SecondBuff;
-        public PCStorage_Private PCStorage;
+        internal PCStorage_Private PCStorage;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0xA00)]
         private readonly byte[] Inventory;
-        public Party_Private Party;
+        internal Party_Private Party;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x66CC4)]
         private readonly byte[] ThirdBuff;
         public string TrainerName
