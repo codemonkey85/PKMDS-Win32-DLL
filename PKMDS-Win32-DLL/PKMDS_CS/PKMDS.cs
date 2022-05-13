@@ -2295,7 +2295,7 @@ namespace PKMDS_CS
             }
         }
 
-        internal static Image GetBallImage(byte ballid) => GetResourceByName("b_" + ballid.ToString());
+        public static Image GetBallImage(byte ballid) => GetResourceByName("b_" + ballid.ToString());
 
         internal static Image GetTypeImage(int typeid)
         {
@@ -2303,7 +2303,7 @@ namespace PKMDS_CS
             return type == "" || type == null ? null : GetResourceByName(type.ToLower());
         }
 
-        internal static Image GetMarkingImage(Markings marking, bool marked)
+        public static Image GetMarkingImage(Markings marking, bool marked)
         {
             var markedint = 0;
             if (marked)
@@ -2600,7 +2600,7 @@ namespace PKMDS_CS
         [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
         internal static extern uint GetPKMTNL(Pokemon pkm);
 
-        internal static void SwapBoxParty(Save sav, int box, int boxslot, int partyslot)
+        public static void SwapBoxParty(Save sav, int box, int boxslot, int partyslot)
         {
             var pkma = new Pokemon
             {
@@ -2617,9 +2617,9 @@ namespace PKMDS_CS
             FixParty(sav);
         }
 
-        internal static void SwapPartyBox(Save sav, int partyslot, int box, int boxslot) => SwapBoxParty(sav, box, boxslot, partyslot);
+        public static void SwapPartyBox(Save sav, int partyslot, int box, int boxslot) => SwapBoxParty(sav, box, boxslot, partyslot);
 
-        internal static void SwapBoxBox(Save sav, int boxa, int boxslota, int boxb, int boxslotb)
+        public static void SwapBoxBox(Save sav, int boxa, int boxslota, int boxb, int boxslotb)
         {
             Pokemon pkma = new Pokemon
             {
@@ -2637,7 +2637,7 @@ namespace PKMDS_CS
             sav.PCStorage[boxb][boxslotb].Data = pkmb.Data;
         }
 
-        internal static void SwapPartyParty(Save sav, int partyslota, int partyslotb)
+        public static void SwapPartyParty(Save sav, int partyslota, int partyslotb)
         {
             PartyPokemon ppkma = new PartyPokemon(), ppkmb = new PartyPokemon(), ppkmc = new PartyPokemon();
             ppkma.PokemonData.Data = sav.Party[partyslota].PokemonData.Data;
@@ -3028,7 +3028,7 @@ namespace PKMDS_CS
             }
         }
 
-        internal static string[] GetPKMFormNames(ushort speciesid)
+        public static string[] GetPKMFormNames(ushort speciesid)
         {
             var formnames = GetPKMFormNames_INTERNAL(speciesid);
             if (formnames != null)
@@ -3072,7 +3072,7 @@ namespace PKMDS_CS
             return ret.Substring(0, length);
         }
 
-        internal static string GetItemName(int itemid, int generation = GENERATION, int langid = LANG_ID) => GetItemName_INTERNAL(itemid, generation, langid);
+        public static string GetItemName(int itemid, int generation = GENERATION, int langid = LANG_ID) => GetItemName_INTERNAL(itemid, generation, langid);
 
         internal static string GetItemFlavor(int itemid, int generation = GENERATION, int langid = LANG_ID, int versiongroup = VERSION_GROUP) => GetItemFlavor_INTERNAL(itemid, generation, langid, versiongroup);
 
@@ -3146,7 +3146,7 @@ namespace PKMDS_CS
             return save;
         }
 
-        internal static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false)
+        public static Pokemon ReadPokemonFile(string pokemonfile, bool encrypted = false)
         {
             var pkm = new Pokemon();
             var size = Marshal.SizeOf(typeof(Pokemon));
