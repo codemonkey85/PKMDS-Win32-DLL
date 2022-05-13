@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using static PKMDS_CS.PKMDS;
 
 namespace PKMDS_CS
 {

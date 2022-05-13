@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using static PKMDS_CS.PKMDS;
 
 namespace PKMDS_CS
 {
