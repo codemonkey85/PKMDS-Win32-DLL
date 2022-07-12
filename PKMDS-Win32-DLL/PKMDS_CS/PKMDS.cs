@@ -2139,7 +2139,7 @@ public class PKMDS
             var basestr = sprite;
             sprite = $"{sprite}_{Form}";
             ret = GetResourceByName(sprite);
-            if (ret == null)
+            if (ret is null)
             {
                 sprite = basestr;
                 var formname = "";
@@ -2210,7 +2210,7 @@ public class PKMDS
                     icon = $"{icon}_{Form}";
                 }
                 ret = GetResourceByName(icon);
-                if (ret == null && formnameinternal is not "" and not null)
+                if (ret is null && formnameinternal is not "" and not null)
                 {
                     icon = $"{basestr}_{formnameinternal.Split(' ')[0].ToLower()}";
                 }
@@ -2974,7 +2974,7 @@ public class PKMDS
     public static string[] GetPKMFormNames(ushort speciesid)
     {
         var formnames = GetPKMFormNames_INTERNAL(speciesid);
-        if (formnames != null)
+        if (formnames is not null)
         {
             formnames = formnames.Remove(formnames.Length - 1, 1);
             if (formnames is not null and not "")

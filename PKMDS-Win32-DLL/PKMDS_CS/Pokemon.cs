@@ -213,7 +213,7 @@ public class Pokemon
         get => GetPKMNickname(this);
         set
         {
-            if (value == null)
+            if (value is null)
             {
                 value = string.Empty;
             }
@@ -232,7 +232,7 @@ public class Pokemon
         get => GetPKMOTName(this);
         set
         {
-            if (value == null)
+            if (value is null)
             {
                 value = string.Empty;
             }

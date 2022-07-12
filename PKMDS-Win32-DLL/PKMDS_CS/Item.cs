@@ -12,7 +12,7 @@ public class Item
         get
         {
             var flavor = GetItemFlavor(ItemID);
-            return flavor == null ? string.Empty : flavor.Replace("\n", " ");
+            return flavor is null ? string.Empty : flavor.Replace("\n", " ");
         }
     }
     public Image ItemImage => ItemID == 0 ? null : GetItemImage(ItemID);
