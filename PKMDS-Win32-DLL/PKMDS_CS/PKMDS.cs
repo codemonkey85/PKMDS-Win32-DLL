@@ -1,5 +1,6 @@
 namespace PKMDS_CS;
 
+[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
 public class PKMDS
 {
     #region Constants
@@ -2332,7 +2333,7 @@ public class PKMDS
         var BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
         var BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
         Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
-        var bData = BaseSprite.LockBits(new Rectangle(0, 0, 96, 96), System.Drawing.Imaging.ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
+        var bData = BaseSprite.LockBits(new Rectangle(0, 0, 96, 96), ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
         var scan0 = (byte*)bData.Scan0.ToPointer();
         uint color;
         int startx;
@@ -3126,7 +3127,7 @@ public class PKMDS
     internal static unsafe Bitmap GetBoxGrid(Box box)
     {
         var b = new Bitmap(60, 50);
-        var bData = b.LockBits(new Rectangle(0, 0, 60, 50), System.Drawing.Imaging.ImageLockMode.ReadWrite, b.PixelFormat);
+        var bData = b.LockBits(new Rectangle(0, 0, 60, 50), ImageLockMode.ReadWrite, b.PixelFormat);
         var scan0 = (byte*)bData.Scan0.ToPointer();
         for (var sloty = 0; sloty < 5; sloty++)
         {
