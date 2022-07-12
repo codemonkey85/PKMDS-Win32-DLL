@@ -1,9 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using static PKMDS_CS.PKMDS;
-
-namespace PKMDS_CS;
+﻿namespace PKMDS_CS;
 
 [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
 [Serializable]

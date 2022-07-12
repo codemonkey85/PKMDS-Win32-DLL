@@ -1,10 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
-using System.Runtime.Serialization;
-using static PKMDS_CS.PKMDS;
-
-namespace PKMDS_CS;
+﻿namespace PKMDS_CS;
 
 public class Box : ObservableCollection<Pokemon>
 {

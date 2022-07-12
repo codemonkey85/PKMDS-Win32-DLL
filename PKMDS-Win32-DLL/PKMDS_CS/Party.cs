@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using static PKMDS_CS.PKMDS;
-
-namespace PKMDS_CS;
+﻿namespace PKMDS_CS;
 
 public class Party : ObservableCollection<PartyPokemon>
 {
