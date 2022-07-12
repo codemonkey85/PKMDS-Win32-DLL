@@ -3,7 +3,7 @@
 public static class SQL
 {
     private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
-    
+
     [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
     public static extern void OpenDB(string dbfilename);
 

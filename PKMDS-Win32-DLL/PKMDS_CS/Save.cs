@@ -150,11 +150,8 @@ public class Save
         Party[slot] = ppkm;
         FixParty(this);
     }
-    public void RemoveStoredPokemon(int box, int slot)
+    public void RemoveStoredPokemon(int box, int slot) => PCStorage[box][slot] = new Pokemon
     {
-        PCStorage[box][slot] = new Pokemon
-        {
-            SpeciesID = 0
-        };
-    }
+        SpeciesID = 0
+    };
 }
