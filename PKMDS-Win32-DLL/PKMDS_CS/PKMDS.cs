@@ -2114,7 +2114,9 @@ public class PKMDS
 
     #region Resources
 
-    internal static Image GetResourceByName(string name) => name is "" or null ? null : (Image)Properties.Resources.ResourceManager.GetObject(name);
+    internal static Image GetResourceByName(string name) => name is not { Length: > 0 }
+        ? null
+        : (Image)Properties.Resources.ResourceManager.GetObject(name);
 
     internal static Image GetSprite(ushort Species, bool Shiny = false, byte Form = 0, bool Female = false)
     {
@@ -2142,7 +2144,7 @@ public class PKMDS
             if (ret is null)
             {
                 sprite = basestr;
-                var formname = "";
+                var formname = string.Empty;
                 switch ((PKMSpecies)Species)
                 {
                     case PKMSpecies.Unown:
@@ -2167,13 +2169,13 @@ public class PKMDS
                         break;
                     default:
                         var formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                        if (formnameinternal is not "" and not null)
+                        if (formnameinternal is {Length: > 0 })
                         {
                             formname = formnameinternal.Split(' ')[0];
                         }
                         break;
                 }
-                if (formname != "")
+                if (formname is { Length: > 0 })
                 {
                     sprite = $"{sprite}_{formname.ToLower()}";
                 }
@@ -2205,12 +2207,12 @@ public class PKMDS
             {
                 var basestr = icon;
                 var formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                if (formnameinternal is not "" and not null)
+                if (formnameinternal is {Length: > 0 })
                 {
                     icon = $"{icon}_{Form}";
                 }
                 ret = GetResourceByName(icon);
-                if (ret is null && formnameinternal is not "" and not null)
+                if (ret is null && formnameinternal is {Length: > 0 })
                 {
                     icon = $"{basestr}_{formnameinternal.Split(' ')[0].ToLower()}";
                 }
@@ -2240,7 +2242,7 @@ public class PKMDS
                 Items.droppeditem2 => $"{GetItemIdentifier((ushort)Items.Dropped_Item)}_yellow",
                 _ => GetItemIdentifier(itemid),
             };
-            if (identifier is not "" and not null)
+            if (identifier is {Length: > 0 })
             {
                 identifier = identifier.Replace('-', '_');
                 return GetResourceByName(identifier);
@@ -2257,7 +2259,7 @@ public class PKMDS
     internal static Image GetTypeImage(int typeid)
     {
         var type = GetTypeName(typeid);
-        return type is "" or null ? null : GetResourceByName(type.ToLower());
+        return type is not {Length: > 0 } ? null : GetResourceByName(type.ToLower());
     }
 
     public static Image GetMarkingImage(Markings marking, bool marked)
@@ -2951,7 +2953,7 @@ public class PKMDS
         }
         catch
         {
-            return "";
+            return string.Empty;
         }
     }
 
@@ -2967,7 +2969,7 @@ public class PKMDS
         }
         catch
         {
-            return "";
+            return string.Empty;
         }
     }
 
@@ -2977,12 +2979,12 @@ public class PKMDS
         if (formnames is not null)
         {
             formnames = formnames.Remove(formnames.Length - 1, 1);
-            if (formnames is not null and not "")
+            if (formnames is { Length: > 0 })
             {
                 return formnames.Split(',');
             }
         }
-        string[] formnamesarray = { "" };
+        string[] formnamesarray = { string.Empty };
         return formnamesarray;
     }
 
@@ -3025,7 +3027,7 @@ public class PKMDS
 
     internal static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
     {
-        string[] moves = { "", "", "", "" };
+        string[] moves = { string.Empty, string.Empty, string.Empty, string.Empty };
         for (var move = 0; move < 4; move++)
         {
             moves[move] = GetMoveName(GetPKMMoveID(pkm, move), langid);
@@ -3035,7 +3037,7 @@ public class PKMDS
 
     internal static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID)
     {
-        string[] moves = { "", "", "", "" };
+        string[] moves = { string.Empty, string.Empty, string.Empty, string.Empty };
         for (var move = 0; move < 4; move++)
         {
             moves[move] = GetMoveTypeName(GetPKMMoveID(pkm, move), langid);

@@ -375,7 +375,7 @@ public class Pokemon
     private Image GetMarkingImage(Markings marking) => PKMDS.GetMarkingImage(marking, GetMarking(marking));
     [Browsable(true)]
     public Image BallPic => GetBallImage(BallID);
-    public Image MoveCategoryPic(ushort move) => GetMoveCategoryImage(move);
+    public static Image MoveCategoryPic(ushort move) => GetMoveCategoryImage(move);
     [Browsable(true)]
     public Image PokerusIcon => PokerusStrain > 0 ? PokerusDays > 0 ? GetResourceByName("pokerus_infected") : GetResourceByName("pokerus_cured") : null;
     [Browsable(true)]
