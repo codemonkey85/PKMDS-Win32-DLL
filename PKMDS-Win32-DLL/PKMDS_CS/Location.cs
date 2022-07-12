@@ -7,7 +7,7 @@ public class Location
     public ushort LocationID { get; set; }
     public string LocationName => LocationID switch
     {
-        2000 => "Day-Care Couple (Gen IV)",
+        02000 => "Day-Care Couple (Gen IV)",
         30001 => "Poké Transfer",
         30012 => "a special place (1)",
         30013 => "a special place (2)",

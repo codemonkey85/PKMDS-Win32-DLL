@@ -7,14 +7,14 @@ public class Hometown
     public byte HometownID { get; set; }
     public string HometownName => HometownID switch
     {
-        0 => "Colosseum Bonus",
-        1 => "Sapphire",
-        2 => "Ruby",
-        3 => "Emerald",
-        4 => "FireRed",
-        5 => "LeafGreen",
-        7 => "HeartGold",
-        8 => "SoulSilver",
+        00 => "Colosseum Bonus",
+        01 => "Sapphire",
+        02 => "Ruby",
+        03 => "Emerald",
+        04 => "FireRed",
+        05 => "LeafGreen",
+        07 => "HeartGold",
+        08 => "SoulSilver",
         10 => "Diamond",
         11 => "Pearl",
         12 => "Platinum",
