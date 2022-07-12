@@ -2112,26 +2112,6 @@ public class PKMDS
 
     #endregion
 
-    #region DBAccess
-
-    public static class SQL
-    {
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        public static extern void OpenDB(string dbfilename);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CloseDB();
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        internal static extern string GetAString(string sql);
-
-        [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        internal static extern int GetAnInt(string sql);
-    }
-
-    #endregion
-
     #region Resources
 
     internal static Image GetResourceByName(string name) => name is "" or null ? null : (Image)Properties.Resources.ResourceManager.GetObject(name);
@@ -2146,18 +2126,18 @@ public class PKMDS
         var sprite = "s";
         if (Female)
         {
-            sprite += "f";
+            sprite = $"{sprite}f";
         }
         if (Shiny)
         {
-            sprite += "s";
+            sprite = $"{sprite}s";
         }
-        sprite += "_" + Species.ToString();
+        sprite = $"{sprite}_{Species}";
         Image ret;
         if (Form != 0)
         {
             var basestr = sprite;
-            sprite += "_" + Form.ToString();
+            sprite = $"{sprite}_{Form}";
             ret = GetResourceByName(sprite);
             if (ret == null)
             {
@@ -2195,7 +2175,7 @@ public class PKMDS
                 }
                 if (formname != "")
                 {
-                    sprite += "_" + formname.ToLower();
+                    sprite = $"{sprite}_{formname.ToLower()}";
                 }
                 ret = GetResourceByName(sprite.Replace('-', '_'));
             }
@@ -2216,10 +2196,10 @@ public class PKMDS
         Image ret;
         try
         {
-            var icon = "bi_" + Species.ToString();
+            var icon = $"bi_{Species}";
             if (Female)
             {
-                icon = "f" + icon;
+                icon = $"f{icon}";
             }
             if (Form != 0)
             {
@@ -2227,15 +2207,12 @@ public class PKMDS
                 var formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
                 if (formnameinternal is not "" and not null)
                 {
-                    icon += "_" + Form.ToString();
+                    icon = $"{icon}_{Form}";
                 }
                 ret = GetResourceByName(icon);
-                if (ret == null)
+                if (ret == null && formnameinternal is not "" and not null)
                 {
-                    if (formnameinternal is not "" and not null)
-                    {
-                        icon = basestr + "_" + formnameinternal.Split(' ')[0].ToLower();
-                    }
+                    icon = $"{basestr}_{formnameinternal.Split(' ')[0].ToLower()}";
                 }
             }
             ret = GetResourceByName(icon);
@@ -2258,9 +2235,9 @@ public class PKMDS
         {
             var identifier = (Items)itemid switch
             {
-                Items.xtransceiver2 => GetItemIdentifier((ushort)Items.Xtransceiver) + "_yellow",
+                Items.xtransceiver2 => $"{GetItemIdentifier((ushort)Items.Xtransceiver)}_yellow",
                 Items.dnasplicers2 => GetItemIdentifier((ushort)Items.DNA_Splicers),
-                Items.droppeditem2 => GetItemIdentifier((ushort)Items.Dropped_Item) + "_yellow",
+                Items.droppeditem2 => $"{GetItemIdentifier((ushort)Items.Dropped_Item)}_yellow",
                 _ => GetItemIdentifier(itemid),
             };
             if (identifier is not "" and not null)
@@ -2275,7 +2252,7 @@ public class PKMDS
         }
     }
 
-    public static Image GetBallImage(byte ballid) => GetResourceByName("b_" + ballid.ToString());
+    public static Image GetBallImage(byte ballid) => GetResourceByName($"b_{ballid}");
 
     internal static Image GetTypeImage(int typeid)
     {
@@ -2290,7 +2267,7 @@ public class PKMDS
         {
             markedint = 1;
         }
-        return GetResourceByName("m_" + ((int)marking).ToString() + markedint.ToString());
+        return GetResourceByName($"m_{(int)marking}{markedint}");
     }
 
     internal static Image GetGenderIcon(int gender) => gender switch
@@ -2379,7 +2356,7 @@ public class PKMDS
         return BaseSprite;
     }
 
-    internal static Image GetWallpaperImage(int wallpaper) => GetResourceByName("wc_" + wallpaper.ToString());
+    internal static Image GetWallpaperImage(int wallpaper) => GetResourceByName($"wc_{wallpaper}");
 
     #endregion
 

@@ -26,8 +26,7 @@ public class Save
             BoxWallpapers.Add(InternalSave.BoxWallpapers.Wallpapers(box));
             for (var slot = 0; slot < 30; slot++)
             {
-                var pkmn = new Pokemon();
-                pkmn = InternalSave.PCStorage.Box(box).Pokemon(slot);
+                var pkmn = InternalSave.PCStorage.Box(box).Pokemon(slot);
                 PCStorage[box].Add(pkmn);
                 pkmn.Decrypt();
             }
@@ -105,59 +104,57 @@ public class Save
     public int BoxCount(int box) => InternalSave.BoxCount(box);
     public bool DepositPokemon(Pokemon pokemon, int box)
     {
-        var ret = false;
-        if (BoxCount(box) != 30)
+        if (BoxCount(box) == 30)
         {
-            var boxint = 0;
-            var slotint = 0;
-            unsafe
-            {
-                var boxptr = &boxint;
-                var slotptr = &slotint;
-                GetPCStorageAvailableSlot(this, boxptr, slotptr, box);
-            }
-            PCStorage[boxint][slotint].Data = pokemon.Data;
-            FixParty(this);
-            ret = true;
+            return false;
         }
-        return ret;
+        var boxint = 0;
+        var slotint = 0;
+        unsafe
+        {
+            var boxptr = &boxint;
+            var slotptr = &slotint;
+            GetPCStorageAvailableSlot(this, boxptr, slotptr, box);
+        }
+        PCStorage[boxint][slotint].Data = pokemon.Data;
+        FixParty(this);
+        return true;
     }
     public bool WithdrawPokemon(Pokemon pokemon)
     {
-        var ret = false;
-        if (PartySize != 6)
+        if (PartySize == 6)
         {
-            PartyPokemon ppkm;
-            for (var slot = 0; slot < 6; slot++)
+            return false;
+        }
+        for (var slot = 0; slot < 6; slot++)
+        {
+            var ppkm = Party[slot];
+            if (ppkm.PokemonData.SpeciesID == 0)
             {
-                ppkm = Party[slot];
-                if (ppkm.PokemonData.SpeciesID == 0)
-                {
-                    ppkm.PokemonData.Data = pokemon.Data;
-                    RecalcPartyPKM(ppkm);
-                    FixParty(this);
-                    return true;
-                }
+                ppkm.PokemonData.Data = pokemon.Data;
+                RecalcPartyPKM(ppkm);
+                FixParty(this);
+                return true;
             }
         }
-        return ret;
+        return false;
     }
     public void RemovePartyPokemon(int slot)
     {
-        if (PartySize > 1)
+        if (PartySize <= 1)
         {
-            var ppkm = new PartyPokemon();
-            ppkm.PokemonData.SpeciesID = 0;
-            Party[slot] = ppkm;
-            FixParty(this);
+            return;
         }
+        var ppkm = new PartyPokemon();
+        ppkm.PokemonData.SpeciesID = 0;
+        Party[slot] = ppkm;
+        FixParty(this);
     }
     public void RemoveStoredPokemon(int box, int slot)
     {
-        var pkm = new Pokemon
+        PCStorage[box][slot] = new Pokemon
         {
             SpeciesID = 0
         };
-        PCStorage[box][slot] = pkm;
     }
 }

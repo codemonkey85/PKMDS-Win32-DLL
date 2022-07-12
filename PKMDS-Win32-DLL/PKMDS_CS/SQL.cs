@@ -2,13 +2,18 @@
 
 public static class SQL
 {
-    [DllImport("PKMDS_WIN32_DLL", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
+    
+    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
     public static extern void OpenDB(string dbfilename);
-    [DllImport("PKMDS_WIN32_DLL", CallingConvention = CallingConvention.Cdecl)]
+
+    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
     public static extern void CloseDB();
-    [DllImport("PKMDS_WIN32_DLL", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+
+    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.BStr)]
-    public static extern string GetAString(string sql);
-    [DllImport("PKMDS_WIN32_DLL", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-    public static extern int GetAnInt(string sql);
+    internal static extern string GetAString(string sql);
+
+    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    internal static extern int GetAnInt(string sql);
 }

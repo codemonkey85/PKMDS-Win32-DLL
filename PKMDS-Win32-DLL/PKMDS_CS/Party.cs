@@ -8,21 +8,22 @@ public class Party : ObservableCollection<PartyPokemon>
     }
     public void RecalculateParty()
     {
-        if (Count > 0)
+        if (Count <= 0)
         {
-            foreach (var ppkm in this)
+            return;
+        }
+        foreach (var ppkm in this)
+        {
+            try
             {
-                try
-                {
-                    var appkm = new PartyPokemon();
-                    appkm.PokemonData.Data = ppkm.PokemonData.Data;
-                    RecalcPartyPKM(appkm);
-                    ppkm.PokemonData.Data = appkm.PokemonData.Data;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
+                var appkm = new PartyPokemon();
+                appkm.PokemonData.Data = ppkm.PokemonData.Data;
+                RecalcPartyPKM(appkm);
+                ppkm.PokemonData.Data = appkm.PokemonData.Data;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
     }
