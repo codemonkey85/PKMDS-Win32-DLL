@@ -21,7 +21,7 @@ EXPORT int HasFemaleIcon(pokemon_obj * pkm)
 		decryptpkm(pkm);
 	}
 
-	return ((pkm->species == Species::unfezant) | (pkm->species == Species::frillish) | (pkm->species == Species::jellicent)) && (calcpkmgender(pkm) == Genders::female);
+	return ((pkm->species == Species::unfezant) || (pkm->species == Species::frillish) || (pkm->species == Species::jellicent)) && (calcpkmgender(pkm) == Genders::female);
 }
 EXPORT void OpenDB(const char * dbfilename)
 {
@@ -328,13 +328,13 @@ EXPORT int ValidateSave_INTERNAL(bw2sav_obj * sav, wchar_t ** message, int * len
 EXPORT BSTR GetItemIdentifier(uint16 item)
 {
 	string ret = "";
-	if (((item >= (uint16)Items::tm01) & (item <= (uint16)Items::tm92)) | ((item >= (uint16)Items::tm93) & (item <= (uint16)Items::tm95)) | ((item >= (uint16)Items::hm01) & (item <= (uint16)Items::hm06)))
+	if (((item >= (uint16)Items::tm01) && (item <= (uint16)Items::tm92)) || ((item >= (uint16)Items::tm93) && (item <= (uint16)Items::tm95)) || ((item >= (uint16)Items::hm01) && (item <= (uint16)Items::hm06)))
 	{
 		std::string mprefix = "tm-";
-		if ((item >= (uint16)Items::hm01) & (item <= (uint16)Items::hm06)){ mprefix = "hm-"; }
+		if ((item >= (uint16)Items::hm01) && (item <= (uint16)Items::hm06)){ mprefix = "hm-"; }
 		ret = mprefix + getmachinetypename(Items::items(item));
 	}
-	else if ((item >= (uint16)Items::datacard01) & (item <= (uint16)Items::datacard27))
+	else if ((item >= (uint16)Items::datacard01) && (item <= (uint16)Items::datacard27))
 	{
 		ret = "data-card";
 	}
@@ -355,14 +355,14 @@ EXPORT BSTR GetItemIdentifier(uint16 item)
 EXPORT void GetItemImage_INTERNAL(int item, byte ** picdata, int * size)
 {
 	std::ostringstream o;
-	if (((item >= (int)Items::tm01) & (item <= (int)Items::tm92)) | ((item >= (int)Items::tm93) & (item <= (int)Items::tm95)) | ((item >= (int)Items::hm01) & (item <= (int)Items::hm06)))
+	if (((item >= (int)Items::tm01) && (item <= (int)Items::tm92)) || ((item >= (int)Items::tm93) && (item <= (int)Items::tm95)) || ((item >= (int)Items::hm01) && (item <= (int)Items::hm06)))
 	{
 		std::string mprefix = "tm-";
-		if ((item >= (int)Items::hm01) & (item <= (int)Items::hm06)){ mprefix = "hm-"; }
+		if ((item >= (int)Items::hm01) && (item <= (int)Items::hm06)){ mprefix = "hm-"; }
 		std::string sql = "select image from items where (identifier = \"" + mprefix + getmachinetypename(Items::items(item)) + "\")";
 		o << sql.c_str();
 	}
-	else if ((item >= (int)Items::datacard01) & (item <= (int)Items::datacard27))
+	else if ((item >= (int)Items::datacard01) && (item <= (int)Items::datacard27))
 	{
 		std::string sql = "select image from items where (identifier = \"data-card\")";
 		o << sql.c_str();
