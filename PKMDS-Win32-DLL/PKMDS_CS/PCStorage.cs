@@ -1,23 +1,22 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace PKMDS_CS
+namespace PKMDS_CS;
+
+public class PCStorage : ObservableCollection<Box>
 {
-    public class PCStorage : ObservableCollection<Box>
+    public PCStorage()
     {
-        public PCStorage()
+        for (var i = 0; i < 24; i++)
         {
-            for (var i = 0; i < 24; i++)
-            {
-                Add(new Box());
-            }
+            Add(new Box());
         }
-        public void Reset()
+    }
+    public void Reset()
+    {
+        Clear();
+        for (var i = 0; i < 24; i++)
         {
-            Clear();
-            for (var i = 0; i < 24; i++)
-            {
-                Add(new Box());
-            }
+            Add(new Box());
         }
     }
 }

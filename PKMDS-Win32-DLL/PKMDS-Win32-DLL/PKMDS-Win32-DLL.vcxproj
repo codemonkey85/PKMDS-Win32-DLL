@@ -42,6 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\..\PKMDS-Save-Editor\PKMDS-Save-Editor\bin\Debug\net6.0-windows7.0</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -59,7 +60,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Q /Y "$(TargetPath)" "$(SolutionDir)PKMDS Spinda Viewer\bin\Debug"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Bscmake>
       <PreserveSBR>true</PreserveSBR>

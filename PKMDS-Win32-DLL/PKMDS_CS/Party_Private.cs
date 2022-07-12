@@ -1,51 +1,40 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PKMDS_CS
-{
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    [Serializable]
-    internal class Party_Private
-    {
-        public PartyPokemon Pokemon(int slot)
-        {
-            switch (slot)
-            {
-                case 0:
-                    return PPKM01;
-                case 1:
-                    return PPKM02;
-                case 2:
-                    return PPKM03;
-                case 3:
-                    return PPKM04;
-                case 4:
-                    return PPKM05;
-                case 5:
-                    return PPKM06;
-                default:
-                    return null;
-            }
-        }
-        public uint Size;
-        private readonly uint buffer;
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM01 = new PartyPokemon();
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM02 = new PartyPokemon();
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM03 = new PartyPokemon();
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM04 = new PartyPokemon();
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM05 = new PartyPokemon();
-        [NonSerialized()]
-        private readonly PartyPokemon PPKM06 = new PartyPokemon();
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
-        private readonly byte[] Data;
-        public Party_Private()
-        {
+namespace PKMDS_CS;
 
-        }
+[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+[Serializable]
+internal class Party_Private
+{
+    public PartyPokemon Pokemon(int slot) => slot switch
+    {
+        0 => PPKM01,
+        1 => PPKM02,
+        2 => PPKM03,
+        3 => PPKM04,
+        4 => PPKM05,
+        5 => PPKM06,
+        _ => null,
+    };
+    public uint Size;
+    private readonly uint buffer;
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM01 = new();
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM02 = new();
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM03 = new();
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM04 = new();
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM05 = new();
+    [NonSerialized()]
+    private readonly PartyPokemon PPKM06 = new();
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
+    private readonly byte[] Data;
+    public Party_Private()
+    {
+
     }
 }

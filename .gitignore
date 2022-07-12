@@ -219,3 +219,4 @@ pip-log.txt
 *.db-shm
 *.db-wal
 *.opendb
+*.vs

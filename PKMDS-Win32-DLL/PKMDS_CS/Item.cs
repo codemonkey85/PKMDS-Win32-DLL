@@ -1,23 +1,22 @@
 ﻿using System.Drawing;
 using static PKMDS_CS.PKMDS;
 
-namespace PKMDS_CS
-{
-    public class Item
-    {
-        public Item() => ItemID = 0;
-        public Item(ushort itemid) => ItemID = itemid;
+namespace PKMDS_CS;
 
-        public ushort ItemID { get; set; }
-        public string ItemName => GetItemName(ItemID) ?? string.Empty;
-        public string ItemFlavor
+public class Item
+{
+    public Item() => ItemID = 0;
+    public Item(ushort itemid) => ItemID = itemid;
+
+    public ushort ItemID { get; set; }
+    public string ItemName => GetItemName(ItemID) ?? string.Empty;
+    public string ItemFlavor
+    {
+        get
         {
-            get
-            {
-                var flavor = GetItemFlavor(ItemID);
-                return flavor == null ? string.Empty : flavor.Replace("\n", " ");
-            }
+            var flavor = GetItemFlavor(ItemID);
+            return flavor == null ? string.Empty : flavor.Replace("\n", " ");
         }
-        public Image ItemImage => ItemID == 0 ? null : GetItemImage(ItemID);
     }
+    public Image ItemImage => ItemID == 0 ? null : GetItemImage(ItemID);
 }

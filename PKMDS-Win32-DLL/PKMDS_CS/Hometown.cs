@@ -1,52 +1,28 @@
-﻿namespace PKMDS_CS
+﻿namespace PKMDS_CS;
+
+public class Hometown
 {
-    public class Hometown
+    public Hometown(byte hometownid) => HometownID = hometownid;
+    public Hometown() => HometownID = 0;
+    public byte HometownID { get; set; }
+    public string HometownName => HometownID switch
     {
-        public Hometown(byte hometownid) => HometownID = hometownid;
-        public Hometown() => HometownID = 0;
-        public byte HometownID { get; set; }
-        public string HometownName
-        {
-            get
-            {
-                switch (HometownID)
-                {
-                    case 0:
-                        return "Colosseum Bonus";
-                    case 1:
-                        return "Sapphire";
-                    case 2:
-                        return "Ruby";
-                    case 3:
-                        return "Emerald";
-                    case 4:
-                        return "FireRed";
-                    case 5:
-                        return "LeafGreen";
-                    case 7:
-                        return "HeartGold";
-                    case 8:
-                        return "SoulSilver";
-                    case 10:
-                        return "Diamond";
-                    case 11:
-                        return "Pearl";
-                    case 12:
-                        return "Platinum";
-                    case 15:
-                        return "Colosseum / XD";
-                    case 20:
-                        return "White";
-                    case 21:
-                        return "Black";
-                    case 22:
-                        return "White 2";
-                    case 23:
-                        return "Black 2";
-                    default:
-                        return string.Empty;
-                }
-            }
-        }
-    }
+        0 => "Colosseum Bonus",
+        1 => "Sapphire",
+        2 => "Ruby",
+        3 => "Emerald",
+        4 => "FireRed",
+        5 => "LeafGreen",
+        7 => "HeartGold",
+        8 => "SoulSilver",
+        10 => "Diamond",
+        11 => "Pearl",
+        12 => "Platinum",
+        15 => "Colosseum / XD",
+        20 => "White",
+        21 => "Black",
+        22 => "White 2",
+        23 => "Black 2",
+        _ => string.Empty,
+    };
 }

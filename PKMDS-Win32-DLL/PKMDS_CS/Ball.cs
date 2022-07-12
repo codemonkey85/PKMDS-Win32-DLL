@@ -1,74 +1,41 @@
 ﻿using System.Drawing;
 using static PKMDS_CS.PKMDS;
 
-namespace PKMDS_CS
+namespace PKMDS_CS;
+
+public class Ball
 {
-    public class Ball
+    public Ball(byte ballid) => BallID = ballid;
+    public Ball() => BallID = 0;
+    public byte BallID { get; set; }
+    public string BallName => BallID switch
     {
-        public Ball(byte ballid) => BallID = ballid;
-        public Ball() => BallID = 0;
-        public byte BallID { get; set; }
-        public string BallName
-        {
-            get
-            {
-                switch (BallID)
-                {
-                    case 0:
-                        return "Poké Ball";
-                    case 1:
-                        return "Master Ball";
-                    case 2:
-                        return "Ultra Ball";
-                    case 3:
-                        return "Great Ball";
-                    case 4:
-                        return "Poké Ball";
-                    case 5:
-                        return "Safari Ball";
-                    case 6:
-                        return "Net Ball";
-                    case 7:
-                        return "Dive Ball";
-                    case 8:
-                        return "Nest Ball";
-                    case 9:
-                        return "Repeat Ball";
-                    case 10:
-                        return "Timer Ball";
-                    case 11:
-                        return "Luxury Ball";
-                    case 12:
-                        return "Premier Ball";
-                    case 13:
-                        return "Dusk Ball";
-                    case 14:
-                        return "Heal Ball";
-                    case 15:
-                        return "Quick Ball";
-                    case 16:
-                        return "Cherish Ball";
-                    case 17:
-                        return "Fast Ball";
-                    case 18:
-                        return "Level Ball";
-                    case 19:
-                        return "Lure Ball";
-                    case 20:
-                        return "Heavy Ball";
-                    case 21:
-                        return "Love Ball";
-                    case 22:
-                        return "Friend Ball";
-                    case 23:
-                        return "Moon Ball";
-                    case 24:
-                        return "Sport Ball";
-                    default:
-                        return "Dream Ball";
-                }
-            }
-        }
-        public Image BallImage => GetBallImage(BallID);
-    }
+        0 => "Poké Ball",
+        1 => "Master Ball",
+        2 => "Ultra Ball",
+        3 => "Great Ball",
+        4 => "Poké Ball",
+        5 => "Safari Ball",
+        6 => "Net Ball",
+        7 => "Dive Ball",
+        8 => "Nest Ball",
+        9 => "Repeat Ball",
+        10 => "Timer Ball",
+        11 => "Luxury Ball",
+        12 => "Premier Ball",
+        13 => "Dusk Ball",
+        14 => "Heal Ball",
+        15 => "Quick Ball",
+        16 => "Cherish Ball",
+        17 => "Fast Ball",
+        18 => "Level Ball",
+        19 => "Lure Ball",
+        20 => "Heavy Ball",
+        21 => "Love Ball",
+        22 => "Friend Ball",
+        23 => "Moon Ball",
+        24 => "Sport Ball",
+        _ => "Dream Ball",
+    };
+    public Image BallImage => GetBallImage(BallID);
 }
