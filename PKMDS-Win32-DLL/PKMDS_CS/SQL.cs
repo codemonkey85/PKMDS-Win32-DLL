@@ -10,7 +10,9 @@ public static partial class SQL
 
     [LibraryImport(PKMDS_WIN32_DLL)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+#pragma warning disable CA1401 // P/Invokes should not be visible
     public static partial void CloseDB();
+#pragma warning restore CA1401 // P/Invokes should not be visible
 
     [LibraryImport(PKMDS_WIN32_DLL, StringMarshalling = StringMarshalling.Utf16)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
