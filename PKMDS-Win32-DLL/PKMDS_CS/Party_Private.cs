@@ -4,7 +4,7 @@
 [Serializable]
 internal class Party_Private
 {
-    public PartyPokemon Pokemon(int slot) => slot switch
+    public PartyPokemon? Pokemon(int slot) => slot switch
     {
         0 => PPKM01,
         1 => PPKM02,
@@ -29,7 +29,7 @@ internal class Party_Private
     [NonSerialized()]
     private readonly PartyPokemon PPKM06 = new();
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
-    private readonly byte[] Data;
+    private readonly byte[] Data = Array.Empty<byte>();
     public Party_Private()
     {
 

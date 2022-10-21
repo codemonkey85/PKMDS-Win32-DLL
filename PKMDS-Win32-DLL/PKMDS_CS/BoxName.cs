@@ -6,7 +6,7 @@ public class BoxName
 {
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 20)]
 
-    private string mName;
+    private string mName = string.Empty;
     [Browsable(true)]
     public string Name
     {

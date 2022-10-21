@@ -4,7 +4,7 @@
 [Serializable]
 internal class PCStorage_Private
 {
-    public Box_Private Box(int box) => box switch
+    public Box_Private? Box(int box) => box switch
     {
         00 => Box01,
         01 => Box02,

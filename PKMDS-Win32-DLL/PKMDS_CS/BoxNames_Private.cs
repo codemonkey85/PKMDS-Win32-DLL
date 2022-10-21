@@ -4,7 +4,7 @@
 [Serializable]
 internal class BoxNames_Private
 {
-    public BoxName Boxes(int slot) => slot switch
+    public BoxName? Boxes(int slot) => slot switch
     {
         00 => BoxName01,
         01 => BoxName02,
@@ -32,28 +32,28 @@ internal class BoxNames_Private
         23 => BoxName24,
         _ => null,
     };
-    public BoxName BoxName01;
-    public BoxName BoxName02;
-    public BoxName BoxName03;
-    public BoxName BoxName04;
-    public BoxName BoxName05;
-    public BoxName BoxName06;
-    public BoxName BoxName07;
-    public BoxName BoxName08;
-    public BoxName BoxName09;
-    public BoxName BoxName10;
-    public BoxName BoxName11;
-    public BoxName BoxName12;
-    public BoxName BoxName13;
-    public BoxName BoxName14;
-    public BoxName BoxName15;
-    public BoxName BoxName16;
-    public BoxName BoxName17;
-    public BoxName BoxName18;
-    public BoxName BoxName19;
-    public BoxName BoxName20;
-    public BoxName BoxName21;
-    public BoxName BoxName22;
-    public BoxName BoxName23;
-    public BoxName BoxName24;
+    public BoxName BoxName01 = new();
+    public BoxName BoxName02 = new();
+    public BoxName BoxName03 = new();
+    public BoxName BoxName04 = new();
+    public BoxName BoxName05 = new();
+    public BoxName BoxName06 = new();
+    public BoxName BoxName07 = new();
+    public BoxName BoxName08 = new();
+    public BoxName BoxName09 = new();
+    public BoxName BoxName10 = new();
+    public BoxName BoxName11 = new();
+    public BoxName BoxName12 = new();
+    public BoxName BoxName13 = new();
+    public BoxName BoxName14 = new();
+    public BoxName BoxName15 = new();
+    public BoxName BoxName16 = new();
+    public BoxName BoxName17 = new();
+    public BoxName BoxName18 = new();
+    public BoxName BoxName19 = new();
+    public BoxName BoxName20 = new();
+    public BoxName BoxName21 = new();
+    public BoxName BoxName22 = new();
+    public BoxName BoxName23 = new();
+    public BoxName BoxName24 = new();
 }

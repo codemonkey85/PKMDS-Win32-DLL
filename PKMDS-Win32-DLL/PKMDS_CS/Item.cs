@@ -15,5 +15,5 @@ public class Item
             return flavor is null ? string.Empty : flavor.Replace("\n", " ");
         }
     }
-    public Image ItemImage => ItemID == 0 ? null : GetItemImage(ItemID);
+    public Image? ItemImage => ItemID == 0 ? null : GetItemImage(ItemID);
 }

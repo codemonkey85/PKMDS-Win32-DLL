@@ -4,7 +4,7 @@
 [Serializable]
 internal class Box_Private
 {
-    public Pokemon Pokemon(int slot) => slot switch
+    public Pokemon? Pokemon(int slot) => slot switch
     {
         00 => Pokemon01,
         01 => Pokemon02,
@@ -99,7 +99,7 @@ internal class Box_Private
     [NonSerialized()]
     private readonly Pokemon Pokemon30 = new();
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-    private readonly byte[] Data;
+    private readonly byte[] Data = Array.Empty<byte>();
     public Box_Private()
     {
 

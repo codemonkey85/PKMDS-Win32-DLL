@@ -1,19 +1,23 @@
 ﻿namespace PKMDS_CS;
 
-public static class SQL
+public static partial class SQL
 {
     private const string PKMDS_WIN32_DLL = "PKMDS-Win32-DLL.dll";
 
-    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-    public static extern void OpenDB(string dbfilename);
+    [LibraryImport(PKMDS_WIN32_DLL, StringMarshalling = StringMarshalling.Utf16)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    public static partial void OpenDB(string dbfilename);
 
-    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CloseDB();
+    [LibraryImport(PKMDS_WIN32_DLL)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    public static partial void CloseDB();
 
-    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+    [LibraryImport(PKMDS_WIN32_DLL, StringMarshalling = StringMarshalling.Utf16)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
     [return: MarshalAs(UnmanagedType.BStr)]
-    internal static extern string GetAString(string sql);
+    internal static partial string GetAString(string sql);
 
-    [DllImport(PKMDS_WIN32_DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-    internal static extern int GetAnInt(string sql);
+    [LibraryImport(PKMDS_WIN32_DLL, StringMarshalling = StringMarshalling.Utf16)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
+    internal static partial int GetAnInt(string sql);
 }

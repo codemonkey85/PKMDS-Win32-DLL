@@ -2114,9 +2114,9 @@ public class PKMDS
 
     #region Resources
 
-    internal static Image GetResourceByName(string name) => name is not { Length: > 0 }
+    internal static Image? GetResourceByName(string name) => name is not { Length: > 0 }
         ? null
-        : (Image)Properties.Resources.ResourceManager.GetObject(name);
+        : (Image?)Properties.Resources.ResourceManager.GetObject(name);
 
     internal static Image GetSprite(ushort Species, bool Shiny = false, byte Form = 0, bool Female = false)
     {
@@ -2169,7 +2169,7 @@ public class PKMDS
                         break;
                     default:
                         var formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                        if (formnameinternal is {Length: > 0 })
+                        if (formnameinternal is { Length: > 0 })
                         {
                             formname = formnameinternal.Split(' ')[0];
                         }
@@ -2207,12 +2207,12 @@ public class PKMDS
             {
                 var basestr = icon;
                 var formnameinternal = GetPKMFormName_INTERNAL(Species, Form);
-                if (formnameinternal is {Length: > 0 })
+                if (formnameinternal is { Length: > 0 })
                 {
                     icon = $"{icon}_{Form}";
                 }
                 ret = GetResourceByName(icon);
-                if (ret is null && formnameinternal is {Length: > 0 })
+                if (ret is null && formnameinternal is { Length: > 0 })
                 {
                     icon = $"{basestr}_{formnameinternal.Split(' ')[0].ToLower()}";
                 }
@@ -2242,7 +2242,7 @@ public class PKMDS
                 Items.droppeditem2 => $"{GetItemIdentifier((ushort)Items.Dropped_Item)}_yellow",
                 _ => GetItemIdentifier(itemid),
             };
-            if (identifier is {Length: > 0 })
+            if (identifier is { Length: > 0 })
             {
                 identifier = identifier.Replace('-', '_');
                 return GetResourceByName(identifier);
@@ -2259,7 +2259,7 @@ public class PKMDS
     internal static Image GetTypeImage(int typeid)
     {
         var type = GetTypeName(typeid);
-        return type is not {Length: > 0 } ? null : GetResourceByName(type.ToLower());
+        return type is not { Length: > 0 } ? null : GetResourceByName(type.ToLower());
     }
 
     public static Image GetMarkingImage(Markings marking, bool marked)

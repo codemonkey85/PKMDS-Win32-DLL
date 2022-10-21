@@ -18,7 +18,7 @@ public class Pokemon
     [Browsable(true)]
     public string SpeciesName => GetPKMName_FromObj(this);
     [Browsable(true)]
-    public Image Sprite => SpeciesID == 0
+    public Image? Sprite => SpeciesID == 0
                 ? null
                 : SpeciesID != (ushort)PKMSpecies.Spinda
                 ? GetSprite(SpeciesID, IsShiny, FormID, HasFemaleSprite(this) == 1)
@@ -213,10 +213,7 @@ public class Pokemon
         get => GetPKMNickname(this);
         set
         {
-            if (value is null)
-            {
-                value = string.Empty;
-            }
+            value ??= string.Empty;
             SetPKMNickname(this, value, value.Length);
         }
     }
@@ -232,10 +229,7 @@ public class Pokemon
         get => GetPKMOTName(this);
         set
         {
-            if (value is null)
-            {
-                value = string.Empty;
-            }
+            value ??= string.Empty;
             SetPKMOTName(this, value, value.Length);
         }
     }

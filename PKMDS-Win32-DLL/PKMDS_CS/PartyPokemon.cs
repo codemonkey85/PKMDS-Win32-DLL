@@ -6,13 +6,13 @@ public class PartyPokemon
 {
     public PartyPokemon() => PokemonData = new Pokemon();
     internal void Decrypt() => DecryptPartyPokemon(this);
-    private Pokemon mPokemonData;
+    private Pokemon mPokemonData = new();
     public Pokemon PokemonData
     {
         get => mPokemonData;
         set => mPokemonData = value;
     }
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
-    private readonly byte[] PartyData;
+    private readonly byte[] PartyData = Array.Empty<byte>();
     public void WriteToFile(string FileName, bool encrypt = false) => WritePokemonFile(PokemonData, FileName, encrypt);
 }

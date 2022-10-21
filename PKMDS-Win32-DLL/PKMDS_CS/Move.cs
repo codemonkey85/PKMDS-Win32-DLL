@@ -21,7 +21,7 @@ public class Move
             return ret ?? string.Empty;
         }
     }
-    public Image MoveTypeImage => GetResourceByName(GetMoveTypeName(MoveID).ToLower());
+    public Image? MoveTypeImage => GetResourceByName(GetMoveTypeName(MoveID).ToLower());
     public Image MoveCategoryImage => GetMoveCategoryImage(MoveID);
     public int MovePower => GetMovePower(MoveID);
     public decimal MoveAccuracy => GetMoveAccuracy(MoveID);

@@ -4,7 +4,7 @@
 [Serializable]
 internal class BoxWallpapers_Private
 {
-    public BoxWallpaper Wallpapers(int slot) => slot switch
+    public BoxWallpaper? Wallpapers(int slot) => slot switch
     {
         00 => BoxName01,
         01 => BoxName02,
@@ -32,28 +32,28 @@ internal class BoxWallpapers_Private
         23 => BoxName24,
         _ => null,
     };
-    public BoxWallpaper BoxName01;
-    public BoxWallpaper BoxName02;
-    public BoxWallpaper BoxName03;
-    public BoxWallpaper BoxName04;
-    public BoxWallpaper BoxName05;
-    public BoxWallpaper BoxName06;
-    public BoxWallpaper BoxName07;
-    public BoxWallpaper BoxName08;
-    public BoxWallpaper BoxName09;
-    public BoxWallpaper BoxName10;
-    public BoxWallpaper BoxName11;
-    public BoxWallpaper BoxName12;
-    public BoxWallpaper BoxName13;
-    public BoxWallpaper BoxName14;
-    public BoxWallpaper BoxName15;
-    public BoxWallpaper BoxName16;
-    public BoxWallpaper BoxName17;
-    public BoxWallpaper BoxName18;
-    public BoxWallpaper BoxName19;
-    public BoxWallpaper BoxName20;
-    public BoxWallpaper BoxName21;
-    public BoxWallpaper BoxName22;
-    public BoxWallpaper BoxName23;
-    public BoxWallpaper BoxName24;
+    public BoxWallpaper BoxName01 = new();
+    public BoxWallpaper BoxName02 = new();
+    public BoxWallpaper BoxName03 = new();
+    public BoxWallpaper BoxName04 = new();
+    public BoxWallpaper BoxName05 = new();
+    public BoxWallpaper BoxName06 = new();
+    public BoxWallpaper BoxName07 = new();
+    public BoxWallpaper BoxName08 = new();
+    public BoxWallpaper BoxName09 = new();
+    public BoxWallpaper BoxName10 = new();
+    public BoxWallpaper BoxName11 = new();
+    public BoxWallpaper BoxName12 = new();
+    public BoxWallpaper BoxName13 = new();
+    public BoxWallpaper BoxName14 = new();
+    public BoxWallpaper BoxName15 = new();
+    public BoxWallpaper BoxName16 = new();
+    public BoxWallpaper BoxName17 = new();
+    public BoxWallpaper BoxName18 = new();
+    public BoxWallpaper BoxName19 = new();
+    public BoxWallpaper BoxName20 = new();
+    public BoxWallpaper BoxName21 = new();
+    public BoxWallpaper BoxName22 = new();
+    public BoxWallpaper BoxName23 = new();
+    public BoxWallpaper BoxName24 = new();
 }
