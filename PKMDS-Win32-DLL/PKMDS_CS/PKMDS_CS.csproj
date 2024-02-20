@@ -2,18 +2,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<LangVersion>preview</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0-rc.2.22472.3" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.2.22472.3" />
-		<PackageReference Include="System.Resources.Extensions" Version="7.0.0-rc.2.22472.3" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.2" />
+		<PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
 	</ItemGroup>
 
 </Project>
