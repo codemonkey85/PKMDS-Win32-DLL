@@ -13,6 +13,6 @@ public class PartyPokemon
         set => mPokemonData = value;
     }
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
-    private readonly byte[] PartyData = Array.Empty<byte>();
+    private readonly byte[] PartyData = [];
     public void WriteToFile(string FileName, bool encrypt = false) => WritePokemonFile(PokemonData, FileName, encrypt);
 }

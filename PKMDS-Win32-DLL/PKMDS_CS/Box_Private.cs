@@ -99,7 +99,7 @@ internal class Box_Private
     [NonSerialized()]
     private readonly Pokemon Pokemon30 = new();
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x10)]
-    private readonly byte[] Data = Array.Empty<byte>();
+    private readonly byte[] Data = [];
     public Box_Private()
     {
 

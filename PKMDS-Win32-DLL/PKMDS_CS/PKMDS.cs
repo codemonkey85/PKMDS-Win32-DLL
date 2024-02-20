@@ -2300,18 +2300,18 @@ public class PKMDS
         var TopRightOrigin = new Point(47, 17);
         var BottomLeftOrigin = new Point(26, 33);
         var BottomRightOrigin = new Point(38, 33);
-        Point[] SpotOrigins = { TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin };
+        Point[] SpotOrigins = [TopLeftOrigin, TopRightOrigin, BottomLeftOrigin, BottomRightOrigin];
         var TopLeftOffsets = new Point((int)(PID & 0xf), (int)(PID >> 4 & 0xf));
         var TopRightOffsets = new Point((int)(PID >> 8 & 0xf), (int)(PID >> 12 & 0xf));
         var BottomLeftOffsets = new Point((int)(PID >> 16 & 0xf), (int)(PID >> 20 & 0xf));
         var BottomRightOffsets = new Point((int)(PID >> 24 & 0xf), (int)(PID >> 28 & 0xf));
-        Point[] SpotOffsets = { TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets };
+        Point[] SpotOffsets = [TopLeftOffsets, TopRightOffsets, BottomLeftOffsets, BottomRightOffsets];
         var BaseSprite = GetSpindaBaseSprite(IsShiny);
         var TopLeft = GetSpindaSpot(SpindaSpots.TopLeft);
         var TopRight = GetSpindaSpot(SpindaSpots.TopRight);
         var BottomLeft = GetSpindaSpot(SpindaSpots.BottomLeft);
         var BottomRight = GetSpindaSpot(SpindaSpots.BottomRight);
-        Bitmap[] Spots = { TopLeft, TopRight, BottomLeft, BottomRight };
+        Bitmap[] Spots = [TopLeft, TopRight, BottomLeft, BottomRight];
         var bData = BaseSprite.LockBits(new Rectangle(0, 0, 96, 96), ImageLockMode.ReadWrite, BaseSprite.PixelFormat);
         var scan0 = (byte*)bData.Scan0.ToPointer();
         uint color;
@@ -2331,7 +2331,7 @@ public class PKMDS
                         var data = scan0 + y * bData.Stride + x * 4;
                         if (data[0] != 0)
                         {
-                            byte[] datab = { data[0], data[1], data[2], data[3] };
+                            byte[] datab = [data[0], data[1], data[2], data[3]];
                             var SpriteColor = BitConverter.ToUInt32(datab, 0);
                             if (SpriteColor == (uint)SpindaColorsBase.BaseLight)
                             {
@@ -2984,7 +2984,7 @@ public class PKMDS
                 return formnames.Split(',');
             }
         }
-        string[] formnamesarray = { string.Empty };
+        string[] formnamesarray = [string.Empty];
         return formnamesarray;
     }
 
@@ -3027,7 +3027,7 @@ public class PKMDS
 
     internal static string[] GetPKMMoveNames(Pokemon pkm, int langid = LANG_ID)
     {
-        string[] moves = { string.Empty, string.Empty, string.Empty, string.Empty };
+        string[] moves = [string.Empty, string.Empty, string.Empty, string.Empty];
         for (var move = 0; move < 4; move++)
         {
             moves[move] = GetMoveName(GetPKMMoveID(pkm, move), langid);
@@ -3037,7 +3037,7 @@ public class PKMDS
 
     internal static string[] GetPKMMoveTypeNames(Pokemon pkm, int langid = LANG_ID)
     {
-        string[] moves = { string.Empty, string.Empty, string.Empty, string.Empty };
+        string[] moves = [string.Empty, string.Empty, string.Empty, string.Empty];
         for (var move = 0; move < 4; move++)
         {
             moves[move] = GetMoveTypeName(GetPKMMoveID(pkm, move), langid);

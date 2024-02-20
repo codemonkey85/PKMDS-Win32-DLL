@@ -29,7 +29,7 @@ internal class Party_Private
     [NonSerialized()]
     private readonly PartyPokemon PPKM06 = new();
     [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x0C)]
-    private readonly byte[] Data = Array.Empty<byte>();
+    private readonly byte[] Data = [];
     public Party_Private()
     {
 

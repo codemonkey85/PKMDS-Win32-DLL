@@ -128,7 +128,7 @@ public class Pokemon
     {
         get
         {
-            ushort[] moveids = { 0, 0, 0, 0 };
+            ushort[] moveids = [0, 0, 0, 0];
             for (var movenum = 0; movenum < 4; movenum++)
             {
                 moveids[movenum] = GetPKMMoveID(this, movenum);
